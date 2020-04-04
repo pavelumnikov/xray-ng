@@ -1,0 +1,2 @@
+--- Starting logging session ---
+[THREAD: MAIN][21.12.2018] Invalid filename for output vfs file

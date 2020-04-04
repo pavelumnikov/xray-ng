@@ -1,0 +1,7 @@
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\bin\Debug\MakeVirtualFileSystem.exe.config
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\bin\Debug\MakeVirtualFileSystem.exe
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\bin\Debug\MakeVirtualFileSystem.pdb
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\obj\Debug\MakeVirtualFileSystem.csproj.CoreCompileInputs.cache
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\obj\Debug\MakeVirtualFileSystem.exe
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\obj\Debug\MakeVirtualFileSystem.pdb
+C:\gamedev\idtech4-ex-gl\neo\MakeVirtualFileSystem\obj\Debug\MakeVirtualFileSystem.csprojAssemblyReference.cache

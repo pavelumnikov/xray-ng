@@ -1,0 +1,13 @@
+# Microsoft Visual Studio (Code)
+.vs
+
+# PVS-Studio
+build*
+*.cfg
+*.i
+
+# Game output folder
+[Rr]esult
+
+# Generated build files
+[Pp]rojects
