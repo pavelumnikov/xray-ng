@@ -35,23 +35,37 @@
 #include "corlib/etl/containers/std/deque.h"
 #include "file_async_result_win32.h"
 
+//------------------------------------------------------------------------------
 namespace xr::async_io
 {
 
-class common_io
+//------------------------------------------------------------------------------
+class file_api_win32 : public file_api
 {
 public:
-    common_io(memory::base_allocator& alloc);
-    ~common_io();
+    file_api_win32(memory::base_allocator& alloc);
+    virtual ~file_api_win32();
 
-    void add_request(async_result_ptr& ptr);
-    memory::base_allocator& get_allocator();
+    virtual file_handle create_file_descriptor(path_view name,
+        access_mode mode, access_pattern pattern) override;
+
+    virtual void free_file_descriptor(file_handle handle) override;
+
+    virtual async_result_ptr read_file_async(file_handle handle,
+        memory::buffer_ref& buffer, size_t read, uint64_t offset = 0) override;
+
+    virtual async_result_ptr write_file_async(file_handle handle,
+        memory::buffer_ref& buffer, size_t write) override;
+
+    virtual void cancel_async_io(async_result_ptr& ptr) override;
 
 private:
     using mutex = threading::spin_wait_fairness;
     static constexpr uint32_t max_io_threads = 2;
 
     static void async_io_func(void* arg);
+
+    void add_request(async_result_ptr& ptr);
     bool try_deque_request(async_result_ptr& ptr);
 
     void process_request(async_result_ptr& ptr);
@@ -67,12 +81,5 @@ private:
     volatile bool m_quit_status;
 };
 
-inline memory::base_allocator&
-common_io::get_allocator()
-{
-    return m_allocator;
-}
-
-common_io& get_common_io();
-
 } // namespace xr::async_io
+//------------------------------------------------------------------------------

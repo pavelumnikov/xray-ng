@@ -33,7 +33,7 @@
 #include "corlib/threading/interlocked.h"
 #include "corlib/memory/memory_mt_arena_allocator.h"
 #include "corlib/tasks/task_system.h"
-#include "async_io/io_system.h"
+#include "async_io/file_api.h"
 #include "corlib/sys/thread.h"
 #include <Windows.h>
 

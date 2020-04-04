@@ -14,7 +14,6 @@ project(async_io)
 set(ASYNC_IO_MODULE_HEADERS
 	"include/async_io/async_result.h"
 	"include/async_io/file_api.h"
-	"include/async_io/io_system.h"
 )
 	
 source_group("include" FILES ${ASYNC_IO_MODULE_HEADERS})
@@ -22,9 +21,8 @@ source_group("include" FILES ${ASYNC_IO_MODULE_HEADERS})
 ##
 
 set(ASYNC_IO_MODULE_SOURCES
-	"sources/common.cpp"
-	"sources/common.h"
 	"sources/file_api_win32.cpp"
+	"sources/file_api_win32.h"
 	"sources/file_async_result_win32.cpp"
 	"sources/file_async_result_win32.h"
 )

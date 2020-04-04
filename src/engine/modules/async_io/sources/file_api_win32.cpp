@@ -1,39 +1,69 @@
 /*
 
-Copyright (c) 2020, Pavel Umnikov
-All rights reserved.
+    Copyright (c) 2020, Pavel Umnikov
+    All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice,
-this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright
-notice, this list of conditions and the following disclaimer in the
-documentation and/or other materials provided with the distribution.
+    * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.
+    THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+    OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+    DAMAGE.
 
 */
 
-#include "async_io/file_api.h"
+#include "file_api_win32.h"
 #include "file_async_result_win32.h"
-#include "common.h"
+#include "corlib/memory/uninitialized_reference.h"
+#include "corlib/memory/proxy/eastl_proxy_allocator.h"
+#include "corlib/threading/scoped_lock.h"
 
+//------------------------------------------------------------------------------
 namespace xr::async_io
 {
 
-file_handle create_file_descriptor(path_view name, access_mode mode, access_pattern pattern)
+//------------------------------------------------------------------------------
+static memory::uninitialized_reference<file_api_win32> file_api_system;
+
+//------------------------------------------------------------------------------
+/**
+ */
+file_api_win32::file_api_win32(memory::base_allocator& alloc)
+    : m_async_requests { memory::proxy::eastl_proxy_allocator { alloc } }
+    , m_async_requests_lock {}
+    , m_thread_handles {}
+    , m_allocator { alloc }
+    , m_quit_status { false }
+{
+    initialize();
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+file_api_win32::~file_api_win32()
+{
+    finalize();
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+file_handle file_api_win32::create_file_descriptor(path_view name, access_mode mode, access_pattern pattern)
 {
     DWORD access = 0;
     DWORD disposition = 0;
@@ -93,7 +123,10 @@ file_handle create_file_descriptor(path_view name, access_mode mode, access_patt
     return file;
 }
 
-void free_file_descriptor(file_handle handle)
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::free_file_descriptor(file_handle handle)
 {
     XR_DEBUG_ASSERTION_MSG(handle.is_valid(),
         "file handle must be valid before freeing");
@@ -101,40 +134,179 @@ void free_file_descriptor(file_handle handle)
     handle.close();
 }
 
-async_result_ptr read_file_async(file_handle handle, memory::buffer_ref& buffer, size_t read, uint64_t offset)
+//------------------------------------------------------------------------------
+/**
+ */
+async_result_ptr file_api_win32::read_file_async(file_handle handle, 
+    memory::buffer_ref& buffer, size_t read, uint64_t offset)
 {
-    common_io& io = get_common_io();
-    memory::base_allocator& allocator = io.get_allocator();
-
-    //
-    auto result = etl::make_shared_ptr<read_file_async_result>(allocator, handle, buffer, read, offset);
-
-    // 
+    auto result = etl::make_shared_ptr<read_file_async_result>(m_allocator, handle, buffer, read, offset);
     async_result_ptr ptr = eastl::static_pointer_cast<async_result>(result);
-    io.add_request(ptr);
-
+    add_request(ptr);
     return ptr;
 }
 
-async_result_ptr write_file_async(file_handle handle, memory::buffer_ref& buffer, size_t write)
+//------------------------------------------------------------------------------
+/**
+ */
+async_result_ptr file_api_win32::write_file_async(file_handle handle, 
+    memory::buffer_ref& buffer, size_t write)
 {
-    common_io& io = get_common_io();
-    memory::base_allocator& allocator = io.get_allocator();
-    
-    //
-    auto result = etl::make_shared_ptr<read_file_async_result>(allocator, handle, buffer, write, 0);
-
-    // 
+    auto result = etl::make_shared_ptr<read_file_async_result>(m_allocator, handle, buffer, write, 0);
     async_result_ptr ptr = eastl::static_pointer_cast<async_result>(result);
-    io.add_request(ptr);
-
+    add_request(ptr);
     return ptr;
 }
 
-void cancel_async_io(async_result_ptr& ptr)
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::cancel_async_io(async_result_ptr& ptr)
 {
     auto file_async_ptr = eastl::static_pointer_cast<file_async_result>(ptr);
     file_async_ptr->set_current_status(async_status::cancelled);
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::add_request(async_result_ptr& ptr)
+{
+    threading::scoped_lock lock { m_async_requests_lock };
+    m_async_requests.push_back(ptr);
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+bool file_api_win32::try_deque_request(async_result_ptr& ptr)
+{
+    threading::scoped_lock lock { m_async_requests_lock };
+    if(m_async_requests.empty())
+        return false;
+
+    ptr = eastl::move(m_async_requests.front());
+    m_async_requests.pop_front();
+    return true;
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::process_request(async_result_ptr& ptr)
+{
+    if(ptr->is_file_io())
+    {
+        if(ptr->is_read_request())
+        {
+            auto read_file_async = eastl::static_pointer_cast<read_file_async_result>(ptr);
+            process_read_request(read_file_async);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::process_read_request(read_file_async_result_ptr& ptr)
+{
+    XR_DEBUG_ASSERTION_MSG(ptr, "Invalid read file request");
+    HANDLE handle = ptr->get_file_handle().get();
+
+    memory::buffer_ref& buffer = ptr->get_buffer_ref();
+    XR_DEBUG_ASSERTION_MSG(buffer.is_valid(), "Invalid input buffer");
+
+    size_t read_size = ptr->get_read_size();
+    XR_DEBUG_ASSERTION_MSG(buffer.length() >= read_size,
+        "Input buffer size lower than request read size");
+
+    LPOVERLAPPED overlapped = &ptr->get_overlapped();
+    BOOL status = ReadFileEx(handle, buffer.as_pointer<void*>(),
+        static_cast<DWORD>(read_size), overlapped, &file_async_result::request_func);
+
+    if(status)
+    {
+        ptr->set_current_status(async_status::error);
+        return;
+    }
+    else
+    {
+        ptr->set_current_status(async_status::processing);
+    }
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::initialize()
+{
+    for(size_t i = 0; i < eastl::size(m_thread_handles); ++i)
+    {
+        m_thread_handles[i] = sys::spawn_thread(m_allocator, async_io_func, this, L"io_worker_thread", sys::thread_priority::high, 1_mb, static_cast<uint32_t>(i));
+    }
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::finalize()
+{
+    threading::atomic_store_rel(m_quit_status, true);
+    bool result = sys::wait_threads(m_thread_handles, eastl::size(m_thread_handles));
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void file_api_win32::async_io_func(void* arg)
+{
+    file_api_win32* ptr = reinterpret_cast<file_api_win32*>(arg);
+    XR_DEBUG_ASSERTION_MSG(ptr, "async io thread invalid argument");
+    while(!threading::atomic_fetch_acq(ptr->m_quit_status))
+    {
+        async_result_ptr async_ptr {};
+        if(ptr->try_deque_request(async_ptr))
+        {
+            ptr->process_request(async_ptr);
+        }
+        else
+        {
+            sys::yield(15);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void initialize_async_io(memory::base_allocator& alloc)
+{
+    XR_DEBUG_ASSERTION_MSG(!file_api_system.is_constructed(),
+        "file api already initialized");
+
+    memory::construct_reference(file_api_system, alloc);
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+void shutdown_async_io()
+{
+    XR_DEBUG_ASSERTION_MSG(file_api_system.is_constructed(),
+        "file api must be initialized");
+
+    memory::destruct_reference(file_api_system);
+}
+
+//------------------------------------------------------------------------------
+/**
+ */
+file_api& current_file_api()
+{
+    XR_DEBUG_ASSERTION_MSG(file_api_system.is_constructed(),
+        "file api must be initialized");
+
+    return file_api_system.ref();
 }
 
 } // namespace xr::async_io
