@@ -34,19 +34,62 @@
 #include "../os_include_win32.h"
 
 //------------------------------------------------------------------------------
+namespace xr::threading::details
+{
+
+class critical_section_raii
+{
+public:
+    critical_section_raii(LPCRITICAL_SECTION cs) : m_cs { cs }
+    {
+        ::EnterCriticalSection(m_cs);
+    }
+
+    ~critical_section_raii()
+    {
+        ::LeaveCriticalSection(m_cs);
+    }
+
+private:
+    LPCRITICAL_SECTION m_cs;
+};
+
+LPCRITICAL_SECTION to_critical_section(uint8_t const* buffer)
+{
+    return reinterpret_cast<LPCRITICAL_SECTION>(const_cast<uint8_t*>(buffer));
+}
+
+}
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 namespace xr::threading
 {
+
+constexpr int32_t EVENT_NOT_SIGNALED = 0;
+constexpr int32_t EVENT_SIGNALED = 1;
+constexpr DWORD CRIT_SPIN_COUNT_FOR_EVENT = 16;
 
 //------------------------------------------------------------------------------
 /**
 */
 event::event(bool const initial_state) noexcept
-    : m_handle(nullptr)
+    : m_critical_section {}
+    , m_condition_variable { nullptr }
+    , m_num_of_waiting_threads { 0 }
+    , m_value { 0 }
 {
-    static_assert(sizeof(m_handle) == sizeof(HANDLE), "please change type of storage");
-    auto const is_initial_state = static_cast<BOOL>(initial_state);
-    auto const handle = CreateEventA(nullptr, 0, is_initial_state, nullptr);
-    m_handle = handle;
+    static_assert(sizeof(m_critical_section) == sizeof(CRITICAL_SECTION),
+        "m_critical_section: change type of storage");
+    static_assert(sizeof(m_condition_variable) == sizeof(HANDLE),
+        "m_condition_variable: please change type of storage");
+
+    auto cs = reinterpret_cast<LPCRITICAL_SECTION>(m_critical_section);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
+
+    (void)InitializeCriticalSectionAndSpinCount(cs, CRIT_SPIN_COUNT_FOR_EVENT);
+    InitializeConditionVariable(cv);
+    m_value = initial_state ? EVENT_SIGNALED : EVENT_NOT_SIGNALED;
 }
 
 //------------------------------------------------------------------------------
@@ -54,53 +97,66 @@ event::event(bool const initial_state) noexcept
 */
 event::~event()
 {
-    XR_DEBUG_ASSERTION(m_handle);
-
-    CloseHandle(m_handle);
-    m_handle = nullptr;
+    auto cs = details::to_critical_section(m_critical_section);
+    ::DeleteCriticalSection(cs);
 }
 
 //------------------------------------------------------------------------------
 /**
 */
 void
-event::set(bool const value) const noexcept
+event::set(bool const value) noexcept
 {
-    XR_DEBUG_ASSERTION(this->m_handle);
-
     if(value)
-        SetEvent(m_handle);
+        set_event();
     else
-        ResetEvent(m_handle);
+        reset_event();
 }
 
 //------------------------------------------------------------------------------
 /**
 */
 event_wait_result
-event::wait_timeout(sys::tick timeout) const noexcept
+event::wait_timeout(sys::tick timeout) noexcept
 {
-    XR_DEBUG_ASSERTION(this->m_handle);
+    auto cs = details::to_critical_section(m_critical_section);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
 
-    auto constexpr alertable = TRUE; // all threads must be alertable
+    // early exit if event already signaled
+    if(m_value != EVENT_NOT_SIGNALED)
+        return event_wait_result::signaled;
 
-    auto const result = WaitForSingleObjectEx(
-        m_handle, static_cast<uint32_t>(timeout), alertable);
+    m_num_of_waiting_threads++;
 
-    switch(result)
+    for(;;)
     {
-        case WAIT_OBJECT_0:
-            return event_wait_result::signaled;
+        BOOL ret = ::SleepConditionVariableCS(cv, cs, static_cast<DWORD>(timeout));
+        if(ret == 0)
+        {
+            DWORD err = ::GetLastError();
+            if(err == ERROR_TIMEOUT)
+                return event_wait_result::timed_out;
+            else
+                return event_wait_result::failed;
+        }
 
-        case WAIT_TIMEOUT:
-            return event_wait_result::timed_out;
-
-        case WAIT_FAILED:
-            return event_wait_result::failed;
-
-        default:
-            return event_wait_result::still_non_signaled;
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms686301(v=vs.85).aspx
+        // Condition variables are subject to spurious wakeups (those not associated with an explicit wake)
+        // and stolen wakeups (another thread manages to run before the woken thread).
+        // Therefore, you should recheck a predicate (typically in a while loop) after a sleep operation returns.
+        if(m_value == EVENT_SIGNALED || ret == 0)
+            break;
     }
+
+    m_num_of_waiting_threads--;
+    bool is_signaled = (m_value != EVENT_NOT_SIGNALED);
+    if(is_signaled)
+        m_value = EVENT_NOT_SIGNALED;
+
+    if(!is_signaled)
+        return event_wait_result::still_non_signaled;
+
+    return event_wait_result::signaled;
 }
 
 //------------------------------------------------------------------------------
@@ -109,15 +165,35 @@ event::wait_timeout(sys::tick timeout) const noexcept
 signalling_bool 
 event::peek() const noexcept
 {
-    XR_DEBUG_ASSERTION(m_handle);
+    auto cs = details::to_critical_section(m_critical_section);
+    details::critical_section_raii lock { cs };
+    return m_value == EVENT_SIGNALED;
+}
 
-    DWORD constexpr milliseconds = 0;
-    auto constexpr alertable = TRUE; // all threads must be alertable
+//------------------------------------------------------------------------------
+/**
+*/
+inline void event::set_event()
+{
+    auto cs = details::to_critical_section(m_critical_section);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
 
-    auto const result = WaitForSingleObjectEx(
-        m_handle, milliseconds, alertable);
+    details::critical_section_raii lock { cs };
+    m_value = EVENT_SIGNALED;
+    if(m_num_of_waiting_threads > 0)
+    {
+        ::WakeConditionVariable(cv);
+    }
+}
 
-    return WAIT_TIMEOUT != result;
+//------------------------------------------------------------------------------
+/**
+*/
+inline void event::reset_event()
+{
+    auto cs = details::to_critical_section(m_critical_section);
+    details::critical_section_raii lock { cs };
+    m_value = EVENT_NOT_SIGNALED;
 }
 
 } // namespace xr::threading

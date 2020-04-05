@@ -57,43 +57,45 @@ public:
     XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(event);
 
     // Signal the event.
-    void set(bool value) const noexcept;
+    void set(bool value) noexcept;
 
     // Wait for the event to become signaled.
-    event_wait_result wait() const noexcept;
+    event_wait_result wait() noexcept;
 
     // Waits for the event to become signaled with a specified timeout
     // in milliseconds.
     // If the method times out it will return false,
     // if the event becomes signaled within the timeout it will return true.
-    event_wait_result wait_timeout(sys::tick timeout) const noexcept;
+    event_wait_result wait_timeout(sys::tick timeout) noexcept;
 
     // This checks if the event is signaled and returns immediately.
     signalling_bool peek() const noexcept;
 
-    void* get_handle() const noexcept;
-
 private:
     using handle = sys::win::HANDLE;
-    handle m_handle; // event base handle
+
+    void set_event();
+    void reset_event();
+
+#if defined(XRAY_PLATFORM_64BIT)
+    uint8_t m_critical_section[40];
+#else
+    uint8_t m_critical_section[24];
+#endif // defined(XRAY_PLATFORM_64BIT)
+
+    handle m_condition_variable;
+
+    volatile uint32_t m_num_of_waiting_threads;
+    volatile int32_t m_value;
 };
 
 //------------------------------------------------------------------------------
 /**
 */
 inline event_wait_result 
-event::wait() const noexcept
+event::wait() noexcept
 {
-    return this->wait_timeout(sys::infinite);
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-inline void*
-event::get_handle() const noexcept
-{
-    return this->m_handle;
+    return wait_timeout(sys::infinite);
 }
 
 } // namespace xr::threading
