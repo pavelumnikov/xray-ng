@@ -32,6 +32,7 @@
 #include "corlib/threading/spin_wait.h"
 #include "corlib/threading/scoped_lock.h"
 #include "corlib/memory/memory_aligned_allocator.h"
+#include "corlib/memory/allocator_macro.h"
 
 namespace xr::tasks
 {

@@ -34,6 +34,7 @@
 #include "corlib/etl/type_conversions.h"
 #include "EASTL/internal/copy_help.h"
 #include "corlib/sys/win/min_windows.h"
+#include "corlib/memory/allocator_macro.h"
 #include "../error_conv_win32.h"
 #include <VersionHelpers.h>
 #include <process.h>

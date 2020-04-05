@@ -1,5 +1,6 @@
 #include "catch/catch.hpp"
 #include "corlib/memory/memory_st_arena_allocator.h"
+#include "corlib/memory/allocator_macro.h"
 
 using namespace xr;
 

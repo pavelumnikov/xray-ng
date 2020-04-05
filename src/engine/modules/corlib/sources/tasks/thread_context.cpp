@@ -27,6 +27,7 @@
 */
 
 #include "thread_context.h"
+#include "corlib/memory/allocator_macro.h"
 
 //------------------------------------------------------------------------------
 namespace xr::tasks::details

@@ -35,6 +35,7 @@
 #include "corlib/tasks/details/work_distribution.h"
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/etl/containers/static_vector.h"
+#include "corlib/memory/allocator_macro.h"
 
 // TODO: add profiling scope(or move inside scheduler)
 #ifndef XR_SCHEDULER_PROFILER_TASK_SCOPE_CODE_INJECTION
