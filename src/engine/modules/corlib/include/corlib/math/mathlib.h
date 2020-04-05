@@ -97,121 +97,153 @@ auto constexpr ieee_int_rcp_sqrt_const_nr0_snorm = 0x5F341A43;
 //auto constexpr ieee_int_sqrt_const_nr0_snorm = 0x1FBD22DF;
 //auto constexpr ieee_int_rcp_sqrt_const_nr0_snorm = 0x5F33E79F;
 
-inline auto float_sign_bit_set(float x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline auto
+float_sign_bit_set(float x) noexcept
 {
-    return (static_cast<const unsigned long>(x) >> 31);
+    return (static_cast<uint32_t>(x) >> 31);
 }
 
-inline auto float_is_nan(float x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline auto
+float_is_nan(float x) noexcept
 {
-    return (((static_cast<const unsigned long>(x)) & 0x7f800000) == 0x7f800000);
+    return (((static_cast<uint32_t>(x)) & 0x7f800000) == 0x7f800000);
 }
 
-inline auto float_is_inf(float x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline auto
+float_is_inf(float x) noexcept
 {
-    return (((static_cast<const unsigned long>(x)) & 0x7fffffff) == 0x7f800000);
+    return (((static_cast<uint32_t>(x)) & 0x7fffffff) == 0x7f800000);
 }
 
-inline auto float_is_ind(float x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline auto
+float_is_ind(float x) noexcept
 {
-    return ((static_cast<const unsigned long>(x)) == 0xffc00000);
+    return ((static_cast<uint32_t>(x)) == 0xffc00000);
 }
 
-inline auto float_is_denormal(float x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline auto
+float_is_denormal(float x) noexcept
 {
-    return (((static_cast<const unsigned long>(x)) & 0x7f800000) == 0x00000000 &&
-        ((static_cast<const unsigned long>(x)) & 0x007fffff) != 0x00000000);
+    return (((static_cast<uint32_t>(x)) & 0x7f800000) == 0x00000000 &&
+        ((static_cast<uint32_t>(x)) & 0x007fffff) != 0x00000000);
 };
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
-constexpr int max_index(T x, T y) noexcept
+constexpr int32_t max_index(T x, T y) noexcept
 {
     return  (x > y) ? 0 : 1;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
-constexpr int min_index(T x, T y) noexcept
+constexpr int32_t min_index(T x, T y) noexcept
 {
     return (x < y) ? 0 : 1;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
 constexpr T max3(T x, T y, T z) noexcept
 {
     return (x > y) ? ((x > z) ? x : z) : ((y > z) ? y : z);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
 constexpr T min3(T x, T y, T z) noexcept
 {
     return (x < y) ? ((x < z) ? x : z) : ((y < z) ? y : z);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
-constexpr int max3_index(T x, T y, T z) noexcept
+constexpr int32_t max3_index(T x, T y, T z) noexcept
 {
     return (x > y) ? ((x > z) ? 0 : 2) : ((y > z) ? 1 : 2);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
-constexpr int min3_index(T x, T y, T z) noexcept
+constexpr int32_t min3_index(T x, T y, T z) noexcept
 {
     return (x < y) ? ((x < z) ? 0 : 2) : ((y < z) ? 1 : 2);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
 constexpr T sign(T f)
 {
     return (f > 0) ? 1 : ((f < 0) ? -1 : 0);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T>
 constexpr T square(T x)
 {
     return x * x;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 template<class T> constexpr T cube(T x)
 {
     return x * x * x;
 }
 
-enum
-{
-    LOOKUP_BITS = 8,
-    EXP_POS = 23,
-    EXP_BIAS = 127,
-    LOOKUP_POS = (EXP_POS - LOOKUP_BITS),
-    SEED_POS = (EXP_POS - 8),
-    SQRT_TABLE_SIZE = (2 << LOOKUP_BITS),
-    LOOKUP_MASK = (SQRT_TABLE_SIZE - 1)
-};
-
 //------------------------------------------------------------------------------
-inline bool negative(const float& f)
+/**
+ */
+constexpr bool
+negative(const float& f)
 {
-    return (*((unsigned*)(&f)) & float_mask_sign_bit);
+    return (static_cast<uint32_t>(f) & float_mask_sign_bit);
 }
 
 //------------------------------------------------------------------------------
-inline bool positive(const float& f)
+/**
+ */
+constexpr bool
+positive(const float& f)
 {
-    return (*((unsigned*)(&f)) & float_mask_sign_bit) == 0;
+    return (static_cast<uint32_t>(f) & float_mask_sign_bit) == 0;
 }
 
 //------------------------------------------------------------------------------
-inline void set_negative(float& f)
-{
-    (*(unsigned*)(&f)) |= float_mask_sign_bit;
-}
-
-//------------------------------------------------------------------------------
-inline void set_positive(float& f)
-{
-    (*(unsigned*)(&f)) &= ~float_mask_sign_bit;
-}
-
-//------------------------------------------------------------------------------
+/**
+ */
 template<typename T>
 constexpr int32_t
 approx_as_int(T const value) noexcept
@@ -220,6 +252,8 @@ approx_as_int(T const value) noexcept
 }
 
 //------------------------------------------------------------------------------
+/**
+ */
 template<typename T>
 constexpr float
 approx_as_float(T const value) noexcept
@@ -228,10 +262,12 @@ approx_as_float(T const value) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Approximate guess using integer float arithmetics based on IEEE 
-// floating point standard
+/**
+ * Approximate guess using integer float arithmetics based on IEEE 
+ * floating point standard
+ */
 constexpr float
-rcp_sqrt_ieee_int_approx(float const in, int const in_rcp_sqrt_const) noexcept
+rcp_sqrt_ieee_int_approx(float const in, int32_t const in_rcp_sqrt_const) noexcept
 {
     auto const x = approx_as_int(in);
     auto const x1 = (in_rcp_sqrt_const - (x >> 1));
@@ -239,8 +275,10 @@ rcp_sqrt_ieee_int_approx(float const in, int const in_rcp_sqrt_const) noexcept
 }
 
 //------------------------------------------------------------------------------
+/**
+ */
 constexpr float
-sqrt_ieee_int_approx(float const in, int const in_sqrt_const) noexcept
+sqrt_ieee_int_approx(float const in, int32_t const in_sqrt_const) noexcept
 {
     auto const x = approx_as_int(in);
     auto const x1 = in_sqrt_const + (x >> 1);
@@ -248,8 +286,10 @@ sqrt_ieee_int_approx(float const in, int const in_sqrt_const) noexcept
 }
 
 //------------------------------------------------------------------------------
+/**
+ */
 constexpr float
-rcp_ieee_int_approx(float const in, int const in_rcp_const)
+rcp_ieee_int_approx(float const in, int32_t const in_rcp_const)
 {
     auto const x = approx_as_int(in);
     auto const x1 = (in_rcp_const - x);
@@ -257,6 +297,8 @@ rcp_ieee_int_approx(float const in, int const in_rcp_const)
 }
 
 //------------------------------------------------------------------------------
+/**
+ */
 constexpr float
 rcp_sqrt_newton_raphson(float const in, float const in_rcp) noexcept
 {
@@ -264,6 +306,8 @@ rcp_sqrt_newton_raphson(float const in, float const in_rcp) noexcept
 }
 
 //------------------------------------------------------------------------------
+/**
+ */
 constexpr float
 rcp_newton_raphson(float const in, float const in_rcp) noexcept
 {
@@ -271,11 +315,12 @@ rcp_newton_raphson(float const in, float const in_rcp) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 1 Newton Raphson iterations
-// Relative error : ~0.2% over full
-// Precise format : ~half float
-// 6 ALU
-//
+/**
+ * Using 1 Newton Raphson iterations
+ * Relative error : ~0.2% over full
+ * Precise format : ~half float
+ * 6 ALU
+ */
 constexpr float
 fast_rcp_sqrt_nr1(float const in) noexcept
 {
@@ -287,11 +332,12 @@ fast_rcp_sqrt_nr1(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 2 Newton Raphson iterations
-// Relative error : ~4.6e-004%  over full
-// Precise format : ~full float
-// 9 ALU
-//
+/**
+ * Using 2 Newton Raphson iterations
+ * Relative error : ~4.6e-004%  over full
+ * Precise format : ~full float
+ * 9 ALU
+ */
 constexpr float
 fast_rcp_sqrt_nr2(float const in) noexcept
 {
@@ -304,11 +350,12 @@ fast_rcp_sqrt_nr2(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 0 Newton Raphson iterations
-// Relative error : < 0.7% over full
-// Precise format : ~small float
-// 1 ALU
-//
+/**
+ * Using 0 Newton Raphson iterations
+ * Relative error : < 0.7% over full
+ * Precise format : ~small float
+ * 1 ALU
+ */
 constexpr float
 fast_sqrt_nr0(float const in) noexcept
 {
@@ -317,12 +364,13 @@ fast_sqrt_nr0(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Use inverse Rcp Sqrt
-// Using 1 Newton Raphson iterations
-// Relative error : ~0.2% over full
-// Precise format : ~half float
-// 6 ALU
-//
+/**
+ * Use inverse Rcp Sqrt
+ * Using 1 Newton Raphson iterations
+ * Relative error : ~0.2% over full
+ * Precise format : ~half float
+ * 6 ALU
+ */
 constexpr float
 fast_sqrt_nr1(float const in) noexcept
 {
@@ -331,12 +379,13 @@ fast_sqrt_nr1(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Use inverse Rcp Sqrt
-// Using 2 Newton Raphson iterations
-// Relative error : ~4.6e-004%  over full
-// Precise format : ~full float
-// 9 ALU
-//
+/**
+ * Use inverse Rcp Sqrt
+ * Using 2 Newton Raphson iterations
+ * Relative error : ~4.6e-004%  over full
+ * Precise format : ~full float
+ * 9 ALU
+ */
 constexpr float
 fast_sqrt_nr2(float const in) noexcept
 {
@@ -345,11 +394,12 @@ fast_sqrt_nr2(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 0 Newton Raphson iterations
-// Relative error : < 0.4% over full
-// Precise format : ~small float
-// 1 ALU
-//
+/**
+ * Using 0 Newton Raphson iterations
+ * Relative error : < 0.4% over full
+ * Precise format : ~small float
+ * 1 ALU
+ */
 constexpr float
 fast_rcp_nr0(float const in) noexcept
 {
@@ -358,11 +408,12 @@ fast_rcp_nr0(float const in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 1 Newton Raphson iterations
-// Relative error : < 0.02% over full
-// Precise format : ~half float
-// 3 ALU
-//
+/**
+ * Using 1 Newton Raphson iterations
+ * Relative error : < 0.02% over full
+ * Precise format : ~half float
+ * 3 ALU
+ */
 constexpr float
 fast_rcp_nr1(float in) noexcept
 {
@@ -372,11 +423,12 @@ fast_rcp_nr1(float in) noexcept
 }
 
 //------------------------------------------------------------------------------
-// Using 2 Newton Raphson iterations
-// Relative error : < 5.0e-005%  over full
-// Precise format : ~full float
-// 5 ALU
-//
+/**
+ * Using 2 Newton Raphson iterations
+ * Relative error : < 5.0e-005%  over full
+ * Precise format : ~full float
+ * 5 ALU
+ */
 constexpr float
 fast_rcp_nr2(float in) noexcept
 {
@@ -387,30 +439,45 @@ fast_rcp_nr2(float in) noexcept
     return rcp;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 rsqrt(float x) noexcept
 {
     return fast_rcp_sqrt_nr2(x);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 inv_sqrt(float x)
 {
     return 1 / fast_rcp_sqrt_nr2(x);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 sqrt(float x)
 {
     return x * inv_sqrt(x);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 sine(float a)
 {
     return sinf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 sine16(float a)
 {
@@ -434,18 +501,27 @@ sine16(float a)
     return a * (((((-2.39e-08f * s + 2.7526e-06f) * s - 1.98409e-04f) * s + 8.3333315e-03f) * s - 1.666666664e-01f) * s + 1.0f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double
 sine64(float a)
 {
     return ::sin(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 cosine(float a)
 {
     return ::cosf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 cosine16(float a)
 {
@@ -484,12 +560,18 @@ cosine16(float a)
     return d * (((((-2.605e-07f * s + 2.47609e-05f) * s - 1.3888397e-03f) * s + 4.16666418e-02f) * s - 4.999999963e-01f) * s + 1.0f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double
 cosine64(float a)
 {
     return ::cos(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline void
 sin_cos(float a, float& s, float& c)
 {
@@ -497,6 +579,9 @@ sin_cos(float a, float& s, float& c)
     c = ::cosf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline void
 sin_cos16(float a, float& s, float& c)
 {
@@ -536,6 +621,9 @@ sin_cos16(float a, float& s, float& c)
     c = d * (((((-2.605e-07f * t + 2.47609e-05f) * t - 1.3888397e-03f) * t + 4.16666418e-02f) * t - 4.999999963e-01f) * t + 1.0f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline void
 sin_cos64(float const a, double& s, double& c)
 {
@@ -544,12 +632,18 @@ sin_cos64(float const a, double& s, double& c)
     c = ::cos(f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 tan(float a)
 {
     return ::tanf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 tan16(float a)
 {
@@ -591,12 +685,18 @@ tan16(float a)
     return s;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double
 tan64(float const a)
 {
     return ::tan(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 asin(float const a)
 {
@@ -609,6 +709,9 @@ asin(float const a)
     return ::asinf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 asin16(float a)
 {
@@ -627,6 +730,9 @@ asin16(float a)
     return pi_div_2 - (((-0.0187293f * a + 0.0742610f) * a - 0.2121144f) * a + 1.5707288f) * sqrtf(1.0f - a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double
 asin64(float a)
 {
@@ -639,6 +745,9 @@ asin64(float a)
     return ::asin(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 acos(float a)
 {
@@ -651,6 +760,9 @@ acos(float a)
     return acosf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float acos16(float a)
 {
     if(float_sign_bit_set(a))
@@ -669,6 +781,9 @@ inline float acos16(float a)
     return (((-0.0187293f * a + 0.0742610f) * a - 0.2121144f) * a + 1.5707288f) * sqrtf(1.0f - a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double acos64(float const a)
 {
     if(a <= -1.0f)
@@ -680,11 +795,17 @@ inline double acos64(float const a)
     return ::acos(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float atan(float a)
 {
     return atanf(a);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float atan16(float a)
 {
     if(::fabs(a) > 1.0f)
@@ -704,16 +825,25 @@ inline float atan16(float a)
         * s + 0.1065626393f) * s - 0.1420889944f) * s + 0.1999355085f) * s - 0.3333314528f) * s) + 1.0f) * a;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double atan64(float const a)
 {
     return ::atan(static_cast<double>(a));
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float atan(float const y, float const x)
 {
     return atan2f(y, x);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 atan16(float const y, float const x)
 {
@@ -736,6 +866,9 @@ atan16(float const y, float const x)
         * s + 0.1065626393f) * s - 0.1420889944f) * s + 0.1999355085f) * s - 0.3333314528f) * s) + 1.0f) * a;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double
 atan64(float const y, float const x)
 {
@@ -743,11 +876,13 @@ atan64(float const y, float const x)
 }
 
 //------------------------------------------------------------------------------
-// 4th order polynomial approximation
-// 4 VGRP, 16 ALU Full Rate
-// 7 * 10^-5 radians precision
-// Reference : Handbook of Mathematical Functions 
-// (chapter : Elementary Transcendental Functions), M. Abramowitz and I.A. Stegun, Ed.
+/**
+ * 4th order polynomial approximation
+ * 4 VGRP, 16 ALU Full Rate
+ * 7 * 10^-5 radians precision
+ * Reference : Handbook of Mathematical Functions 
+ * (chapter : Elementary Transcendental Functions), M. Abramowitz and I.A. Stegun, Ed.
+ */
 inline float
 acos_fast4(float in)
 {
@@ -767,9 +902,11 @@ acos_fast4(float in)
 }
 
 //------------------------------------------------------------------------------
-// 4th order polynomial approximation
-// 4 VGRP, 16 ALU Full Rate
-// 7 * 10^-5 radians precision 
+/**
+ * 4th order polynomial approximation
+ * 4 VGRP, 16 ALU Full Rate
+ * 7 * 10^-5 radians precision 
+ */
 inline float
 asin_fast4(float const in)
 {
@@ -780,11 +917,13 @@ asin_fast4(float const in)
 }
 
 //------------------------------------------------------------------------------
-// 4th order hyperbolical approximation
-// 4 VGRP, 12 ALU Full Rate
-// 7 * 10^-5 radians precision 
-// Reference : Efficient approximations for the arctangent function, 
-// Rajan, S. Sichun Wang Inkol, R. Joyal, A., May 2006
+/**
+ * 4th order hyperbolical approximation
+ * 4 VGRP, 12 ALU Full Rate
+ * 7 * 10^-5 radians precision 
+ * Reference : Efficient approximations for the arctangent function,
+ * Rajan, S. Sichun Wang Inkol, R. Joyal, A., May 2006
+ */
 inline float
 atan_fast4(float const in)
 {
@@ -792,14 +931,20 @@ atan_fast4(float const in)
     return x * (-0.1784f * std::abs(x) - 0.0663f * x * x + 1.0301f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float logn(float f)
 {
     return ::logf(f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float logn16(float f) noexcept
 {
-    auto i = *reinterpret_cast<int*>(&f);
+    auto i = *reinterpret_cast<int32_t*>(&f);
     auto const exponent = ((i >> ieee_flt_mantissa_bits)& ((1 << ieee_flt_exponent_bits) - 1)) - ieee_flt_exponent_bias;
     i -= (exponent + 1) << ieee_flt_mantissa_bits; // get value in the range [.5, 1>
     auto y = *reinterpret_cast<float*>(&i);
@@ -811,26 +956,37 @@ inline float logn16(float f) noexcept
     return y;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double logn64(float f)
 {
     return ::log(static_cast<double>(f));
 }
 
-inline float
-pow(float x, float y)
+//------------------------------------------------------------------------------
+/**
+ */
+inline float pow(float x, float y)
 {
     return ::powf(x, y);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float exp(float f)
 {
     return ::expf(f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float exp16(float f) noexcept
 {
     auto x = f * 1.44269504088896340f; // multiply with ( 1 / log( 2 ) )
-    auto i = *reinterpret_cast<int*>(&x);
+    auto i = *reinterpret_cast<int32_t*>(&x);
     const auto s = (i >> ieee_flt_sign_bit);
     const auto e = ((i >> ieee_flt_mantissa_bits)& ((1 << ieee_flt_exponent_bits) - 1)) - ieee_flt_exponent_bias;
     const auto m = (i & ((1 << ieee_flt_mantissa_bits) - 1)) | (1 << ieee_flt_mantissa_bits);
@@ -853,24 +1009,34 @@ inline float exp16(float f) noexcept
     return x;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline double exp64(float f)
 {
     return ::exp(static_cast<double>(f));
 }
 
-inline float
-pow16(float x, float y)
+//------------------------------------------------------------------------------
+/**
+ */
+inline float pow16(float x, float y)
 {
     return exp16(y * logn16(x));
 }
 
-inline double
-pow64(float x, float y)
+//------------------------------------------------------------------------------
+/**
+ */
+inline double pow64(float x, float y)
 {
     return ::pow(static_cast<double>(x), static_cast<double>(y));
 }
 
-constexpr int pow_integral(int const x, int y) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t pow_integral(int32_t const x, int32_t y) noexcept
 {
     auto r = 0;
 
@@ -880,38 +1046,55 @@ constexpr int pow_integral(int const x, int y) noexcept
     return r;
 }
 
-inline int
-logn2_integral(float f) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t logn2_integral(float f) noexcept
 {
-    return (((*reinterpret_cast<int*>(&f)) >> ieee_flt_mantissa_bits)& ((1 << ieee_flt_exponent_bits) - 1)) - ieee_flt_exponent_bias;
+    return (((*reinterpret_cast<int32_t*>(&f)) >> ieee_flt_mantissa_bits)& ((1 << ieee_flt_exponent_bits) - 1)) - ieee_flt_exponent_bias;
 }
 
-inline int
-logn2_integral(int const i) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t
+logn2_integral(int32_t const i) noexcept
 {
     return logn2_integral(static_cast<float>(i));
 }
 
-inline int
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t
 bits_for_float(float const f) noexcept
 {
     return logn2_integral(f) + 1;
 }
 
-inline int
-bits_for_integer(int const i) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t
+bits_for_integer(int32_t const i) noexcept
 {
     return logn2_integral(static_cast<float>(i)) + 1;
 }
 
-inline int
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t
 mask_for_float_sign(float f) noexcept
 {
-    return ((*reinterpret_cast<int*>(&f)) >> 31);
+    return (static_cast<int32_t>(f) >> 31);
 }
 
-constexpr int
-mask_for_integer_sign(int i) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+mask_for_integer_sign(int32_t i) noexcept
 {
     return (i >> 31);
 }
@@ -935,8 +1118,11 @@ inline int32_t ifloor(float x)
     return r;
 }
 
-constexpr int
-ceil_power_of_two(int x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+ceil_power_of_two(int32_t x) noexcept
 {
     x--;
     x |= x >> 1;
@@ -948,20 +1134,29 @@ ceil_power_of_two(int x) noexcept
     return x;
 }
 
-constexpr int
-floor_power_of_two(int x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+floor_power_of_two(int32_t x) noexcept
 {
     return ceil_power_of_two(x) >> 1;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 constexpr bool
-is_power_of_two(int const x) noexcept
+is_power_of_two(int32_t const x) noexcept
 {
     return (x & (x - 1)) == 0 && x > 0;
 }
 
-constexpr int
-bit_count(int x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+bit_count(int32_t x) noexcept
 {
     x -= ((x >> 1) & 0x55555555);
     x = (((x >> 2) & 0x33333333) + (x & 0x33333333));
@@ -970,8 +1165,11 @@ bit_count(int x) noexcept
     return ((x + (x >> 16)) & 0x0000003f);
 }
 
-constexpr int
-bit_reverse(int x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+bit_reverse(int32_t x) noexcept
 {
     x = (((x >> 1) & 0x55555555) | ((x & 0x55555555) << 1));
     x = (((x >> 2) & 0x33333333) | ((x & 0x33333333) << 2));
@@ -980,84 +1178,54 @@ bit_reverse(int x) noexcept
     return ((x >> 16) | (x << 16));
 }
 
-constexpr int
-absolute(int const x) noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+constexpr int32_t
+absolute(int32_t const x) noexcept
 {
     auto const y = x >> 31;
     return ((x ^ y) - y);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 absolute_float(float f) noexcept
 {
-    auto tmp = *reinterpret_cast<int*>(&f);
+    auto tmp = *reinterpret_cast<int32_t*>(&f);
     tmp &= 0x7FFFFFFF;
     return *reinterpret_cast<float*>(&tmp);
 }
 
-inline float  floor(float f)
+//------------------------------------------------------------------------------
+/**
+ */
+inline float floor(float f)
 {
     return ::floorf(f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float ceil(float f)
 {
     return ::ceilf(f);
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float nearest_integer(float const f)
 {
     return floorf(f + 0.5f);
 }
 
-constexpr int8_t
-clamp8(int32_t const i) noexcept
-{
-    if(i < -128)
-        return -128;
-
-    if(i > 127)
-        return 127;
-
-    return static_cast<int8_t>(i);
-}
-
-constexpr int16_t
-clamp16(int32_t const i) noexcept
-{
-    if(i < -32768)
-        return -32768;
-
-    if(i > 32767)
-        return 32767;
-
-    return static_cast<int16_t>(i);
-}
-
-constexpr int
-clamp32(int32_t const min, int32_t const max, int32_t const value) noexcept
-{
-    if(value < min)
-        return min;
-
-    if(value > max)
-        return max;
-
-    return value;
-}
-
-constexpr float
-clamp_float(float const min, float const max, float const value) noexcept
-{
-    if(value < min)
-        return min;
-
-    if(value > max)
-        return max;
-
-    return value;
-}
-
+//------------------------------------------------------------------------------
+/**
+ */
 inline float angle_normalize360(float angle)
 {
     if((angle >= 360.0f) || (angle < 0.0f))
@@ -1066,6 +1234,9 @@ inline float angle_normalize360(float angle)
     return angle;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float angle_normalize180(float angle)
 {
     angle = angle_normalize360(angle);
@@ -1075,17 +1246,23 @@ inline float angle_normalize180(float angle)
     return angle;
 }
 
+//------------------------------------------------------------------------------
+/**
+ */
 inline float
 angle_delta(float const angle1, float const angle2)
 {
     return angle_normalize180(angle1 - angle2);
 }
 
-inline int
-float_hash(const float* array, const int num_floats)noexcept
+//------------------------------------------------------------------------------
+/**
+ */
+inline int32_t
+float_hash(const float* array, const int32_t num_floats)noexcept
 {
     auto hash = 0;
-    auto const ptr = reinterpret_cast<const int*>(array);
+    auto const ptr = reinterpret_cast<const int32_t*>(array);
 
     for(auto i = 0; i < num_floats; i++)
         hash ^= ptr[i];
