@@ -28,30 +28,30 @@
 
 #pragma once
 
-#include "EASTL/numeric_limits.h"
+#include <xmmintrin.h>
 
-//------------------------------------------------------------------------------
-namespace xr::math
+namespace xr::math::details
 {
 
-auto constexpr max_uint32 = eastl::numeric_limits<uint32_t>::max();
-auto constexpr min_int32 = eastl::numeric_limits<int32_t>::min();
-auto constexpr max_int32 = eastl::numeric_limits<int32_t>::max();
-auto const min_float = eastl::numeric_limits<float>::min();
-auto const max_float = eastl::numeric_limits<float>::max();
-auto constexpr min_pos_float = 1.175494351e-38F;
+/// SSE2 requires to call _mm_empty() if we are intermixing MMX integer commands with 
+/// floating point arithmetics. This class guards critical code fragments where SSE2 integer
+/// is used.
+class empty_guard
+{
+public:
+    empty_guard()
+    {
+#if !defined(XRAY_PLATFORM_64BIT)
+        _mm_empty();
+#endif
+    }
 
-auto constexpr pi = 3.141592654f;
-auto constexpr two_pi = 6.283185307f;
-auto constexpr ri_recip = 0.318309886f;
-auto constexpr two_pi_recip = 0.159154943f;
-auto constexpr pi_div_2 = 1.570796327f;
-auto constexpr pi_div_4 = 0.785398163f;
+    ~empty_guard()
+    {
+#if !defined(XRAY_PLATFORM_64BIT)
+        _mm_empty();
+#endif
+    }
+}; // class empty_guard
 
-auto constexpr eps = 0.000001f;
-// Very small epsilon for checking against 0.0f
-auto constexpr zero_eps = (32.0f * min_pos_float);
-auto const nan = eastl::numeric_limits<float>::quiet_NaN();
-
-} // namespace xr::math
-//------------------------------------------------------------------------------
+} // namespace xr::math::details

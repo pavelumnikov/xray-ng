@@ -155,18 +155,38 @@ source_group("include\\etl\\hashing\\std" FILES ${CORE_MODULE_ETL_HASHING_STD_HE
 ##
 
 set(CORE_MODULE_MATH_HEADERS
+	"include/corlib/math/color.h"
 	"include/corlib/math/color_table.h"
-	"include/corlib/math/math_approx.h"
-	"include/corlib/math/math_const.h"
-	"include/corlib/math/math_rect.h"
+	"include/corlib/math/compressed_normal.h"
+	"include/corlib/math/mathlib.h"
+	"include/corlib/math/rect.h"
+	"include/corlib/math/matrix4.h"
 	"include/corlib/math/random.h"
+	"include/corlib/math/vector.h"
 )
 
 source_group("include\\math" FILES ${CORE_MODULE_MATH_HEADERS})
 
 ##
 
+set(CORE_MODULE_MATH_SSE_HEADERS
+	"include/corlib/math/details/sse/sse_bool_in_vec.h"
+	"include/corlib/math/details/sse/sse_empty_guard.h"
+	"include/corlib/math/details/sse/sse_float_in_vec.h"
+	"include/corlib/math/details/sse/sse_math_intrinsics.h"
+	"include/corlib/math/details/sse/sse_matrix4.h"
+	"include/corlib/math/details/sse/sse_quaternion.h"
+	"include/corlib/math/details/sse/sse_vec_idx_selector.h"
+	"include/corlib/math/details/sse/sse_vector.h"
+)
+
+source_group("include\\math\\detais\\sse" FILES ${CORE_MODULE_MATH_SSE_HEADERS})
+
+##
+
 set(CORE_MODULE_MATH_SOURCES
+	"sources/math/compressed_normal.cpp"
+	"sources/math/compressed_normal_table.h"
 	"sources/math/random.cpp"
 )
 
@@ -398,6 +418,8 @@ endif(WIN32)
 
 set(SOURCES
 	${CORE_MODULE_HEADERS}
+	${CORE_COMPRESSION_MODULE_HEADERS}
+	${CORE_COMPRESSION_MODULE_SOURCES}
 	${CORE_MODULE_ETL_HEADERS}
 	${CORE_MODULE_ETL_ALGORITHMS_HEADERS}
 	${CORE_MODULE_ETL_ALGORITHMS_SEARCHERS_HEADERS}
@@ -411,6 +433,7 @@ set(SOURCES
 	${CORE_MODULE_ETL_STRING_HEADERS}
 	${CORE_MODULE_FS_HEADERS}
 	${CORE_MODULE_MATH_HEADERS}
+	${CORE_MODULE_MATH_SSE_HEADERS}
 	${CORE_MODULE_MATH_SOURCES}
 	${CORE_MODULE_MEMORY_SOURCES}
 	${CORE_MODULE_MEMORY_HEADERS}
@@ -458,13 +481,22 @@ source_group("\\" FILES ${CORE_MODULE_NON_FILTERED_TESTS})
 
 ##
 
+set(CORE_MODULE_MATH_TESTS
+	"tests/math/sse_vector_tests.cpp"
+)
+
+source_group("math" FILES ${CORE_MODULE_MATH_TESTS})
+
+##
+
 #set(CORE_MODULE_MEMORY_TESTS
+#	"tests/memory/memory_aligned_allocator_tests.cpp"
 #	"tests/memory/memory_crt_allocator_tests.cpp"
 #	"tests/memory/memory_fixed_size_allocator_tests.cpp"
 #	"tests/memory/memory_functions_tests.cpp"
 #	"tests/memory/memory_mt_arena_allocator_tests.cpp"
 #	"tests/memory/memory_st_arena_allocator_tests.cpp")
-
+#
 #source_group("memory" FILES ${CORE_MODULE_MEMORY_TESTS})
 
 ##
@@ -502,6 +534,7 @@ source_group("\\" FILES ${CORE_MODULE_TESTS})
 set(TESTS
 	${CORE_MODULE_TESTS}
 	${CORE_MODULE_NON_FILTERED_TESTS}
+	${CORE_MODULE_MATH_TESTS}
 	${CORE_MODULE_MEMORY_TESTS}
 	${CORE_MODULE_SYS_TESTS}
 	${CORE_MODULE_TASKS_TESTS}

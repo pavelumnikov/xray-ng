@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2018, Pavel Umnikov
+  Copyright (c) 2019, Pavel Umnikov
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,40 @@
 
 */
 
-#include "catch/catch.hpp"
-#include "../../sources/tasks/allocator.h"
+#pragma once
 
-struct simple_node
+#include "corlib/math/details/sse/sse_math_intrinsics.h"
+#include "corlib/math/details/sse/sse_vector.h"
+
+namespace xr::math::details
 {
-    int value { 0 };
-}; // struct simple_node
 
-TEST_CASE("Allocate and free task_bases")
+class XR_ALIGNAS(XR_DEFAULT_MACHINE_ALIGNMENT) sse_matrix4
 {
-    xr::tasks::allocator<simple_node, 10> allocator {};
+public:
+    sse_matrix4(void);
+    sse_matrix4(__m128 row1, __m128 row2, __m128 row3, __m128 row4);
+    sse_matrix4(sse_vector& row1, sse_vector& row2, sse_vector& row3, sse_vector& row4);
 
-    // allocate some tasks
-    simple_node* t1 = allocator.take_available();
-    simple_node* t2 = allocator.take_available();
+    float Determinant() const;
+    static sse_matrix4 LookAt(const sse_vector& eye, const sse_vector& at, const sse_vector& up);
 
-    REQUIRE(t1 != nullptr);
-    REQUIRE(t2 != nullptr);
-    REQUIRE(!allocator.check_all_free());
+private:
+    fmatrix mx;
+};
 
-    // free allocated tasks
-    allocator.put_back(t1);
-    allocator.put_back(t2);
+float sse_matrix4::Determinant() const
+{
 
-    REQUIRE(allocator.check_all_free());
 }
+
+sse_matrix4 sse_matrix4::LookAt(const sse_vector& eye, const sse_vector& at, const sse_vector& up)
+{
+    sse_vector v1 = up.Normalize();
+    sse_vector v2 = (eye - at).Normalize();
+    sse_vector v3 = v1.CrossProduct(v2);
+    v2 = v2.CrossProduct(v3);
+
+    return sse_matrix4(v3, v2, v1, const_cast<sse_vector&>(eye));
+}
+} // namespace xr::math::details

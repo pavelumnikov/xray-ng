@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/etl/type_traits.h"
 #include <intrin.h>
 
 //------------------------------------------------------------------------------

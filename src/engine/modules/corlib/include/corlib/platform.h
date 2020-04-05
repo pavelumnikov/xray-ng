@@ -115,6 +115,16 @@ static inline bool (unlikely)(bool x)
 
 //------------------------------------------------------------------------------
 
+#ifndef XR_VECTORIZED_CALL
+#   ifdef XR_MSVC_COMPILER_FAMILY
+#       define XR_VECTORIZED_CALL __vectorcall
+#   else
+#       define XR_VECTORIZED_CALL
+#   endif
+#endif // #ifndef XR_VECTORIZED_CALL
+
+//------------------------------------------------------------------------------
+
 #ifndef XR_FASTCALL_CONVENTION
 #   if XR_MSVC_COMPILER_FAMILY
 #       define XR_FASTCALL_CONVENTION __fastcall

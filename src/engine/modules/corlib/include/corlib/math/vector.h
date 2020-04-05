@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2018, Pavel Umnikov
+  Copyright (c) 2019, Pavel Umnikov
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,18 @@
 
 */
 
-#include "catch/catch.hpp"
-#include "../../sources/tasks/allocator.h"
+#pragma once
 
-struct simple_node
+#if defined( XRAY_PLATFORM_WINDOWS )
+/// SSE mathematics implementation for PC and Mac
+#include "corlib/math/details/sse/sse_vector.h"
+
+namespace xr::math
 {
-    int value { 0 };
-}; // struct simple_node
+using vector = xr::math::details::sse_vector;
+} // namespace xr::math
 
-TEST_CASE("Allocate and free task_bases")
-{
-    xr::tasks::allocator<simple_node, 10> allocator {};
+#else
+#error not implemented for current platform
 
-    // allocate some tasks
-    simple_node* t1 = allocator.take_available();
-    simple_node* t2 = allocator.take_available();
-
-    REQUIRE(t1 != nullptr);
-    REQUIRE(t2 != nullptr);
-    REQUIRE(!allocator.check_all_free());
-
-    // free allocated tasks
-    allocator.put_back(t1);
-    allocator.put_back(t2);
-
-    REQUIRE(allocator.check_all_free());
-}
+#endif // defined( XRAY_PLATFORM_WINDOWS )
