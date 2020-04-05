@@ -489,15 +489,15 @@ source_group("math" FILES ${CORE_MODULE_MATH_TESTS})
 
 ##
 
-#set(CORE_MODULE_MEMORY_TESTS
-#	"tests/memory/memory_aligned_allocator_tests.cpp"
-#	"tests/memory/memory_crt_allocator_tests.cpp"
-#	"tests/memory/memory_fixed_size_allocator_tests.cpp"
-#	"tests/memory/memory_functions_tests.cpp"
-#	"tests/memory/memory_mt_arena_allocator_tests.cpp"
-#	"tests/memory/memory_st_arena_allocator_tests.cpp")
-#
-#source_group("memory" FILES ${CORE_MODULE_MEMORY_TESTS})
+set(CORE_MODULE_MEMORY_TESTS
+	"tests/memory/memory_aligned_allocator_tests.cpp"
+	"tests/memory/memory_crt_allocator_tests.cpp"
+	"tests/memory/memory_fixed_size_allocator_tests.cpp"
+	"tests/memory/memory_functions_tests.cpp"
+	"tests/memory/memory_mt_arena_allocator_tests.cpp"
+	"tests/memory/memory_st_arena_allocator_tests.cpp")
+
+source_group("memory" FILES ${CORE_MODULE_MEMORY_TESTS})
 
 ##
 

@@ -58,7 +58,7 @@ private:
 
     void finalize();
 
-    pvoid m_arena;
+    pvoid m_arena { nullptr };
 }; // class mt_arena_allocator
 
 } // namespace xr::memory
