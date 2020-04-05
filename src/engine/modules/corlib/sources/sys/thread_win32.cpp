@@ -38,243 +38,10 @@
 #include "../error_conv_win32.h"
 #include <VersionHelpers.h>
 #include <process.h>
-#include <cassert>
 
 //------------------------------------------------------------------------------
 namespace xr::sys::details
 {
-
-WORD constexpr thread_all_processor_groups = 0xffff;
-
-class win32_thread_manager final
-{
-public:
-    win32_thread_manager();
-
-    void set_thread_processor_group(HANDLE thread, uint32_t thread_index) const;
-    int32_t find_processor_group_index(int32_t proc_idx) const;
-    int32_t get_number_processor_groups() const;
-    void move_thread_into_processor_group(HANDLE thread, int32_t group_index) const;
-    uint32_t get_processors_count() const;
-    uint32_t get_thread_index_for_manager() const;
-
-private:
-    // Statically allocate an array for processor group information.
-    // Windows 7 supports maximum 4 groups, but let's look ahead a little.
-    static constexpr int32_t max_processor_groups = 64;
-
-    //! Initialized internal threading functions
-    void initialize_threads_instrumentation();
-
-    static int32_t hole_adjusted(int32_t const hole_idx, int32_t const proc_idx, int32_t const group_idx)
-    {
-        return (proc_idx + ((hole_idx <= group_idx) ? 1 : 0));
-    }
-
-    struct processor_group_info final
-    {
-        DWORD_PTR mask; //< Affinity mask covering the whole group
-        int num_procs; //< Number of processors in the group
-        int num_procs_running_total; //< Subtotal of processors in this and preceding groups
-    } m_processor_groups[max_processor_groups];
-
-    //! Total number of processor groups in the system
-    int32_t m_num_groups;
-
-    //! Index of the group with a slot reserved for the first master thread
-    // In the context of multiple processor groups support current implementation
-    // defines "the first master thread" as the first thread to invoke
-    //
-    // TODO: Implement a dynamic scheme remapping workers depending on the pending
-    //       master threads affinity.
-    int32_t m_hole_index;
-};
-
-
-//------------------------------------------------------------------------------
-/**
-*/
-win32_thread_manager::win32_thread_manager()
-    : m_processor_groups {}
-    , m_num_groups { 0 }
-    , m_hole_index { 0 }
-{
-    this->initialize_threads_instrumentation();
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-void win32_thread_manager::initialize_threads_instrumentation()
-{
-    SYSTEM_INFO si;
-    GetNativeSystemInfo(&si);
-    DWORD_PTR pam, sam, m = 1;
-    (void)GetProcessAffinityMask(GetCurrentProcess(), &pam, &sam);
-
-    auto nproc = 0;
-    for(size_t idx = 0; idx < sizeof(DWORD_PTR) * CHAR_BIT; idx++, m <<= 1)
-    {
-        if(pam & m)
-        {
-            ++nproc;
-        }
-    }
-
-    auto const number_of_processors = static_cast<int32_t>(si.dwNumberOfProcessors);
-    assert(nproc <= number_of_processors);
-    // By default setting up a number of processors for one processor group
-    m_processor_groups[0].num_procs =
-        m_processor_groups[0].num_procs_running_total = nproc;
-
-    // Setting up processor groups in case the process does not restrict affinity 
-    // mask and more than one processor group is present
-
-    if(nproc == number_of_processors)
-    {
-        // The process does not have restricting affinity mask and multiple 
-        // processor groups are possible
-
-        this->m_num_groups = static_cast<int32_t>(::GetActiveProcessorGroupCount());
-        assert(this->m_num_groups <= max_processor_groups);
-
-        // Fail safety bootstrap. Release versions will limit available concurrency
-        // level, while debug ones would assert.
-        if(this->m_num_groups > max_processor_groups)
-        {
-            this->m_num_groups = max_processor_groups;
-        }
-
-        if(this->m_num_groups > 1)
-        {
-            GROUP_AFFINITY ga;
-            if(GetThreadGroupAffinity(GetCurrentThread(), &ga))
-            {
-                this->m_hole_index = static_cast<int32_t>(ga.Group);
-            }
-
-            auto nprocs = 0;
-            for(auto i = 0; i < this->m_num_groups; ++i)
-            {
-                auto& pgi = m_processor_groups[i];
-                pgi.num_procs = static_cast<int32_t>(::GetActiveProcessorCount(i));
-                assert(pgi.num_procs <= static_cast<int>(sizeof(DWORD_PTR)) * CHAR_BIT);
-
-                pgi.mask = pgi.num_procs == sizeof(DWORD_PTR) * CHAR_BIT ?
-                    ~static_cast<DWORD_PTR>(0) : (DWORD_PTR(1) << pgi.num_procs) - 1;
-
-                pgi.num_procs_running_total = nprocs += pgi.num_procs;
-            }
-
-            assert(nprocs == static_cast<int32_t>(
-                ::GetActiveProcessorCount(thread_all_processor_groups)));
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-void win32_thread_manager::set_thread_processor_group(HANDLE thread, uint32_t thread_index) const
-{
-    auto const processor_group_index =
-        this->find_processor_group_index(thread_index);
-
-    this->move_thread_into_processor_group(thread, processor_group_index);
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-int32_t win32_thread_manager::find_processor_group_index(int32_t proc_idx) const
-{
-    // In case of over-subscription spread extra workers in a round robin manner
-    int32_t hole_idx;
-    auto const num_procs =
-        m_processor_groups[this->m_num_groups - 1].num_procs_running_total;
-
-    if(proc_idx >= num_procs - 1)
-    {
-        hole_idx = INT_MAX;
-        proc_idx = (proc_idx - num_procs + 1) % num_procs;
-    }
-    else
-    {
-        hole_idx = this->m_hole_index;
-    }
-
-    // Approximate the likely group index assuming all groups are of the same size
-    auto i = proc_idx / m_processor_groups[0].num_procs;
-
-    // Make sure the approximation is a valid group index
-    if(i >= this->m_num_groups)
-    {
-        i = this->m_num_groups - 1;
-    }
-
-    // Now adjust the approximation up or down
-    if(m_processor_groups[i].num_procs_running_total > hole_adjusted(hole_idx, proc_idx, i))
-    {
-        while(m_processor_groups[i].num_procs_running_total -
-            m_processor_groups[i].num_procs > hole_adjusted(hole_idx, proc_idx, i))
-        {
-            assert(i > 0);
-            --i;
-        }
-    }
-    else
-    {
-        do
-        {
-            ++i;
-        } while(m_processor_groups[i].num_procs_running_total < hole_adjusted(hole_idx, proc_idx, i));
-    }
-
-    assert(i < this->m_num_groups);
-    return i;
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-void win32_thread_manager::move_thread_into_processor_group(HANDLE thread, int32_t group_index) const
-{
-    GROUP_AFFINITY ga =
-    {
-        m_processor_groups[group_index].mask,
-        static_cast<WORD>(group_index),
-        { 0, 0, 0 }
-    };
-
-    (void)SetThreadGroupAffinity(thread, &ga, nullptr);
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-int32_t win32_thread_manager::get_number_processor_groups() const
-{
-    return this->m_num_groups;
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-uint32_t win32_thread_manager::get_processors_count() const
-{
-    return static_cast<uint32_t>(
-        m_processor_groups[this->m_num_groups - 1].num_procs_running_total);
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-uint32_t win32_thread_manager::get_thread_index_for_manager() const
-{
-    GROUP_AFFINITY ga;
-    (void)GetThreadGroupAffinity(GetCurrentThread(), &ga);
-    return static_cast<uint32_t>(ga.Group);
-}
 
 //------------------------------------------------------------------------------
 struct thread_data final
@@ -286,6 +53,7 @@ struct thread_data final
 
     thread_name_type name_for_debugger[thread_name_size] { 0 };
     memory::base_allocator* allocator { nullptr };
+    eastl::optional<uint32_t> hardware_index {};
     thread_function function { nullptr };
     void* argument { nullptr };
 
@@ -306,8 +74,6 @@ namespace xr::sys
 //------------------------------------------------------------------------------
 namespace
 {
-
-static details::win32_thread_manager g_win32_thread_manager;
 
 // initializer state for thread-local data
 INIT_ONCE g_thread_local_init = INIT_ONCE_STATIC_INIT; // Static initialization
@@ -337,6 +103,12 @@ unsigned __stdcall thread_procedure_proxy(void* const argument)
 
     memory::base_allocator* allocator = data->allocator;
     XR_DEBUG_ASSERTION(allocator != nullptr);
+
+    if(data->hardware_index.has_value())
+    {
+        uint64_t hardware_code_id = uint64_t(1) << data->hardware_index.value();
+        SetThreadAffinityMask(GetCurrentThread(), hardware_code_id);
+    }
 
     XR_DEBUG_ASSERTION(data->thread_index == 0);
     data->thread_index = GetCurrentThreadId();
@@ -376,10 +148,6 @@ thread_handle spawn_thread(memory::base_allocator& alloc,
 
     XR_DEBUG_ASSERTION_MSG(execute_once_result, "Could not initialize TLS data!");
 
-    // Initialize threading functions and system information
-    auto const num_processor_groups =
-        g_win32_thread_manager.get_number_processor_groups();
-
     // Allocate thread data
     auto const data = XR_ALLOCATE_OBJECT_T(alloc, details::thread_data, "thread data")();
     XR_DEBUG_ASSERTION(data != nullptr);
@@ -388,6 +156,7 @@ thread_handle spawn_thread(memory::base_allocator& alloc,
         eastl::end(debug_thread_name), eastl::begin(data->name_for_debugger));
 
     data->allocator = &alloc;
+    data->hardware_index = hardware_thread;
     data->function = function;
     data->argument = arg;
 
@@ -431,32 +200,7 @@ thread_handle spawn_thread(memory::base_allocator& alloc,
             result = ::SetThreadPriority(thread, THREAD_PRIORITY_HIGHEST);
             break;
     };
-
-#if defined(_DEBUG)
-    if(result != 1)
-    {
-        convert_last_error_to_char(s_spawn_thread_error_buf, sizeof(s_spawn_thread_error_buf));
-        assert((result != 0) && s_spawn_thread_error_buf);
-    }
-#endif
-
-    if(num_processor_groups > 1)
-    {
-        if(hardware_thread.has_value())
-        {
-            g_win32_thread_manager.set_thread_processor_group(thread, hardware_thread.value());
-        }
-    }
-
     result = ::ResumeThread(thread);
-
-#if defined(_DEBUG)
-    if(result != TRUE)
-    {
-        convert_last_error_to_char(s_spawn_thread_error_buf, sizeof(s_spawn_thread_error_buf));
-        assert((result != FALSE) && s_spawn_thread_error_buf);
-    }
-#endif
 
 #if !defined(_DEBUG)
     XR_UNREFERENCED_PARAMETER(result);
@@ -470,7 +214,9 @@ thread_handle spawn_thread(memory::base_allocator& alloc,
  */
 uint32_t core_count()
 {
-    return g_win32_thread_manager.get_processors_count();
+    SYSTEM_INFO si;
+    GetSystemInfo(&si);
+    return (int)si.dwNumberOfProcessors;
 }
 
 //------------------------------------------------------------------------------
@@ -487,7 +233,9 @@ thread_id current_thread_id()
  */
 uint32_t current_thread_affinity()
 {
-    return g_win32_thread_manager.get_thread_index_for_manager();
+    GROUP_AFFINITY ga;
+    (void)GetThreadGroupAffinity(GetCurrentThread(), &ga);
+    return static_cast<uint32_t>(ga.Group);
 }
 
 //------------------------------------------------------------------------------

@@ -68,7 +68,7 @@ enum class access_mode : uint8_t
 // accessing pattern of current file.
 enum class access_pattern : uint8_t
 {
-    random, //!< Random file access - best working with multi-threading
+    random, //!< Random file access
     sequential, //!< Sequential file access
 }; // enum class access_pattern
 
