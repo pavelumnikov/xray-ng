@@ -47,7 +47,6 @@ public:
     sse_vector(const float_in_vec & x, const float_in_vec & y, const float_in_vec & z, const float_in_vec & w = float_in_vec(1.0f));
 
     sse_vector& XR_VECTORIZED_CALL operator = (const sse_vector & rhs);
-    __declspec(deprecated) sse_vector& XR_VECTORIZED_CALL operator = (__m128 rhs);
 
     // Flip sign
     sse_vector XR_VECTORIZED_CALL operator - () const;
@@ -199,16 +198,6 @@ sse_vector::operator = (const sse_vector& rhs)
 {
     __m128 vResult = rhs.v;
     v = vResult;
-    return *this;
-}
-
-//------------------------------------------------------------------------------
-/**
- */
-inline sse_vector& XR_VECTORIZED_CALL
-sse_vector::operator = (__m128 rhs)
-{
-    v = rhs;
     return *this;
 }
 
