@@ -280,7 +280,8 @@ signalling_bool wait_threads(thread_handle const* threads,
         tm = timeout.value();
 
     auto const result = WaitForMultipleObjectsEx(
-        static_cast<uint32_t>(threads_count), threads, do_wait_all, tm, do_alertable);
+        static_cast<uint32_t>(threads_count), threads, do_wait_all,
+        static_cast<uint32_t>(tm), do_alertable);
 
     if(result == WAIT_OBJECT_0)
         return true;

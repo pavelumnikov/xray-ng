@@ -157,11 +157,12 @@ source_group("include\\etl\\hashing\\std" FILES ${CORE_MODULE_ETL_HASHING_STD_HE
 set(CORE_MODULE_MATH_HEADERS
 	"include/corlib/math/color.h"
 	"include/corlib/math/color_table.h"
-	"include/corlib/math/compressed_normal.h"
+	"include/corlib/math/local_transform.h"
 	"include/corlib/math/mathlib.h"
-	"include/corlib/math/rect.h"
 	"include/corlib/math/matrix4.h"
+	"include/corlib/math/quaternion.h"
 	"include/corlib/math/random.h"
+	"include/corlib/math/rect.h"
 	"include/corlib/math/vector.h"
 )
 
@@ -185,9 +186,11 @@ source_group("include\\math\\detais\\sse" FILES ${CORE_MODULE_MATH_SSE_HEADERS})
 ##
 
 set(CORE_MODULE_MATH_SOURCES
-	"sources/math/compressed_normal.cpp"
-	"sources/math/compressed_normal_table.h"
+	"sources/math/local_transform.cpp"
+	"sources/math/matrix4.cpp"
+	"sources/math/quaternion.cpp"
 	"sources/math/random.cpp"
+	"sources/math/vector.cpp"
 )
 
 source_group("sources\\math" FILES ${CORE_MODULE_MATH_SOURCES})
