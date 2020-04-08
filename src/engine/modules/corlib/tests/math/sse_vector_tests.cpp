@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "catch/catch.hpp"
 #include "corlib/math/details/sse/sse_vector.h"
 

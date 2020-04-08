@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #pragma once
 
 #include "corlib/threading/spin_wait_strategy_traits.h"

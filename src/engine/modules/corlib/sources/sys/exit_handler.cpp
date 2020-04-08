@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/sys/exit_handler.h"
 //#include "corlib/containers/intrusive_double_list.h"
 

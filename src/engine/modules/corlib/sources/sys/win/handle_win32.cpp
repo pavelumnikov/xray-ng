@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/sys/win/handle.h"
 #include "../../os_include_win32.h"
 

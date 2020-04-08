@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #pragma once
 
 #include <malloc.h> // for _alloca

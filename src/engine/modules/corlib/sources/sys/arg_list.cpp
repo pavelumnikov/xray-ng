@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/sys/arg_list.h"
 #include "corlib/etl/string/constexpr_string.h"
 

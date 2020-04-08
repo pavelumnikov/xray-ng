@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "error_conv_win32.h"
 #include <cassert>
 

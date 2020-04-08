@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #pragma once
 
 #include "corlib/math/matrix4.h"

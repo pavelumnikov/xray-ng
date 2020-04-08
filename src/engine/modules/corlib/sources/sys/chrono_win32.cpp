@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/sys/chrono.h"
 #include "corlib/platform.h"
 #include "../os_include_win32.h"

@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "catch/catch.hpp"
 #include "corlib/memory/memory_crt_allocator.h"
 #include "corlib/memory/memory_aligned_allocator.h"

@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/math/local_transform.h"
 
 //------------------------------------------------------------------------------

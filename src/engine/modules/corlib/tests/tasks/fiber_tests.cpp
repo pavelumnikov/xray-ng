@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "catch/catch.hpp"
 #include "../sources/tasks/fiber.h"
 #include "corlib/threading/interlocked.h"

@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/math/matrix4.h"
 #include "corlib/math/mathlib.h"
 #include "corlib/math/details/sse/sse_math_intrinsics.h"

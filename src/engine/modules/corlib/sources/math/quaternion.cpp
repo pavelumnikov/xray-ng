@@ -1,3 +1,6 @@
+// This file is a part of xray-ng engine
+//
+
 #include "corlib/math/quaternion.h"
 #include "corlib/math/mathlib.h"
 
