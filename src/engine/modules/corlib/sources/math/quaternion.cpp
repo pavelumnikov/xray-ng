@@ -1,12 +1,16 @@
 #include "corlib/math/quaternion.h"
 #include "corlib/math/mathlib.h"
 
+//------------------------------------------------------------------------------
 namespace xr::math
 {
 
-const quaternion quaternion::IDENTITY = { 0, 0, 0, 1 };
+const quaternion quaternion::IDENTITY { 0, 0, 0, 1 };
 
-quaternion::quaternion(vec3f const& axis, float angle)
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion::quaternion(vec3f const& axis, float angle) noexcept
 {
     float const half_angle = angle * 0.5f;
     float const s = sine(half_angle);
@@ -16,8 +20,10 @@ quaternion::quaternion(vec3f const& axis, float angle)
     z = axis.z * s;
 }
 
-
-quaternion quaternion::vec3_to_vec3(vec3f const& v0, vec3f const& v1)
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::vec3_to_vec3(vec3f const& v0, vec3f const& v1) noexcept
 {
     vec3f const from = v0.normalized();
     vec3f const to = v1.normalized();
@@ -39,7 +45,10 @@ quaternion quaternion::vec3_to_vec3(vec3f const& v0, vec3f const& v1)
     };
 }
 
-vec3f quaternion::to_euler() const
+//------------------------------------------------------------------------------
+/**
+ */
+vec3f quaternion::to_euler() const noexcept
 {
     // from urho3d
     float const check = 2.0f * (-y * z + w * x);
@@ -68,19 +77,26 @@ vec3f quaternion::to_euler() const
     };
 }
 
-
-void quaternion::conjugate()
+//------------------------------------------------------------------------------
+/**
+ */
+void quaternion::conjugate() noexcept
 {
     w = -w;
 }
 
-
-quaternion quaternion::conjugated() const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::conjugated() const noexcept
 {
     return quaternion { x, y, z, -w };
 }
 
-void quaternion::normalize()
+//------------------------------------------------------------------------------
+/**
+ */
+void quaternion::normalize() noexcept
 {
     float l = rsqrt(x * x + y * y + z * z + w * w);
     x *= l;
@@ -89,13 +105,19 @@ void quaternion::normalize()
     w *= l;
 }
 
-quaternion quaternion::normalized() const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::normalized() const noexcept
 {
     float l = rsqrt(x * x + y * y + z * z + w * w);
     return quaternion { x * l, y * l, z * l, w * l };
 }
 
-quaternion quaternion::operator*(const quaternion& rhs) const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::operator*(const quaternion& rhs) const noexcept
 {
     return quaternion
     {
@@ -106,31 +128,42 @@ quaternion quaternion::operator*(const quaternion& rhs) const
     };
 }
 
-
-quaternion quaternion::operator-() const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::operator-() const noexcept
 {
     return quaternion { x, y, z, -w };
 }
 
-
-quaternion quaternion::operator+(const quaternion& q) const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::operator+(const quaternion& q) const noexcept
 {
     return quaternion { x + q.x, y + q.y, z + q.z, w + q.w };
 }
 
-
-quaternion quaternion::operator*(float m) const
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::operator*(float m) const noexcept
 {
     return quaternion { x * m, y * m, z * m, w * m };
 }
 
-
-vec3f quaternion::operator*(vec3f const& q) const
+//------------------------------------------------------------------------------
+/**
+ */
+vec3f quaternion::operator*(vec3f const& q) const noexcept
 {
     return rotate(q);
 }
 
-quaternion quaternion::from_euler(vec3f const& euler)
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion quaternion::from_euler(vec3f const& euler) noexcept
 {
     XR_DEBUG_ASSERTION(euler.x >= -pi_div_2 && euler.x <= pi_div_2);
 
@@ -153,7 +186,10 @@ quaternion quaternion::from_euler(vec3f const& euler)
     };
 }
 
-quaternion nlerp(const quaternion& q1, const quaternion& q2, float t)
+//------------------------------------------------------------------------------
+/**
+ */
+quaternion nlerp(const quaternion& q1, const quaternion& q2, float t) noexcept
 {
     quaternion res {};
 
@@ -178,3 +214,4 @@ quaternion nlerp(const quaternion& q1, const quaternion& q2, float t)
 }
 
 } // namespace xr::math
+//------------------------------------------------------------------------------

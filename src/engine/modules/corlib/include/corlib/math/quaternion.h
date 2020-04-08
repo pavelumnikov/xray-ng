@@ -37,30 +37,30 @@ namespace xr::math
 //------------------------------------------------------------------------------
 struct quaternion
 {
-    constexpr quaternion() = default;
+    constexpr quaternion() noexcept = default;
 
-    quaternion(const vec3f& axis, float angle);
-    quaternion(float _x, float _y, float _z, float _w);
+    quaternion(vec3f const& axis, float angle) noexcept;
+    constexpr quaternion(float x, float y, float z, float w) noexcept;
 
-    vec3f to_euler() const;
-    void set(float _x, float _y, float _z, float _w);
+    vec3f to_euler() const noexcept;
+    constexpr void set(float x, float y, float z, float w) noexcept;
 
-    void conjugate();
-    quaternion conjugated() const;
-    void normalize();
-    quaternion normalized() const;
+    void conjugate() noexcept;
+    quaternion conjugated() const noexcept;
+    void normalize() noexcept;
+    quaternion normalized() const noexcept;
 
-    vec3f rotate(const vec3f& v) const;
-    vec3d rotate(const vec3d& v) const;
+    constexpr vec3f rotate(vec3f const& v) const noexcept;
+    constexpr vec3d rotate(vec3d const& v) const noexcept;
 
-    quaternion operator*(const quaternion& q) const;
-    quaternion operator-() const;
-    quaternion operator+(const quaternion& q) const;
-    quaternion operator*(float m) const;
-    vec3f operator*(const vec3f& q) const;
+    quaternion operator*(const quaternion& q) const noexcept;
+    quaternion operator-() const noexcept;
+    quaternion operator+(const quaternion& q) const noexcept;
+    quaternion operator*(float m) const noexcept;
+    vec3f operator*(vec3f const& q) const noexcept;
 
-    static quaternion from_euler(const vec3f& euler);
-    static quaternion vec3_to_vec3(const vec3f& a, const vec3f& b);
+    static quaternion from_euler(vec3f const& euler) noexcept;
+    static quaternion vec3_to_vec3(vec3f const& a, vec3f const& b) noexcept;
 
     float x {}, y {}, z {}, w {};
 
@@ -70,31 +70,36 @@ struct quaternion
 //------------------------------------------------------------------------------
 /**
 */
-quaternion nlerp(const quaternion& q1, const quaternion& q2, float t);
+quaternion nlerp(const quaternion& q1, const quaternion& q2, float t) noexcept;
 
 //------------------------------------------------------------------------------
 /**
 */
-inline
-quaternion::quaternion(float _x, float _y, float _z, float _w)
+constexpr
+quaternion::quaternion(float x, float y, float z, float w) noexcept
+    : x { x }
+    , y { y }
+    , z { z }
+    , w { w }
+{}
+
+//------------------------------------------------------------------------------
+/**
+*/
+constexpr void
+quaternion::set(float x, float y, float z, float w) noexcept
 {
-    x = _x; y = _y; z = _z; w = _w;
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->w = w;
 }
 
 //------------------------------------------------------------------------------
 /**
 */
-inline void
-quaternion::set(float _x, float _y, float _z, float _w)
-{
-    x = _x; y = _y; z = _z; w = _w;
-}
-
-//------------------------------------------------------------------------------
-/**
-*/
-inline vec3f
-quaternion::rotate(const vec3f& v) const
+constexpr vec3f
+quaternion::rotate(vec3f const& v) const noexcept
 {
     // nVidia SDK implementation
 
@@ -110,8 +115,8 @@ quaternion::rotate(const vec3f& v) const
 //------------------------------------------------------------------------------
 /**
 */
-inline vec3d
-quaternion::rotate(const vec3d& v) const
+constexpr vec3d
+quaternion::rotate(vec3d const& v) const noexcept
 {
     // nVidia SDK implementation
 
@@ -125,3 +130,4 @@ quaternion::rotate(const vec3d& v) const
 }
 
 } // namespace xr::math
+//------------------------------------------------------------------------------

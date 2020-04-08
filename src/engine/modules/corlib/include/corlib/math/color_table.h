@@ -30,6 +30,7 @@
 
 #include "corlib/etl/type_conversions.h"
 
+//------------------------------------------------------------------------------
 namespace xr::math
 {
 
@@ -181,6 +182,9 @@ enum class color_table : uint32_t
     yellow_green = 0xFF9ACD32,
 };
 
+//------------------------------------------------------------------------------
+/**
+ */
 constexpr uint32_t
 convert_to_abgr(color_table const col)
 {
@@ -197,3 +201,4 @@ convert_to_abgr(color_table const col)
 }
 
 } // namespace xr::math
+//------------------------------------------------------------------------------

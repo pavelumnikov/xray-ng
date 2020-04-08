@@ -7,7 +7,7 @@ namespace xr::math
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 local_rigid_transform::to_matrix() const
+matrix4 local_rigid_transform::to_matrix() const noexcept
 {
     return matrix4 { pos, rot };
 }
@@ -16,8 +16,8 @@ matrix4 local_rigid_transform::to_matrix() const
 /**
 */
 local_rigid_transform
-local_rigid_transform::operator*(local_rigid_transform const& rhs) const
-{
+local_rigid_transform::operator*(local_rigid_transform const& rhs) const noexcept
+{ 
     return
     { 
         rot.rotate(rhs.pos) + pos,
@@ -29,7 +29,7 @@ local_rigid_transform::operator*(local_rigid_transform const& rhs) const
 /**
 */
 local_rigid_transform
-local_rigid_transform::interpolate(local_rigid_transform const& rhs, float t) const
+local_rigid_transform::interpolate(local_rigid_transform const& rhs, float t) const noexcept
 {
     local_rigid_transform ret {};
     ret.pos = lerp(pos, rhs.pos, t);

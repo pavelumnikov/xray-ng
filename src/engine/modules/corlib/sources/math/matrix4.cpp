@@ -9,7 +9,7 @@ namespace xr::math
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationX(float angle)
+matrix4 matrix4::rotationX(float angle) noexcept
 {
     matrix4 m {};
 
@@ -26,7 +26,7 @@ matrix4 matrix4::rotationX(float angle)
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationY(float angle)
+matrix4 matrix4::rotationY(float angle) noexcept
 {
     matrix4 m {};
 
@@ -43,7 +43,7 @@ matrix4 matrix4::rotationY(float angle)
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationZ(float angle)
+matrix4 matrix4::rotationZ(float angle) noexcept
 {
     matrix4 m {};
 
@@ -60,7 +60,7 @@ matrix4 matrix4::rotationZ(float angle)
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::from_quaternion(quaternion const& rhs)
+matrix4 matrix4::from_quaternion(quaternion const& rhs) noexcept
 {
     // TODO: rewrite with SSE
 
@@ -97,7 +97,7 @@ matrix4 matrix4::from_quaternion(quaternion const& rhs)
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z_near, float z_far, bool is_homogenous_depth, bool reversed_z)
+matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z_near, float z_far, bool is_homogenous_depth, bool reversed_z) noexcept
 {
     matrix4 m {};
 
@@ -124,7 +124,7 @@ matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z
 /**
 */
 matrix4 matrix4::from_perspective(float fov, float ratio, float near_plane, float far_plane,
-    bool is_homogenous_depth, bool reversed_z)
+    bool is_homogenous_depth, bool reversed_z) noexcept
 {
     matrix4 m {};
 
@@ -153,7 +153,7 @@ matrix4 matrix4::from_perspective(float fov, float ratio, float near_plane, floa
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::from_euler(float yaw, float pitch, float roll)
+matrix4 matrix4::from_euler(float yaw, float pitch, float roll) noexcept
 {
     matrix4 m {};
 
@@ -187,7 +187,7 @@ matrix4 matrix4::from_euler(float yaw, float pitch, float roll)
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up)
+matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up) noexcept
 {
     matrix4 result {};
 
@@ -199,9 +199,9 @@ matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up)
 
     vec3f u = cross_product(f, r);
 
-    result.setXVector(r);
-    result.setYVector(u);
-    result.setZVector(f);
+    result.set_xvec(r);
+    result.set_yvec(u);
+    result.set_zvec(f);
     result.transpose();
     result.set_translation(vec3f(-dot_product(r, eye), -dot_product(u, eye), -dot_product(f, eye)));
 
@@ -211,7 +211,7 @@ matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up)
 //------------------------------------------------------------------------------
 /**
 */
-void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) const
+void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) const noexcept
 {
     get_translation(position);
     scale = getXVector().length();
@@ -223,7 +223,7 @@ void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) con
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator *(float rhs) const
+matrix4 matrix4::operator *(float rhs) const noexcept
 {
     matrix4 out;
     out.m11 = m11 * rhs;
@@ -252,8 +252,8 @@ matrix4 matrix4::operator *(float rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator +(const matrix4& rhs) const
-{
+matrix4 matrix4::operator +(const matrix4& rhs) const noexcept
+{ 
     matrix4 out;
 
     out.m11 = m11 + rhs.m11;
@@ -282,7 +282,7 @@ matrix4 matrix4::operator +(const matrix4& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator *(const matrix4& rhs) const
+matrix4 matrix4::operator *(const matrix4& rhs) const noexcept
 {
     matrix4 out {};
 
@@ -339,7 +339,7 @@ matrix4 matrix4::operator *(const matrix4& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-void matrix4::normalize_scale()
+void matrix4::normalize_scale() noexcept
 {
     vec3f scale
     {
@@ -364,10 +364,10 @@ void matrix4::normalize_scale()
 //------------------------------------------------------------------------------
 /**
 */
-quaternion matrix4::get_rotation() const
+quaternion matrix4::get_rotation() const noexcept
 {
     quaternion rot;
-    float tr = m11 + m22 + m33;
+    float const tr = m11 + m22 + m33;
 
     if(tr > 0)
     {
@@ -412,7 +412,7 @@ quaternion matrix4::get_rotation() const
 //------------------------------------------------------------------------------
 /**
 */
-void matrix4::transpose()
+void matrix4::transpose() noexcept
 {
     float tmp = m21;
 
@@ -443,7 +443,7 @@ void matrix4::transpose()
 //------------------------------------------------------------------------------
 /**
 */
-void matrix4::multiply_3x3(float scale)
+void matrix4::multiply_3x3(float scale) noexcept
 {
     m11 *= scale;
     m12 *= scale;
@@ -459,7 +459,7 @@ void matrix4::multiply_3x3(float scale)
 //------------------------------------------------------------------------------
 /**
 */
-vec3f matrix4::transform_point(const vec3f& rhs) const
+vec3f matrix4::transform_point(const vec3f& rhs) const noexcept
 {
     return vec3f
     {
@@ -472,7 +472,7 @@ vec3f matrix4::transform_point(const vec3f& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-vec3f matrix4::transform_vector(const vec3f& rhs) const
+vec3f matrix4::transform_vector(const vec3f& rhs) const noexcept
 {
     return vec3f
     {
@@ -485,7 +485,7 @@ vec3f matrix4::transform_vector(const vec3f& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-void matrix4::set_identity()
+void matrix4::set_identity() noexcept
 {
     m11 = 1; m12 = 0; m13 = 0; m14 = 0;
     m21 = 0; m22 = 1; m23 = 0; m24 = 0;

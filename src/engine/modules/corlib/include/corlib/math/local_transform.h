@@ -9,14 +9,14 @@ namespace xr::math
 //------------------------------------------------------------------------------
 struct local_rigid_transform
 {
-    local_rigid_transform() = default;
-    local_rigid_transform(vec3f const& position, quaternion const& rotation);
+    constexpr local_rigid_transform() noexcept = default;
+    constexpr local_rigid_transform(vec3f const& position, quaternion const& rotation) noexcept;
 
-    local_rigid_transform inverted() const;
+    local_rigid_transform inverted() const noexcept;
 
-    matrix4 to_matrix() const;
-    local_rigid_transform operator*(local_rigid_transform const& rhs) const;
-    local_rigid_transform interpolate(local_rigid_transform const& rhs, float t) const;
+    matrix4 to_matrix() const noexcept;
+    local_rigid_transform operator*(local_rigid_transform const& rhs) const noexcept;
+    local_rigid_transform interpolate(local_rigid_transform const& rhs, float t) const noexcept;
 
     vec3f pos {};
     quaternion rot {};
@@ -25,8 +25,8 @@ struct local_rigid_transform
 //------------------------------------------------------------------------------
 /**
 */
-inline
-local_rigid_transform::local_rigid_transform(vec3f const& position, quaternion const& rotation)
+constexpr
+local_rigid_transform::local_rigid_transform(vec3f const& position, quaternion const& rotation) noexcept
     : pos { position }
     , rot { rotation }
 {}
@@ -34,7 +34,7 @@ local_rigid_transform::local_rigid_transform(vec3f const& position, quaternion c
 //------------------------------------------------------------------------------
 /**
 */
-local_rigid_transform local_rigid_transform::inverted() const
+local_rigid_transform local_rigid_transform::inverted() const noexcept
 {
     local_rigid_transform result {};
     result.rot = rot.conjugated();
@@ -45,13 +45,13 @@ local_rigid_transform local_rigid_transform::inverted() const
 //------------------------------------------------------------------------------
 struct rigid_transform
 {
-    rigid_transform() = default;
-    rigid_transform(vec3d const& pos, quaternion const& rot);
+    constexpr rigid_transform() noexcept = default;
+    constexpr rigid_transform(vec3d const& pos, quaternion const& rot) noexcept;
 
-    rigid_transform inverted() const;
+    rigid_transform inverted() const noexcept;
 
-    rigid_transform operator*(rigid_transform const& rhs) const;
-    rigid_transform operator*(local_rigid_transform const& rhs) const;
+    rigid_transform operator*(rigid_transform const& rhs) const noexcept;
+    rigid_transform operator*(local_rigid_transform const& rhs) const noexcept;
 
     quaternion rot {};
     vec3d pos {};
@@ -60,7 +60,7 @@ struct rigid_transform
 //------------------------------------------------------------------------------
 /**
 */
-inline rigid_transform::rigid_transform(const vec3d& pos, const quaternion& rot)
+constexpr rigid_transform::rigid_transform(const vec3d& pos, const quaternion& rot) noexcept
     : pos(pos)
     , rot(rot)
 {}
@@ -68,7 +68,7 @@ inline rigid_transform::rigid_transform(const vec3d& pos, const quaternion& rot)
 //------------------------------------------------------------------------------
 /**
 */
-inline rigid_transform rigid_transform::inverted() const
+inline rigid_transform rigid_transform::inverted() const noexcept
 {
     rigid_transform result;
     result.rot = rot.conjugated();
@@ -79,7 +79,7 @@ inline rigid_transform rigid_transform::inverted() const
 //------------------------------------------------------------------------------
 /**
 */
-inline rigid_transform rigid_transform::operator*(const rigid_transform& rhs) const
+inline rigid_transform rigid_transform::operator*(const rigid_transform& rhs) const noexcept
 {
     return{ rot.rotate(rhs.pos) + pos, rot * rhs.rot };
 }
@@ -87,7 +87,7 @@ inline rigid_transform rigid_transform::operator*(const rigid_transform& rhs) co
 //------------------------------------------------------------------------------
 /**
 */
-rigid_transform rigid_transform::operator*(const local_rigid_transform& rhs) const
+rigid_transform rigid_transform::operator*(const local_rigid_transform& rhs) const noexcept
 {
     return { vec3d(rot.rotate(rhs.pos)) + pos, rot * rhs.rot };
 }
@@ -96,17 +96,17 @@ rigid_transform rigid_transform::operator*(const local_rigid_transform& rhs) con
 //------------------------------------------------------------------------------
 struct transform
 {
-    constexpr transform() = default;
-    transform(vec3d const& _pos, quaternion const& _rot, float _scale);
+    constexpr transform() noexcept = default;
+    constexpr transform(vec3d const& _pos, quaternion const& _rot, float _scale) noexcept;
 
-    transform inverted() const;
+    transform inverted() const noexcept;
 
-    transform operator*(transform const& rhs) const;
-    transform operator*(local_rigid_transform const& rhs) const;
+    constexpr transform operator*(transform const& rhs) const noexcept;
+    constexpr transform operator*(local_rigid_transform const& rhs) const noexcept;
 
-    vec3d tform(vec3f const& value) const;
-    vec3d tform(vec3d const& value) const;
-    rigid_transform get_rigid_path() const;
+    constexpr vec3d tform(vec3f const& value) const noexcept;
+    constexpr vec3d tform(vec3d const& value) const noexcept;
+    constexpr rigid_transform get_rigid_path() const noexcept;
 
     vec3d pos {};
     quaternion rot {};
@@ -118,7 +118,7 @@ struct transform
 //------------------------------------------------------------------------------
 /**
 */
-inline transform::transform(vec3d const& _pos, quaternion const& _rot, float _scale)
+constexpr transform::transform(vec3d const& _pos, quaternion const& _rot, float _scale) noexcept
     : pos { _pos }
     , rot { _rot }
     , scale { _scale }
@@ -127,7 +127,7 @@ inline transform::transform(vec3d const& _pos, quaternion const& _rot, float _sc
 //------------------------------------------------------------------------------
 /**
 */
-inline transform transform::inverted() const
+inline transform transform::inverted() const noexcept
 {
     transform result {};
     result.rot = rot.conjugated();
@@ -139,7 +139,7 @@ inline transform transform::inverted() const
 //------------------------------------------------------------------------------
 /**
 */
-transform transform::operator*(transform const& rhs) const
+constexpr transform transform::operator*(transform const& rhs) const noexcept
 {
     return { rot.rotate(rhs.pos * scale) + pos, rot * rhs.rot, scale * rhs.scale };
 }
@@ -147,7 +147,7 @@ transform transform::operator*(transform const& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-inline transform transform::operator*(local_rigid_transform const& rhs) const
+constexpr transform transform::operator*(local_rigid_transform const& rhs) const noexcept
 {
     return { pos + rot.rotate(rhs.pos * scale), rot * rhs.rot, scale };
 }
@@ -155,7 +155,7 @@ inline transform transform::operator*(local_rigid_transform const& rhs) const
 //------------------------------------------------------------------------------
 /**
 */
-inline vec3d transform::tform(vec3f const& value) const
+constexpr vec3d transform::tform(vec3f const& value) const noexcept
 {
     return vec3d { pos + rot.rotate(value) * scale };
 }
@@ -163,7 +163,7 @@ inline vec3d transform::tform(vec3f const& value) const
 //------------------------------------------------------------------------------
 /**
 */
-inline vec3d transform::tform(const vec3d& value) const
+constexpr vec3d transform::tform(const vec3d& value) const noexcept
 {
     return vec3d { pos + rot.rotate(value) * scale };
 }
@@ -171,7 +171,7 @@ inline vec3d transform::tform(const vec3d& value) const
 //------------------------------------------------------------------------------
 /**
 */
-inline rigid_transform transform::get_rigid_path() const
+constexpr rigid_transform transform::get_rigid_path() const noexcept
 {
     return { pos, rot };
 }
