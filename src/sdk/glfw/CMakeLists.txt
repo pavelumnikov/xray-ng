@@ -43,6 +43,9 @@ set(SOURCES ${GLFW_HEADERS} ${GLFW_SOURCES})
 set(OPTIONS generic:purec=yes)
 xrng_engine_add_thirdparty(${PROJECT_NAME} STATIC OPTIONS NoDependency SOURCES)
 
+target_compile_definitions(${PROJECT_NAME} INTERFACE GLFW_INCLUDE_VULKAN)
+target_include_directories(${PROJECT_NAME} PUBLIC ${VK_SDK_PATH}/Include)
+
 if(WIN32)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE _GLFW_WIN32)
 endif(WIN32)
