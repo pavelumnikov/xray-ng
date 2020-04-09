@@ -50,17 +50,17 @@ constexpr DWORD CRIT_SPIN_COUNT_FOR_EVENT = 16;
 */
 event::event(bool const initial_state) noexcept
     : m_critical_section {}
-    , m_condition_variable { nullptr }
+    , m_condition_variable {}
     , m_num_of_waiting_threads { 0 }
     , m_value { 0 }
 {
-    static_assert(sizeof(m_critical_section) == sizeof(CRITICAL_SECTION),
+    static_assert(sizeof(m_critical_section) == sizeof(RTL_CRITICAL_SECTION),
         "m_critical_section: change type of storage");
-    static_assert(sizeof(m_condition_variable) == sizeof(HANDLE),
+    static_assert(sizeof(m_condition_variable) == sizeof(RTL_CONDITION_VARIABLE),
         "m_condition_variable: please change type of storage");
 
     auto cs = reinterpret_cast<LPCRITICAL_SECTION>(m_critical_section);
-    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(&m_condition_variable);
 
     (void)InitializeCriticalSectionAndSpinCount(cs, CRIT_SPIN_COUNT_FOR_EVENT);
     InitializeConditionVariable(cv);
@@ -95,7 +95,7 @@ event_wait_result
 event::wait_timeout(sys::tick timeout) noexcept
 {
     auto cs = details::to_critical_section(m_critical_section);
-    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(&m_condition_variable);
 
     // early exit if event already signaled
     if(m_value != EVENT_NOT_SIGNALED)
@@ -151,7 +151,7 @@ event::peek() const noexcept
 inline void event::set_event()
 {
     auto cs = details::to_critical_section(m_critical_section);
-    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(m_condition_variable);
+    auto cv = reinterpret_cast<PCONDITION_VARIABLE>(&m_condition_variable);
 
     details::critical_section_raii lock { cs };
     m_value = EVENT_SIGNALED;

@@ -47,7 +47,7 @@ public:
     signalling_bool peek() const noexcept;
 
 private:
-    using handle = sys::win::HANDLE;
+    using handle = sys::win::RTL_CONDITION_VARIABLE;
 
     void set_event();
     void reset_event();
@@ -59,7 +59,6 @@ private:
 #endif // defined(XRAY_PLATFORM_64BIT)
 
     handle m_condition_variable;
-
     volatile uint32_t m_num_of_waiting_threads;
     volatile int32_t m_value;
 };
