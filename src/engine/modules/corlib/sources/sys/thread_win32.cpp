@@ -250,7 +250,7 @@ signalling_bool wait_threads(thread_handle const* threads,
     auto const do_wait_all = wait_all_threads ? TRUE : FALSE;
     auto const constexpr do_alertable = TRUE; // all threads must be alertable
 
-    uint64_t tm = 0;
+    uint64_t tm = INFINITE;
     if(timeout.has_value())
         tm = timeout.value();
 
