@@ -13,7 +13,7 @@ constexpr size_t reserve_size = 512_kb;
 
 struct single_fiber_arg
 {
-    volatile uint32_t counter { 0 };
+    threading::atomic_uint32 counter { 0 };
     xr::tasks::fiber main_fiber;
     xr::tasks::fiber other_fiber;
 };

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/signalling_bool.h"
+#include "corlib/threading/atomic_types.h"
 #include "corlib/sys/chrono.h"
 #include "corlib/sys/win/min_windows.h"
 
@@ -59,8 +60,8 @@ private:
 #endif // defined(XRAY_PLATFORM_64BIT)
 
     handle m_condition_variable;
-    volatile uint32_t m_num_of_waiting_threads;
-    volatile int32_t m_value;
+    atomic_uint32 m_num_of_waiting_threads;
+    atomic_int32 m_value;
 };
 
 //-----------------------------------------------------------------------------------------------------------

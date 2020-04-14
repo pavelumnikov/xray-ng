@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/threading/spin_wait_strategy_traits.h"
+#include "corlib/threading/atomic_types.h"
 #include "corlib/signalling_bool.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -15,7 +16,7 @@ namespace details
 
 struct spin_wait_precise_value_type
 {
-    volatile uint32_t dest;
+    atomic_uint32 dest;
     uint32_t exchange;
     uint32_t compare;
 };

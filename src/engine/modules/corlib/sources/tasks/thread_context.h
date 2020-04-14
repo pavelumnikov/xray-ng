@@ -90,7 +90,7 @@ struct thread_context
     threading::event has_new_tasks_event;
 
     // thread is alive or not
-    volatile uint32_t state;
+    threading::atomic_uint32 state;
 
     // Temporary buffer, fixed size = max_task_buffer_capacity
     void* desc_buffer;

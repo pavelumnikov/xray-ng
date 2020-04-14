@@ -375,6 +375,7 @@ set(CORE_MODULE_THREADING_HEADERS
 	"include/corlib/threading/atomic_backoff_helpers.h"
 	"include/corlib/threading/atomic_backoff_strategy.h"
 	"include/corlib/threading/atomic_do_once.h"
+	"include/corlib/threading/atomic_types.h"
 	"include/corlib/threading/event.h"
 	"include/corlib/threading/event_monitor.h"
 	"include/corlib/threading/fast_semaphore.h"

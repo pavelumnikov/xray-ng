@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/types.h"
+#include "corlib/threading/atomic_types.h"
 #include "corlib/etl/type_conversions.h"
 #include "corlib/etl/type_inversions.h"
 #include "corlib/signalling_bool.h"
@@ -62,17 +62,6 @@ int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) noexcept;
 
 } // namespace internal
 //-----------------------------------------------------------------------------------------------------------
-
-using atomic_bool = volatile bool;
-using atomic_int8 = volatile int8_t;
-using atomic_uint8 = volatile uint8_t;
-using atomic_int16 = volatile int16_t;
-using atomic_uint16 = volatile uint16_t;
-using atomic_int32 = volatile int32_t;
-using atomic_uint32 = volatile uint32_t;
-using atomic_int64 = volatile int64_t;
-using atomic_uint64 = volatile uint64_t;
-using atomic_size_t = volatile size_t;
 
 //-----------------------------------------------------------------------------------------------------------
 enum class memory_order

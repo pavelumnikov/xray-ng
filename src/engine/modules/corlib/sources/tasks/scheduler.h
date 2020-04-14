@@ -81,7 +81,7 @@ public:
 #endif // defined(DEBUG)
 
 private:
-    volatile int32_t m_in_progress_task_count;
+    threading::atomic_int32 m_in_progress_task_count;
 
 #if defined(DEBUG)
     bool m_debug_is_free;
@@ -170,13 +170,13 @@ private:
     //! central memory allocator for tasks system
     memory::aligned_allocator<XR_DEFAULT_MACHINE_ALIGNMENT> m_aligned_allocator;
     //! thread index for new task
-    volatile uint32_t m_round_robin_thread_index;
+    threading::atomic_uint32 m_round_robin_thread_index;
     //! started threads count
-    volatile uint32_t m_started_threads_count;
+    threading::atomic_uint32 m_started_threads_count;
     //! waiting slots for different masters
     eastl::array<sys::thread_id, max_awaiting_contexts> m_awaiting_masters;
     //! waiting slots helper index
-    volatile uint32_t m_next_awaiting_master_index;
+    threading::atomic_uint32 m_next_awaiting_master_index;
     //! threads created by task manager
     uint32_t m_threads_count;
     //! all groups task statistic
