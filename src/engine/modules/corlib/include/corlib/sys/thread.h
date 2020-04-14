@@ -29,20 +29,20 @@ enum class thread_priority
 #if defined(XRAY_PLATFORM_WINDOWS)
 using thread_handle = win::HANDLE;
 using thread_id = uint32_t;
+using thread_function = etl::function_pointer_t<uint32_t, void*>;
 auto constexpr unknown_thread_handle = nullptr;
 // See http://blogs.msdn.com/b/oldnewthing/archive/2004/02/23/78395.aspx
 thread_id constexpr invalid_thread_id = 0;
+
 #else
 #error "Thread handle is not defined for this platform!"
-#endif
 
-using thread_function = etl::function_pointer_t<void, void*>;
+#endif
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-thread_handle spawn_thread(memory::base_allocator& alloc,
-    thread_function function, void* const arg,
+thread_handle spawn_thread(thread_function function, void* const arg,
     eastl::wstring_view debug_thread_name, thread_priority priority,
     size_t stack_size, eastl::optional<uint32_t> hardware_thread = {});
 
@@ -76,11 +76,6 @@ thread_id current_thread_id();
 /**
 */
 uint32_t current_thread_affinity();
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-eastl::wstring_view get_current_thread_name();
 
 } // namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------
