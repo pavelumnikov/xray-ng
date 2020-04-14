@@ -11,14 +11,11 @@ namespace xr::sys
 {
 
 //-----------------------------------------------------------------------------------------------------------
-class XR_NON_VIRTUAL exit_handler 
-    : public etl::containers::intrusive_list_node<exit_handler>
+class XR_NON_VIRTUAL exit_handler : public etl::containers::intrusive_list_node<exit_handler>
 {
 public:
-    virtual void on_exit() = 0;
-
-protected:
     XR_PURE_VIRTUAL_DESTRUCTOR(exit_handler);
+    virtual void on_exit() {};
 }; // class exit_handler
 
 //-----------------------------------------------------------------------------------------------------------
@@ -31,7 +28,7 @@ void register_exit_handler(exit_handler& handler);
  * Must be called from main module at exit to call all handlers registered with
  * register_exit_handler() function earlier
 */
-void call_exit_handlers();
+bool call_exit_handlers();
 
 } // namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------

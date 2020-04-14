@@ -2,24 +2,48 @@
 //
 
 #include "corlib/sys/exit_handler.h"
-//#include "corlib/containers/intrusive_double_list.h"
 
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::sys
 {
 
-//using exit_handlers_container = containers::intrusive_double_linked_list<
-//    exit_handler, exit_handler_node, &exit_handler_node::prev, &exit_handler_node::next>;
+using exit_handlers_container = etl::containers::intrusive_list_node<exit_handler>;
+static exit_handlers_container s_exit_handlers {};
 
-//static exit_handlers_container s_exit_handlers;
-
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 void register_exit_handler(exit_handler& handler)
 {
-    //s_exit_handlers.push_back(&handler);
+    s_exit_handlers.append_after_this(handler);
 }
 
-void call_exit_handlers()
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+bool call_exit_handlers()
 {
+    uint32_t handlers_done = 0;
+    bool has_next_handler = s_exit_handlers.has_next();
+    if(has_next_handler)
+    {
+        exit_handler* next_handler = &s_exit_handlers.next();
+        for(;;)
+        {
+            next_handler->on_exit();
+            ++handlers_done;
 
+            has_next_handler = next_handler->has_next();
+
+            if(!has_next_handler)
+                break;
+
+            next_handler = &next_handler->next();
+        }
+    }
+
+    return (handlers_done > 0);
 }
 
 } // namespace xr::sys
+//-----------------------------------------------------------------------------------------------------------
