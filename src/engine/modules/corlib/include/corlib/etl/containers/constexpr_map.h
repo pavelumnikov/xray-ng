@@ -7,11 +7,11 @@
 #include "corlib/etl/algorithms/constexpr_quicksort.h"
 #include "corlib/etl/algorithms/constexpr_binarysearch.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::etl::containers::details
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template<class Comparer> 
 class compare_key
 {
@@ -52,13 +52,13 @@ public:
 }; // class compare_key
 
 } // namespace xr::etl::containers::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::etl::containers
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template <class Key, class Value, size_t N, class Compare = eastl::less<Key>>
 class constexpr_map
 {
@@ -126,7 +126,7 @@ private:
     container_comparer m_comparer;
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename T, typename U, size_t N>
@@ -135,7 +135,7 @@ constexpr auto make_constexpr_map(eastl::pair<T, U> const (&items)[N])
     return constexpr_map<T, U, N>{ items };
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename T, typename U, size_t N, typename Comp>
@@ -144,7 +144,7 @@ constexpr auto make_constexpr_map(eastl::pair<T, U> const (&items)[N], Comp cons
     return constexpr_map<T, U, N, Comp>{ items, compare };
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -153,7 +153,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(container_type items, Compa
     : m_comparer { compare }
     , m_items { algorithms::quicksort_r(items, m_comparer) } {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -162,7 +162,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(container_type items)
     : constexpr_map { items, Compare {} }
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -177,7 +177,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(::std::initializer_list<val
 #endif // defined(_MSC_VER)
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -187,7 +187,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(
     : constexpr_map { items, Compare {} }
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -202,7 +202,7 @@ constexpr_map<Key, Value, N, Compare>::at(Key const &key) const
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -212,7 +212,7 @@ constexpr_map<Key, Value, N, Compare>::begin() const
     return m_items.begin();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -222,7 +222,7 @@ constexpr_map<Key, Value, N, Compare>::cbegin() const
     return m_items.cbegin();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -232,7 +232,7 @@ constexpr_map<Key, Value, N, Compare>::end() const
     return m_items.end();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -242,7 +242,7 @@ constexpr_map<Key, Value, N, Compare>::cend() const
     return m_items.cend();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -252,7 +252,7 @@ constexpr_map<Key, Value, N, Compare>::rbegin() const
     return m_items.rbegin();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -262,7 +262,7 @@ constexpr_map<Key, Value, N, Compare>::crbegin() const
     return m_items.crbegin();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -272,7 +272,7 @@ constexpr_map<Key, Value, N, Compare>::rend() const
     return m_items.rend();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -282,7 +282,7 @@ constexpr_map<Key, Value, N, Compare>::crend() const
     return m_items.crend();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -292,7 +292,7 @@ constexpr_map<Key, Value, N, Compare>::empty() const
     return !N;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -302,7 +302,7 @@ constexpr_map<Key, Value, N, Compare>::size() const
     return N;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -312,7 +312,7 @@ constexpr_map<Key, Value, N, Compare>::max_size() const
     return N;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -322,7 +322,7 @@ constexpr_map<Key, Value, N, Compare>::count(Key const &key) const
     return algorithms::binary_search<N>(m_items.begin(), key, m_comparer);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -336,7 +336,7 @@ constexpr_map<Key, Value, N, Compare>::find(Key const &key) const
         return end();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -350,7 +350,7 @@ constexpr_map<Key, Value, N, Compare>::equal_range(Key const &key) const
         return { lower, lower + 1 };
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -364,7 +364,7 @@ constexpr_map<Key, Value, N, Compare>::lower_bound(Key const &key) const
         return end();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
@@ -379,4 +379,4 @@ constexpr_map<Key, Value, N, Compare>::upper_bound(Key const &key) const
 }
 
 } // namespace xr::etl::containers
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

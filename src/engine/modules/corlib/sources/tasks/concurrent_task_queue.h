@@ -180,14 +180,14 @@ public:
     bool try_pop_newest(T& item);
 }; // class priority_task_queue<T, Priority, Capacity>
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
 inline priority_task_queue<T, Priority, Capacity>::priority_task_queue()
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
@@ -198,7 +198,7 @@ priority_task_queue<T, Priority, Capacity>::initialize_memory_pool(memory::base_
         m_queues[i].create(alloc);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
@@ -209,14 +209,14 @@ priority_task_queue<T, Priority, Capacity>::shutdown_memory_pool(memory::base_al
         m_queues[i].destroy(alloc);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
 inline priority_task_queue<T, Priority, Capacity>::~priority_task_queue()
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
@@ -249,7 +249,7 @@ priority_task_queue<T, Priority, Capacity>::add(const T* item_array, size_t coun
     return true;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
@@ -267,7 +267,7 @@ priority_task_queue<T, Priority, Capacity>::try_pop_oldest(T& item)
     return false;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t Priority, size_t Capacity>
@@ -285,4 +285,4 @@ priority_task_queue<T, Priority, Capacity>::try_pop_newest(T& item)
 }
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

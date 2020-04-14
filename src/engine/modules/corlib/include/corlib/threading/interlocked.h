@@ -29,11 +29,11 @@ extern "C" void __faststorefence();
 
 #endif
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace internal
 {
 
@@ -61,7 +61,7 @@ int32_t __atomic_and_operation(volatile int32_t* ptr, int32_t value) noexcept;
 int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) noexcept;
 
 } // namespace internal
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
 using atomic_bool = volatile bool;
 using atomic_int8 = volatile int8_t;
@@ -74,7 +74,7 @@ using atomic_int64 = volatile int64_t;
 using atomic_uint64 = volatile uint64_t;
 using atomic_size_t = volatile size_t;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 enum class memory_order
 {
     relaxed, //!< No order constraint, same as plain load/store. Unsafe but best performance
@@ -87,28 +87,28 @@ enum class memory_order
 // forward declarations
 template< typename T, size_t size > struct interlocked_align;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template< typename T > 
 struct alignas(sizeof(int8_t)) interlocked_align< T, sizeof(int8_t) > final
 {
     eastl::add_volatile_t<T> data;
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template< typename T >
 struct alignas(sizeof(int16_t)) interlocked_align< T, sizeof(int16_t) > final
 {
     eastl::add_volatile_t<T> data;
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template< typename T > 
 struct alignas(sizeof(int32_t)) interlocked_align< T, sizeof(int32_t) > final
 {
     eastl::add_volatile_t<T> data;
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template< typename T > 
 struct alignas(sizeof(int64_t)) interlocked_align< T, sizeof(int64_t) > final
 {
@@ -118,7 +118,7 @@ struct alignas(sizeof(int64_t)) interlocked_align< T, sizeof(int64_t) > final
 template< typename Type >
 using interlocked_align_t = interlocked_align<Type, sizeof(Type)>;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -145,7 +145,7 @@ T atomic_fetch(volatile T& address) noexcept
     return address;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -154,7 +154,7 @@ auto atomic_fetch_relax(volatile T& address) noexcept
     return atomic_fetch<memory_order::relaxed, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -163,7 +163,7 @@ auto atomic_fetch_acq(volatile T& address) noexcept
     return atomic_fetch<memory_order::acquire, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -173,7 +173,7 @@ auto atomic_fetch_seq(volatile T& address) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -255,7 +255,7 @@ void atomic_store(volatile T& address, T value) noexcept
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -264,7 +264,7 @@ auto atomic_store_relax(volatile T& address, T value) noexcept
     return atomic_store<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -273,7 +273,7 @@ auto atomic_store_rel(volatile T& address, T value) noexcept
     return atomic_store<memory_order::release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -282,7 +282,7 @@ auto atomic_store_seq(volatile T& address, T value) noexcept
     return atomic_store<memory_order::sequential, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -362,7 +362,7 @@ T atomic_fetch_store(volatile T& address, T value) noexcept
     return prev;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -371,7 +371,7 @@ auto atomic_fetch_store_relax(volatile T& address, T value) noexcept
     return atomic_fetch_store<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -380,7 +380,7 @@ auto atomic_fetch_store_acqrel(volatile T& address, T value) noexcept
     return atomic_fetch_store<memory_order::acquire_release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -390,7 +390,7 @@ auto atomic_fetch_store_seq(volatile T& address, T value) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -467,7 +467,7 @@ T atomic_fetch_add(volatile T& address, T value) noexcept
     return prev;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -476,7 +476,7 @@ auto atomic_fetch_add_relax(volatile T& address, T value) noexcept
     return atomic_fetch_add<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -485,7 +485,7 @@ auto atomic_fetch_add_acqrel(volatile T& address, T value) noexcept
     return atomic_fetch_add<memory_order::acquire_release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -495,7 +495,7 @@ auto atomic_fetch_add_seq(volatile T& address, T value) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<threading::memory_order order, typename T>
@@ -504,7 +504,7 @@ auto atomic_fetch_inc(volatile T& address) noexcept
     return atomic_fetch_add<order, T>(address, 1) + 1;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -513,7 +513,7 @@ auto atomic_fetch_inc_relax(volatile T& address) noexcept
     return atomic_fetch_inc<memory_order::relaxed, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -522,7 +522,7 @@ auto atomic_fetch_inc_acqrel(volatile T& address) noexcept
     return atomic_fetch_inc<memory_order::acquire_release, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -532,7 +532,7 @@ auto atomic_fetch_inc_seq(volatile T& address) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<memory_order Order, typename T>
@@ -541,7 +541,7 @@ auto atomic_add_fetch(volatile T& address, T value) noexcept
     return atomic_fetch_add<Order, T>(address, value) + value;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -550,7 +550,7 @@ auto atomic_add_fetch_relax(volatile T& address, T value) noexcept
     return atomic_add_fetch<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -559,7 +559,7 @@ auto atomic_add_fetch_acqrel(volatile T& address, T value) noexcept
     return atomic_add_fetch<memory_order::acquire_release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -569,7 +569,7 @@ auto atomic_add_fetch_seq(volatile T& address, T value) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<memory_order Order, typename T>
@@ -578,7 +578,7 @@ auto atomic_inc_fetch(volatile T& address) noexcept
     return atomic_fetch_add<Order, T>(address, 1) + 1;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -587,7 +587,7 @@ auto atomic_inc_fetch_relax(volatile T& address) noexcept
     return atomic_inc_fetch<memory_order::relaxed, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -596,7 +596,7 @@ auto atomic_inc_fetch_acqrel(volatile T& address) noexcept
     return atomic_inc_fetch<memory_order::acquire_release, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -606,7 +606,7 @@ auto atomic_inc_fetch_seq(volatile T& address) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -686,7 +686,7 @@ T atomic_fetch_sub(volatile T& address, T value) noexcept
     return prev;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -695,7 +695,7 @@ auto atomic_fetch_sub_relax(volatile T& address, T value) noexcept
     return atomic_fetch_sub<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -704,7 +704,7 @@ auto atomic_fetch_sub_acqrel(volatile T& address, T value) noexcept
     return atomic_fetch_sub<memory_order::acquire_release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -714,7 +714,7 @@ auto atomic_fetch_sub_seq(volatile T& address, T value) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<threading::memory_order order, typename T>
@@ -723,7 +723,7 @@ auto atomic_sub_fetch(volatile T& address, T value) noexcept
     return atomic_fetch_sub<order, T>(address, value) - value;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -732,7 +732,7 @@ auto atomic_sub_fetch_relax(volatile T& address, T value) noexcept
     return atomic_sub_fetch<memory_order::relaxed, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -741,7 +741,7 @@ auto atomic_sub_fetch_acqrel(volatile T& address, T value) noexcept
     return atomic_sub_fetch<memory_order::acquire_release, T>(address, value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -752,7 +752,7 @@ auto atomic_sub_fetch_seq(volatile T& address, T value) noexcept
 
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<threading::memory_order order, typename T>
@@ -761,7 +761,7 @@ auto atomic_dec_fetch(volatile T& address) noexcept
     return atomic_fetch_sub<order, T>(address, 1) - 1;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -770,7 +770,7 @@ auto atomic_dec_fetch_relax(volatile T& address) noexcept
     return atomic_dec_fetch<memory_order::relaxed, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -779,7 +779,7 @@ auto atomic_dec_fetch_acqrel(volatile T& address) noexcept
     return atomic_dec_fetch<memory_order::acquire_release, T>(address);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -790,7 +790,7 @@ auto atomic_dec_fetch_seq(volatile T& address) noexcept
 
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -874,7 +874,7 @@ T atomic_cas(volatile T& address, T value, T comparand) noexcept
     return prev;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -884,7 +884,7 @@ auto atomic_cas_relax(volatile T& address, T value, T comparand) noexcept
         address, value, comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -894,7 +894,7 @@ auto atomic_cas_acqrel(volatile T& address, T value, T comparand) noexcept
         address, value, comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -905,7 +905,7 @@ auto atomic_cas_seq(volatile T& address, T value, T comparand) noexcept
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< memory_order Order, typename T >
@@ -914,7 +914,7 @@ signalling_bool atomic_bcas(volatile T& address, T value, T comparand) noexcept
     return atomic_cas<Order, T>(address, value, comparand) == static_cast<T>(comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -924,7 +924,7 @@ auto atomic_bcas_relax(volatile T& address, T value, T comparand) noexcept
         address, value, comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -934,7 +934,7 @@ auto atomic_bcas_acqrel(volatile T& address, T value, T comparand) noexcept
         address, value, comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
@@ -944,7 +944,7 @@ auto atomic_bcas_seq(volatile T& address, T value, T comparand) noexcept
         address, value, comparand);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T >
@@ -987,7 +987,7 @@ T atomic_or(volatile T& address, T value) noexcept
     return prev;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T >
@@ -1031,4 +1031,4 @@ T atomic_and(volatile T& address, T value) noexcept
 }
 
 } // namespace xr::threading
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

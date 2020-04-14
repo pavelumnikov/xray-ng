@@ -5,11 +5,11 @@
 
 #include "corlib/threading/atomic_backoff.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 // read_write_spin_wait provides spin-waiting functionality to prevent kernel-level locking.
 // This particular locking scheme performs well when lock contention is low, as the while 
 // loop overhead is small and locks are acquired very quickly, but degrades as many callers 
@@ -62,7 +62,7 @@ private:
     static const uint64_t mask = 0xFFFF;
 }; // class read_write_spin_wait
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 constexpr read_write_spin_wait::read_write_spin_wait() noexcept
@@ -71,21 +71,21 @@ constexpr read_write_spin_wait::read_write_spin_wait() noexcept
     m_u.split_and_rw.data = 0;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline read_write_spin_wait::reader_access::reader_access(read_write_spin_wait& spin) noexcept
     : m_spinwaiter(spin)
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline read_write_spin_wait::writer_access::writer_access(read_write_spin_wait& spin) noexcept
     : m_spinwaiter(spin)
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void read_write_spin_wait::reader_access::unlock() const noexcept
@@ -95,4 +95,4 @@ inline void read_write_spin_wait::reader_access::unlock() const noexcept
 }
 
 } // namespace xr::threading
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

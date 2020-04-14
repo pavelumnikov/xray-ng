@@ -8,11 +8,11 @@
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/etl/containers/static_vector.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 fiber_context::fiber_context()
@@ -23,7 +23,7 @@ fiber_context::fiber_context()
     , parent_fiber { nullptr }
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::set_status(fiber_task_status status)
@@ -34,7 +34,7 @@ void fiber_context::set_status(fiber_task_status status)
     m_task_status = status;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 fiber_task_status fiber_context::get_status() const
@@ -42,7 +42,7 @@ fiber_task_status fiber_context::get_status() const
     return m_task_status;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::set_thread_context(details::thread_context* thread_ctx)
@@ -53,7 +53,7 @@ void fiber_context::set_thread_context(details::thread_context* thread_ctx)
     m_thread_context = thread_ctx;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 details::thread_context* fiber_context::get_thread_context()
@@ -61,7 +61,7 @@ details::thread_context* fiber_context::get_thread_context()
     return m_thread_context;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::reset()
@@ -75,7 +75,7 @@ void fiber_context::reset()
     required_stack = task_stack_request::unknown;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::yield()
@@ -98,7 +98,7 @@ void fiber_context::yield()
 #endif
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::assert_subtasks_valid(size_t task_count, bool fire_forget)
@@ -113,7 +113,7 @@ void fiber_context::assert_subtasks_valid(size_t task_count, bool fire_forget)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 size_t fiber_context::effective_coroutine_buckets(size_t task_count)
@@ -124,7 +124,7 @@ size_t fiber_context::effective_coroutine_buckets(size_t task_count)
     return bucket_count;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 pvoid fiber_context::current_effective_buffer()
@@ -133,11 +133,11 @@ pvoid fiber_context::current_effective_buffer()
     return m_thread_context->desc_buffer;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void fiber_context::run_subtasks_on_scheduler(
-    etl::containers::array_view<details::task_bucket>& buckets,
+    etl::array_view<details::task_bucket>& buckets,
     bool restored_from_awaiting)
 {
     XR_DEBUG_ASSERTION_MSG(m_thread_context, "Sanity check failed!");
@@ -145,10 +145,10 @@ void fiber_context::run_subtasks_on_scheduler(
     scheduler.run_tasks_internal(buckets, nullptr, restored_from_awaiting);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
-void fiber_context::run_subtasks_and_yield_impl(etl::containers::array_view<details::task_bucket>& buckets)
+void fiber_context::run_subtasks_and_yield_impl(etl::array_view<details::task_bucket>& buckets)
 {
     XR_DEBUG_ASSERTION_MSG(m_thread_context, "Sanity check failed!");
     XR_DEBUG_ASSERTION_MSG(m_thread_context->current_scheduler, "Sanity check failed!");
@@ -186,4 +186,4 @@ void fiber_context::run_subtasks_and_yield_impl(etl::containers::array_view<deta
 }
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

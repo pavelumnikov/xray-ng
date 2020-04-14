@@ -10,11 +10,11 @@
 #include "corlib/threading/interlocked.h"
 #include "corlib/sys/thread.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 st_arena_allocator::~st_arena_allocator()
@@ -22,7 +22,7 @@ st_arena_allocator::~st_arena_allocator()
     finalize();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void st_arena_allocator::initialize(size_t size, size_t initial,
@@ -39,7 +39,7 @@ void st_arena_allocator::initialize(size_t size, size_t initial,
     m_arena = HeapCreate(dw_initial_flags, sz_initial, sz_buffer_size);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 bool st_arena_allocator::can_allocate_block(size_t const size) const noexcept
@@ -49,7 +49,7 @@ bool st_arena_allocator::can_allocate_block(size_t const size) const noexcept
     return true;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 size_t st_arena_allocator::total_size() const noexcept
@@ -59,7 +59,7 @@ size_t st_arena_allocator::total_size() const noexcept
     return (mem_usage(heap, nullptr, nullptr));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 size_t st_arena_allocator::allocated_size() const noexcept
@@ -69,7 +69,7 @@ size_t st_arena_allocator::allocated_size() const noexcept
     return (mem_usage(heap, nullptr, nullptr));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 pvoid st_arena_allocator::call_malloc(size_t size
@@ -86,7 +86,7 @@ pvoid st_arena_allocator::call_malloc(size_t size
     return result;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 pvoid st_arena_allocator::call_realloc(pvoid pointer, size_t new_size
@@ -103,7 +103,7 @@ pvoid st_arena_allocator::call_realloc(pvoid pointer, size_t new_size
     return result;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void st_arena_allocator::call_free(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION)
@@ -117,7 +117,7 @@ void st_arena_allocator::call_free(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION
     HeapFree(heap, 0, pointer);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void st_arena_allocator::finalize()
@@ -128,4 +128,4 @@ void st_arena_allocator::finalize()
 }
 
 } // namespace xr::memory
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

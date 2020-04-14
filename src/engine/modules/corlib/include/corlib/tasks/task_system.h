@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/signalling_bool.h"
+#include "corlib/math/color_table.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/tasks/details/task_desc.h"
 #include "corlib/tasks/details/task_group.h"
@@ -39,18 +40,18 @@
 
 #endif // XR_INSTRUMENTED_BUILD
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
 {
 class base_allocator;
 } // namespace xr::memory
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL execution_context
 {
 public:
@@ -69,10 +70,10 @@ public:
     void run_subtasks_and_yield(task_group group, TTask(&tasks)[N]);
 
     template<typename TTask, size_t N>
-    void run_async(task_group group, etl::containers::static_vector<TTask, N>& tasks);
+    void run_async(task_group group, etl::static_vector<TTask, N>& tasks);
 
     template<typename TTask, size_t N>
-    void run_subtasks_and_yield(task_group group, etl::containers::static_vector<TTask, N>& tasks);
+    void run_subtasks_and_yield(task_group group, etl::static_vector<TTask, N>& tasks);
 
     virtual void yield() = 0;
 
@@ -82,14 +83,14 @@ protected:
     virtual pvoid current_effective_buffer() = 0;
 
     virtual void run_subtasks_on_scheduler(
-        etl::containers::array_view<details::task_bucket>& buckets,
+        etl::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) = 0;
 
     virtual void run_subtasks_and_yield_impl(
-        etl::containers::array_view<details::task_bucket>& buckets) = 0;
+        etl::array_view<details::task_bucket>& buckets) = 0;
 }; // class execution_context
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL scheduler
 {
 public:
@@ -100,7 +101,7 @@ public:
     void run_async(task_group group, TTask(&tasks)[N]);
 
     template<typename TTask, size_t N>
-    void run_async(task_group group, etl::containers::static_vector<TTask, N>& tasks);
+    void run_async(task_group group, etl::static_vector<TTask, N>& tasks);
 
     virtual task_group create_group() = 0;
     virtual void release_group(task_group group) = 0;
@@ -111,33 +112,33 @@ public:
 protected:
     virtual size_t effective_master_buckets(size_t tasks) = 0;
     virtual void run_subtasks_on_scheduler(
-        etl::containers::array_view<details::task_bucket>& buckets,
+        etl::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) = 0;
 }; // class scheduler
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void initialize_tasks(memory::base_allocator& alloc);
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void shutdown_tasks();
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 scheduler& current_scheduler();
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask>
@@ -148,15 +149,15 @@ execution_context::run_async(task_group group, const TTask* tasks, size_t count)
     pvoid desc_buffer = current_effective_buffer();
     size_t bucket_count = effective_coroutine_buckets(count);
 
-    etl::containers::array_view<details::grouped_task> buffer(desc_buffer, count);
-    etl::containers::array_view<details::task_bucket> buckets(
+    etl::array_view<details::grouped_task> buffer(desc_buffer, count);
+    etl::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket) * bucket_count), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
     run_subtasks_on_scheduler(buckets, false);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask>
@@ -167,15 +168,15 @@ execution_context::run_subtasks_and_yield(task_group group, const TTask* tasks, 
     pvoid desc_buffer = current_effective_buffer();
     size_t bucket_count = effective_coroutine_buckets(count);
 
-    etl::containers::array_view<details::grouped_task> buffer(desc_buffer, count);
-    etl::containers::array_view<details::task_bucket> buckets(
+    etl::array_view<details::grouped_task> buffer(desc_buffer, count);
+    etl::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket) * bucket_count), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
     run_subtasks_and_yield_impl(buckets);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
@@ -185,7 +186,7 @@ execution_context::run_async(task_group group, TTask(&tasks)[N])
     run_async(group, tasks, N);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
@@ -195,29 +196,29 @@ execution_context::run_subtasks_and_yield(task_group group, TTask(&tasks)[N])
     run_subtasks_and_yield(group, tasks, N);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
 inline void
 execution_context::run_async(task_group group,
-    etl::containers::static_vector<TTask, N>& tasks)
+    etl::static_vector<TTask, N>& tasks)
 {
     run_async(group, tasks.begin(), tasks.size());
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
 inline void
 execution_context::run_subtasks_and_yield(task_group group,
-    etl::containers::static_vector<TTask, N>& tasks)
+    etl::static_vector<TTask, N>& tasks)
 {
     run_subtasks_and_yield(group, tasks.begin(), tasks.size());
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask>
@@ -226,18 +227,18 @@ scheduler::run_async(task_group group, const TTask* tasks, size_t count)
 {
     size_t bucket_count = effective_master_buckets(count);
     size_t bytes_count_for_grouped_tasks = sizeof(details::grouped_task) * count;
-    etl::containers::array_view<details::grouped_task> buffer(
+    etl::array_view<details::grouped_task> buffer(
         XR_STACK_ALLOCATE_MEMORY(bytes_count_for_grouped_tasks), count);
 
     size_t bytes_count_for_task_buckets = sizeof(details::task_bucket) * bucket_count;
-    etl::containers::array_view<details::task_bucket> buckets(
+    etl::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(bytes_count_for_task_buckets), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
     run_subtasks_on_scheduler(buckets, false);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
@@ -247,15 +248,15 @@ scheduler::run_async(task_group group, TTask(&tasks)[N])
     run_async(group, tasks, N);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename TTask, size_t N>
 inline void
-scheduler::run_async(task_group group, etl::containers::static_vector<TTask, N>& tasks)
+scheduler::run_async(task_group group, etl::static_vector<TTask, N>& tasks)
 {
     run_async(group, tasks.begin(), tasks.size());
 }
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

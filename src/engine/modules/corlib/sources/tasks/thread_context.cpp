@@ -4,11 +4,11 @@
 #include "thread_context.h"
 #include "corlib/memory/allocator_macro.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 thread_context::thread_context(memory::base_allocator& alloc)
@@ -34,7 +34,7 @@ thread_context::thread_context(memory::base_allocator& alloc)
         memory_requrements_for_desc_buffer, "thread_context local data");
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 thread_context::thread_context(void* externalDescBuffer)
@@ -53,7 +53,7 @@ thread_context::thread_context(void* externalDescBuffer)
     desc_buffer = externalDescBuffer;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 thread_context::~thread_context()
@@ -68,7 +68,7 @@ thread_context::~thread_context()
     desc_buffer = nullptr;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::set_thread_index(uint32_t threadIndex)
@@ -78,7 +78,7 @@ void thread_context::set_thread_index(uint32_t threadIndex)
 
 #ifdef XR_INSTRUMENTED_BUILD
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_wait_started()
@@ -89,7 +89,7 @@ void thread_context::notify_wait_started()
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_wait_finished()
@@ -100,7 +100,7 @@ void thread_context::notify_wait_finished()
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_temporary_worker_thread_join()
@@ -111,7 +111,7 @@ void thread_context::notify_temporary_worker_thread_join()
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_temporary_worker_thread_leave()
@@ -122,7 +122,7 @@ void thread_context::notify_temporary_worker_thread_leave()
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_task_execute_state_changed(math::color_table debug_color, const mt_char* debug_id, task_execute_state type, int32 fiber_index)
@@ -133,7 +133,7 @@ void thread_context::notify_task_execute_state_changed(math::color_table debug_c
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_thread_created(uint32_t threadIndex)
@@ -144,7 +144,7 @@ void thread_context::notify_thread_created(uint32_t threadIndex)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_thread_started(uint32_t threadIndex)
@@ -155,7 +155,7 @@ void thread_context::notify_thread_started(uint32_t threadIndex)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_thread_stopped(uint32_t threadIndex)
@@ -166,7 +166,7 @@ void thread_context::notify_thread_stopped(uint32_t threadIndex)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_thread_idle_started(uint32_t threadIndex)
@@ -177,7 +177,7 @@ void thread_context::notify_thread_idle_started(uint32_t threadIndex)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void thread_context::notify_thread_idle_finished(uint32_t threadIndex)
@@ -191,4 +191,4 @@ void thread_context::notify_thread_idle_finished(uint32_t threadIndex)
 #endif // XR_INSTRUMENTED_BUILD
 
 } // namespace xr::tasks::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

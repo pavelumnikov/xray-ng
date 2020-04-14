@@ -31,8 +31,10 @@ source_group("include" FILES ${CORE_MODULE_HEADERS})
 ##
 
 set(CORE_MODULE_ETL_HEADERS
+	"include/corlib/etl/array_view.h"
 	"include/corlib/etl/delegate.h"
 	"include/corlib/etl/enumeration.h"
+	"include/corlib/etl/fourcc.h"
 	"include/corlib/etl/function_pointer.h"
 	"include/corlib/etl/integer.h"
 	"include/corlib/etl/integer_fwd.h"
@@ -41,7 +43,7 @@ set(CORE_MODULE_ETL_HEADERS
 	"include/corlib/etl/padded.h"
 	"include/corlib/etl/pseudo_virtual_pointer.h"
 	"include/corlib/etl/ptr.h"
-	"include/corlib/etl/signal.h"
+	"include/corlib/etl/static_vector.h"
 	"include/corlib/etl/select_sizet_constant.h"
 	"include/corlib/etl/type_conversions.h"
 	"include/corlib/etl/type_inversions.h"
@@ -77,7 +79,6 @@ source_group("include\\etl\\algorithms\\searchers" FILES ${CORE_MODULE_ETL_ALGOR
 ##
 
 set(CORE_MODULE_ETL_CONTAINERS_HEADERS
-	"include/corlib/etl/containers/array_view.h"
 	"include/corlib/etl/containers/associative_vector.h"
 	"include/corlib/etl/containers/associative_vector_compare_predicate.h"
 	"include/corlib/etl/containers/constexpr_array.h"
@@ -86,7 +87,6 @@ set(CORE_MODULE_ETL_CONTAINERS_HEADERS
 	"include/corlib/etl/containers/hierarchy_node.h"
 	"include/corlib/etl/containers/intrusive_list_node.h"
 	"include/corlib/etl/containers/lru_cache.h"
-	"include/corlib/etl/containers/static_vector.h"
 )
 
 source_group("include\\etl\\containers" FILES ${CORE_MODULE_ETL_CONTAINERS_HEADERS})
@@ -157,6 +157,7 @@ source_group("include\\etl\\hashing\\std" FILES ${CORE_MODULE_ETL_HASHING_STD_HE
 set(CORE_MODULE_MATH_HEADERS
 	"include/corlib/math/color.h"
 	"include/corlib/math/color_table.h"
+	"include/corlib/math/constants.h"
 	"include/corlib/math/local_transform.h"
 	"include/corlib/math/mathlib.h"
 	"include/corlib/math/matrix4.h"
@@ -459,7 +460,7 @@ endif(WIN32)
 ##
 
 set(OPTIONS generic:cpp17=yes generic:noexceptions=yes win:asm=yes)
-set(DEPENDENCY module:eastl win:Ws2_32 win:Mswsock win:AdvApi32)
+set(DEPENDENCY module:eastl module:glfw win:Ws2_32 win:Mswsock win:AdvApi32)
 
 xrng_engine_add_module(${PROJECT_NAME} STATIC OPTIONS DEPENDENCY SOURCES)
 target_include_directories(${PROJECT_NAME} PRIVATE ${eastl_SOURCE_DIR}/include)

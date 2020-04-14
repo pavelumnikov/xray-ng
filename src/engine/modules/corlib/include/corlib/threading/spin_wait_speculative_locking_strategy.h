@@ -6,7 +6,7 @@
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/threading/spin_wait_strategy_traits.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
 {
 
@@ -26,7 +26,7 @@ struct spin_wait_speculative_strategy final
     void unlock(volatile locking_value& locking_value) const noexcept;
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void 
@@ -36,4 +36,4 @@ spin_wait_speculative_strategy::reset(volatile locking_value& locking_value) con
 }
 
 } // namespace xr::threading
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

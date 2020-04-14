@@ -102,4 +102,4 @@ template <static_min_max_unsigned_type Value1, static_min_max_unsigned_type Valu
 struct static_unsigned_max;
 
 }  // namespace xr::etl
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

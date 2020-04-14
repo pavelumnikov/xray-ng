@@ -7,7 +7,7 @@
 #include "corlib/threading/atomic_backoff_strategy.h"
 #include "corlib/signalling_bool.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
 {
 
@@ -67,7 +67,7 @@ using default_atomic_backoff = atomic_backoff<backoff_strategy_pause, backoff_st
 template<size_t BackoffCount, size_t BackoffThreshold>
 using default_atomic_backoff_timeout = atomic_backoff<backoff_strategy_pause, backoff_strategy_yield, BackoffCount, BackoffThreshold>;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -76,7 +76,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::at
     : m_backoff_counter(1)
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -89,7 +89,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::at
     mov.m_backoff_counter = 0;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -105,7 +105,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::op
     return *this;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -125,7 +125,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::pa
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -143,7 +143,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::bo
     return false;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
@@ -154,4 +154,4 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::re
 }
 
 } // namespace xr::threading
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

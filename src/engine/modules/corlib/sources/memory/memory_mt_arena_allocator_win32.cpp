@@ -8,11 +8,19 @@
 #include "corlib/memory/memory_mt_arena_allocator.h"
 #include "memory_utility_for_arena_win32.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+mt_arena_allocator::~mt_arena_allocator()
+{
+    finalize();
+}
+
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void mt_arena_allocator::initialize(size_t size, size_t initial)
@@ -26,7 +34,7 @@ void mt_arena_allocator::initialize(size_t size, size_t initial)
     m_arena = HeapCreate(dw_initial_flags, sz_initial, sz_buffer_size);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 bool mt_arena_allocator::can_allocate_block(size_t const size) const noexcept
@@ -36,7 +44,7 @@ bool mt_arena_allocator::can_allocate_block(size_t const size) const noexcept
     return true;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 size_t mt_arena_allocator::total_size() const noexcept
@@ -45,7 +53,7 @@ size_t mt_arena_allocator::total_size() const noexcept
     return (mem_usage(heap, nullptr, nullptr));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 size_t mt_arena_allocator::allocated_size() const noexcept
@@ -54,7 +62,7 @@ size_t mt_arena_allocator::allocated_size() const noexcept
     return (mem_usage(heap, nullptr, nullptr));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 pvoid mt_arena_allocator::call_malloc(size_t size
@@ -69,7 +77,7 @@ pvoid mt_arena_allocator::call_malloc(size_t size
     return result;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 pvoid mt_arena_allocator::call_realloc(pvoid pointer, size_t new_size
@@ -84,7 +92,7 @@ pvoid mt_arena_allocator::call_realloc(pvoid pointer, size_t new_size
     return result;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void mt_arena_allocator::call_free(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION)
@@ -96,7 +104,7 @@ void mt_arena_allocator::call_free(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION
     HeapFree(heap, 0, pointer);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void mt_arena_allocator::finalize()
@@ -106,4 +114,4 @@ void mt_arena_allocator::finalize()
 }
 
 } // namespace xr::memory
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

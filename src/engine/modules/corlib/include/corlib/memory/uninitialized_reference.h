@@ -8,11 +8,11 @@
 #include "EASTL/memory.h"
 #include <cassert>
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory::details
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template <class Class, class ConstructorClass = int>
 class uninitialized_reference_impl
 {
@@ -60,7 +60,7 @@ private:
     };
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -71,7 +71,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_i
 {
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -83,7 +83,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_i
         sizeof(Class), ::eastl::begin(m_static_memory));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<class Class, class ConstructorClass>
@@ -96,7 +96,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::operator= (uninitialized_
     return *this;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -107,7 +107,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::operator->()
     return &m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -118,7 +118,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::operator*()
     return m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -129,7 +129,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::operator->() const
     return &m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -140,7 +140,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::operator*() const
     return m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -151,7 +151,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::c_ptr()
     return &m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -162,7 +162,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::c_ptr() const
     return &m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -173,7 +173,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::ref()
     return m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -184,7 +184,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::ref() const
     return m_variable;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -193,7 +193,7 @@ bool uninitialized_reference_impl<Class, ConstructorClass>::is_constructed() con
     return m_is_constructed;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -205,7 +205,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::construct()
     return pointer_cast<Class*>(m_static_memory);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class, class ConstructorClass>
@@ -218,19 +218,19 @@ void uninitialized_reference_impl<Class, ConstructorClass>::destruct()
 }
 
 } // namespace xr::memory::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template <class Class, class ConstructorClass = int>
 class uninitialized_reference final
     : public details::uninitialized_reference_impl<Class, ConstructorClass>
 {};
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template <class Class>
 class uninitialized_reference<Class, int>final
     : public details::uninitialized_reference_impl<Class, int>
@@ -245,7 +245,7 @@ public:
     void destruct();
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class>
@@ -255,7 +255,7 @@ uninitialized_reference<Class, int>::construct()
     return super::construct();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <class Class>
@@ -265,7 +265,7 @@ uninitialized_reference<Class, int>::destruct()
     super::destruct();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename Class, typename... Args>
@@ -273,12 +273,12 @@ template<typename Class, typename... Args>
 construct_reference(uninitialized_reference<Class>& uninitialized_ref, Args&&... args)
 {
     static_assert(eastl::is_constructible_v<Class, Args...>,
-        "Cannot construct task with provided arguments");
+        "Cannot construct with provided arguments");
 
     new(uninitialized_ref.construct()) Class(args...);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename Class>
@@ -289,7 +289,7 @@ destruct_reference(uninitialized_reference<Class>& uninitialized_ref)
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template<typename Class>
 struct scoped_construct final
 {
@@ -316,4 +316,4 @@ private:
 };
 
 } // namespace xr::memory
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

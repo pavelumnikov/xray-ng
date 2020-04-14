@@ -8,11 +8,11 @@
 #include "thread_context.h"
 #include "fiber.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 // Task can be completed for several reasons.
 // For example task was done or someone call yield from the Task body.
 enum class fiber_task_status : uint8_t
@@ -24,7 +24,7 @@ enum class fiber_task_status : uint8_t
     AWAITING_CHILD = 4,
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 // Context passed to fiber main function
 class fiber_context : public execution_context
 {
@@ -47,11 +47,11 @@ private:
     virtual pvoid current_effective_buffer() override;
 
     virtual void run_subtasks_on_scheduler(
-        etl::containers::array_view<details::task_bucket>& buckets,
+        etl::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) override;
 
     virtual void run_subtasks_and_yield_impl(
-        etl::containers::array_view<details::task_bucket>& buckets);
+        etl::array_view<details::task_bucket>& buckets);
 
     // Active thread context (null if fiber context is not executing now)
     details::thread_context* m_thread_context;
@@ -86,4 +86,4 @@ public:
 }; // class fiber_context
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

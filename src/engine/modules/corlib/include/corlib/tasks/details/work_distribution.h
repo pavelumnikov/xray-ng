@@ -7,11 +7,11 @@
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/etl/containers/array_view.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template<typename TTask>
 struct grouped_task_selector
 {
@@ -29,7 +29,7 @@ struct grouped_task_selector
     }
 }; // struct grouped_task_selector
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  * Distributes task to threads, for example:
  * | Task1 | Task2 | Task3 | Task4 | Task5 | Task6 |
@@ -41,7 +41,7 @@ struct grouped_task_selector
  */
 template<typename TTask>
 inline bool distibute_descriptions(task_group group, const TTask* tasks,
-    etl::containers::array_view<grouped_task>& descriptions, etl::containers::array_view<task_bucket>& buckets)
+    etl::array_view<grouped_task>& descriptions, etl::array_view<task_bucket>& buckets)
 {
     grouped_task_selector<TTask> helper {};
 
@@ -60,4 +60,4 @@ inline bool distibute_descriptions(task_group group, const TTask* tasks,
 }
 
 } // namespace xr::tasks::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

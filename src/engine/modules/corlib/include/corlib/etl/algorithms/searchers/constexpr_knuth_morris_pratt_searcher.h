@@ -6,7 +6,7 @@
 #include "corlib/etl/containers/constexpr_array.h"
 #include "corlib/etl/type_traits.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::etl::algorithms::searchers
 {
 
@@ -98,4 +98,4 @@ constexpr constexpr_knuth_morris_pratt_searcher<Type, N - 1> make_knuth_morris_p
 }
 
 } // namespace xr::etl::algorithms::searchers
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

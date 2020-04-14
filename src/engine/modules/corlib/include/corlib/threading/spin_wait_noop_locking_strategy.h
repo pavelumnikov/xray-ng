@@ -6,7 +6,7 @@
 #include "corlib/threading/spin_wait_strategy_traits.h"
 #include "corlib/signalling_bool.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
 {
 
@@ -20,7 +20,7 @@ struct spin_wait_noop_strategy final : spin_wait_strategy_traits<uint8_t, false>
 
 #pragma optimize( "", off )
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void 
@@ -29,7 +29,7 @@ spin_wait_noop_strategy::reset(volatile locking_value& locking_value) const noex
     XR_UNREFERENCED_PARAMETER(locking_value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline signalling_bool
@@ -39,7 +39,7 @@ spin_wait_noop_strategy::try_lock(volatile locking_value& locking_value) const n
     return true;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void
@@ -48,7 +48,7 @@ spin_wait_noop_strategy::lock(volatile locking_value& locking_value) const noexc
     XR_UNREFERENCED_PARAMETER(locking_value);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void
@@ -60,4 +60,4 @@ spin_wait_noop_strategy::unlock(volatile locking_value& locking_value) const noe
 #pragma optimize( "", on ) 
 
 } // namespace xr::threading
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

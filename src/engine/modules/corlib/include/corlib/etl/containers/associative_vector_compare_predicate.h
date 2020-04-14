@@ -5,11 +5,11 @@
 
 #include "EASTL/utility.h" // for eastl::pair
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::etl::containers
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template <typename Key, typename Data, typename ComparePredicateType>
 class associative_vector_compare_predicate : public ComparePredicateType
 {
@@ -31,14 +31,14 @@ public:
     bool operator()(key_type const& lhs, value_type const& rhs) const;
 }; // class associative_vector_compare_predicate
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
 associative_vector_compare_predicate<Key, Data, ComparePredicateType>::associative_vector_compare_predicate()
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
@@ -46,7 +46,7 @@ associative_vector_compare_predicate<Key, Data, ComparePredicateType>::associati
     : super(compare_predicate)
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
@@ -56,7 +56,7 @@ associative_vector_compare_predicate<Key, Data, ComparePredicateType>::operator(
     return (super::operator()(lhs, rhs));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
@@ -66,7 +66,7 @@ associative_vector_compare_predicate<Key, Data, ComparePredicateType>::operator(
     return (operator( ) (lhs.first, rhs.first));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
@@ -76,7 +76,7 @@ associative_vector_compare_predicate<Key, Data, ComparePredicateType>::operator(
     return (operator( ) (lhs.first, rhs));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Data, typename ComparePredicateType>
@@ -87,4 +87,4 @@ associative_vector_compare_predicate<Key, Data, ComparePredicateType>::operator(
 }
 
 } // namespace xr::etl::containers
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

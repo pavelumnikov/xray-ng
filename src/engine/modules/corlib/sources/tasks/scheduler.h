@@ -11,25 +11,25 @@
 #include "corlib/etl/containers/static_vector.h"
 #include "corlib/sys/thread.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
 {
 class base_allocator;
 } // namespace xr::memory
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details
 {
 struct thread_context;
 } // namespace xr::tasks::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 // Application can assign task group to task and later wait until group was finished.
 class task_group_description
 {
@@ -88,7 +88,7 @@ private:
 #endif // defined(DEBUG)
 }; // class task_group_description
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 class task_scheduler : public scheduler
 {
 public:
@@ -129,7 +129,7 @@ public:
 protected:
     virtual size_t effective_master_buckets(size_t tasks) override;
     virtual void run_subtasks_on_scheduler(
-        etl::containers::array_view<details::task_bucket>& buckets,
+        etl::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) override;
 
 private:
@@ -152,7 +152,7 @@ private:
     fiber_context* request_fiber_context(details::grouped_task& task);
     void release_fiber_context(fiber_context*&& execution_context);
 
-    void run_tasks_internal(etl::containers::array_view<details::task_bucket>& buckets,
+    void run_tasks_internal(etl::array_view<details::task_bucket>& buckets,
         fiber_context* parent_fiber, bool restored_from_awaiting);
 
     task_group_description& get_group_desc(task_group group);
@@ -201,7 +201,7 @@ private:
 #endif
 }; // class task_scheduler
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 inline memory::base_allocator&
@@ -212,7 +212,7 @@ task_scheduler::get_allocator()
 
 #ifdef XR_INSTRUMENTED_BUILD
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 inline base_profiler_event_listener*
@@ -224,4 +224,4 @@ task_scheduler::get_profiler_event_listener()
 #endif // XR_INSTRUMENTED_BUILD
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

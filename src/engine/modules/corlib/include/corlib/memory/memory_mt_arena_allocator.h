@@ -12,6 +12,7 @@ class mt_arena_allocator final : public base_allocator
 {
 public:
     mt_arena_allocator() = default;
+    virtual ~mt_arena_allocator();
 
     void initialize(size_t size, size_t initial);
 

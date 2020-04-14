@@ -4,11 +4,11 @@
 #include "corlib/sys/arg_list.h"
 #include "corlib/etl/string/constexpr_string.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::sys
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 arg_list::arg_list(memory::base_allocator& alloc, eastl::string_view cmd_line)
@@ -50,7 +50,7 @@ arg_list::arg_list(memory::base_allocator& alloc, eastl::string_view cmd_line)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 bool arg_list::add_arg(eastl::string_view key) noexcept
@@ -64,7 +64,7 @@ bool arg_list::add_arg(eastl::string_view key) noexcept
     return result.second;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 bool arg_list::add_arg(eastl::string_view key, eastl::string_view arg) noexcept
@@ -81,7 +81,7 @@ bool arg_list::add_arg(eastl::string_view key, eastl::string_view arg) noexcept
     return result.second;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 bool arg_list::has_arg(eastl::string_view key) const noexcept
@@ -90,7 +90,7 @@ bool arg_list::has_arg(eastl::string_view key) const noexcept
     return internal_key_exists(k);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 eastl::string_view arg_list::at(eastl::string_view key) const noexcept
@@ -101,7 +101,7 @@ eastl::string_view arg_list::at(eastl::string_view key) const noexcept
     return etl::string::to_string_view(m_map.at(k));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 bool arg_list::internal_key_exists(key_type const& k) const noexcept
@@ -110,4 +110,4 @@ bool arg_list::internal_key_exists(key_type const& k) const noexcept
 }
 
 } // namespace xr::sys
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

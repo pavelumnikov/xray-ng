@@ -14,11 +14,11 @@
 // Low latency hybrid wait works better on consoles, but a little worse on PC.
 // #define XR_EXPERIMENTAL_WAIT (1)
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<>
@@ -41,9 +41,9 @@ struct grouped_task_selector<fiber_context*>
 };
 
 } // namespace xr::tasks::details
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
 {
 
@@ -53,7 +53,7 @@ constexpr size_t reserve_standard_fiber_stack_size = standard_fiber_stack_size /
 constexpr size_t extended_fiber_stack_size = 1_mb; // 1Mb
 constexpr size_t reserve_extended_fiber_stack_size = extended_fiber_stack_size / 2;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 #ifdef XR_INSTRUMENTED_BUILD
@@ -147,7 +147,7 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::join_worker_threads()
@@ -176,7 +176,7 @@ void task_scheduler::join_worker_threads()
     threading::atomic_store_rel<uint32_t>(m_threads_count, 0);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 task_scheduler::~task_scheduler()
@@ -185,7 +185,7 @@ task_scheduler::~task_scheduler()
         join_worker_threads();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 fiber_context* task_scheduler::request_fiber_context(details::grouped_task& t)
@@ -228,7 +228,7 @@ fiber_context* task_scheduler::request_fiber_context(details::grouped_task& t)
     return fiber_ctx;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::release_fiber_context(fiber_context*&& fiber_ctx)
@@ -260,7 +260,7 @@ void task_scheduler::release_fiber_context(fiber_context*&& fiber_ctx)
     XR_DEBUG_ASSERTION_MSG(res != false, "Can't return fiber to storage");
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 fiber_context* task_scheduler::execute_task(details::thread_context& thread_ctx, fiber_context* fiber_ctx)
@@ -352,7 +352,7 @@ fiber_context* task_scheduler::execute_task(details::thread_context& thread_ctx,
     return nullptr;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::fiber_main(void* user_data)
@@ -387,7 +387,7 @@ void task_scheduler::fiber_main(void* user_data)
 
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 bool task_scheduler::try_steal_task(details::thread_context& thread_context, details::grouped_task& task)
@@ -414,7 +414,7 @@ bool task_scheduler::try_steal_task(details::thread_context& thread_context, det
     return false;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::worker_thread_main(void* user_data)
@@ -425,7 +425,7 @@ void task_scheduler::worker_thread_main(void* user_data)
     context.scheduler_fiber.create_from_thread_and_run(scheduler_fiber_main, user_data);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::scheduler_fiber_wait(void* user_data)
@@ -475,7 +475,7 @@ void task_scheduler::scheduler_fiber_wait(void* user_data)
 #endif
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::scheduler_fiber_main(void* user_data)
@@ -573,7 +573,7 @@ void task_scheduler::scheduler_fiber_main(void* user_data)
 #endif
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::scheduler_fiber_process_task(details::thread_context& context, details::grouped_task& task)
@@ -636,12 +636,12 @@ void task_scheduler::scheduler_fiber_process_task(details::thread_context& conte
             if(task_status == fiber_task_status::YIELDED)
             {
                 // Task is yielded, add to tasks queue
-                etl::containers::array_view<details::grouped_task> buffer(context.desc_buffer, 1);
-                etl::containers::array_view<details::task_bucket> buckets(
+                etl::array_view<details::grouped_task> buffer(context.desc_buffer, 1);
+                etl::array_view<details::task_bucket> buckets(
                     XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket)), 1);
 
                 fiber_context* yieldedTask = fiber_ctx;
-                etl::containers::static_vector<fiber_context*, 1> yielded_tasks_queue(1, yieldedTask);
+                etl::static_vector<fiber_context*, 1> yielded_tasks_queue(1, yieldedTask);
 
                 details::distibute_descriptions(task_group(task_group::assign_from_context),
                     yielded_tasks_queue.begin(), buffer, buckets);
@@ -657,7 +657,7 @@ void task_scheduler::scheduler_fiber_process_task(details::thread_context& conte
     } //while(fiber_ctx)
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 bool task_scheduler::scheduler_fiber_step(details::thread_context& context)
@@ -680,10 +680,10 @@ bool task_scheduler::scheduler_fiber_step(details::thread_context& context)
     return false;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
-void task_scheduler::run_tasks_internal(etl::containers::array_view<details::task_bucket>& buckets, 
+void task_scheduler::run_tasks_internal(etl::array_view<details::task_bucket>& buckets, 
     fiber_context* parent_fiber, bool restored_from_awaiting)
 {
 #if XR_EXPERIMENTAL_WAIT
@@ -769,7 +769,7 @@ void task_scheduler::run_tasks_internal(etl::containers::array_view<details::tas
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 signalling_bool task_scheduler::wait_group(task_group group, uint32_t milliseconds)
@@ -805,7 +805,7 @@ signalling_bool task_scheduler::wait_group(task_group group, uint32_t millisecon
     return (wait_context.exit_code == 0);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 signalling_bool task_scheduler::wait_all(uint32_t milliseconds)
@@ -839,7 +839,7 @@ signalling_bool task_scheduler::wait_all(uint32_t milliseconds)
     return wait_context.exit_code == 0;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 size_t task_scheduler::get_workers_count() const
@@ -847,7 +847,7 @@ size_t task_scheduler::get_workers_count() const
     return m_threads_count;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 bool task_scheduler::is_worker_thread() const
@@ -868,7 +868,7 @@ bool task_scheduler::is_worker_thread() const
     return false;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 task_group task_scheduler::create_group()
@@ -891,7 +891,7 @@ task_group task_scheduler::create_group()
     return group;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::release_group(task_group group)
@@ -911,7 +911,7 @@ void task_scheduler::release_group(task_group group)
     XR_DEBUG_ASSERTION_MSG(res, "Can't return group to pool");
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 task_group_description& task_scheduler::get_group_desc(task_group group)
@@ -927,7 +927,7 @@ task_group_description& task_scheduler::get_group_desc(task_group group)
 
 
 #ifdef XR_INSTRUMENTED_BUILD
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::notify_fibers_created(uint32_t fibersCount)
@@ -936,7 +936,7 @@ void task_scheduler::notify_fibers_created(uint32_t fibersCount)
         eventListener->on_fibers_created(fibersCount);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::notify_threads_created(uint32_t threadsCount)
@@ -946,7 +946,7 @@ void task_scheduler::notify_threads_created(uint32_t threadsCount)
 }
 #endif
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 size_t task_scheduler::effective_master_buckets(size_t tasks)
@@ -960,15 +960,15 @@ size_t task_scheduler::effective_master_buckets(size_t tasks)
     return bucket_count;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void task_scheduler::run_subtasks_on_scheduler(
-    etl::containers::array_view<details::task_bucket>& buckets,
+    etl::array_view<details::task_bucket>& buckets,
     bool restored_from_awaiting)
 {
     run_tasks_internal(buckets, nullptr, restored_from_awaiting);
 }
 
 } // namespace xr::tasks
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

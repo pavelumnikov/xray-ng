@@ -6,11 +6,11 @@
 #include "corlib/platform.h"
 #include "corlib/etl/type_conversions.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::etl
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace details
 {
 
@@ -56,7 +56,7 @@ private:
     value_type m_storage; //!< TStore of enumerations
 };
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -64,7 +64,7 @@ constexpr enumeration_impl<T, U, defaultValue>::enumeration_impl() noexcept
     : m_storage { defaultValue }
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -72,7 +72,7 @@ constexpr enumeration_impl<T, U, defaultValue>::enumeration_impl(enumeration_typ
     : m_storage(to_underlying(e))
 {}
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -83,7 +83,7 @@ enumeration_impl<T, U, defaultValue>::operator = (enumeration_type e) noexcept
     return *this;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -92,7 +92,7 @@ constexpr enumeration_impl<T, U, defaultValue>::operator enumeration_type() cons
     return static_cast<enumeration_type>(this->m_storage);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -103,7 +103,7 @@ enumeration_impl<T, U, defaultValue>::operator += (const enumeration_type e) noe
     return *this;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -114,7 +114,7 @@ enumeration_impl<T, U, defaultValue>::operator -= (const enumeration_type e) noe
     return *this;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -124,7 +124,7 @@ enumeration_impl<T, U, defaultValue>::operator == (enumeration_type e) const noe
     return this->m_storage == to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -134,7 +134,7 @@ enumeration_impl<T, U, defaultValue>::operator != (enumeration_type e) const noe
     return this->m_storage != to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -144,7 +144,7 @@ enumeration_impl<T, U, defaultValue>::operator <= (enumeration_type e) const noe
     return this->m_storage <= to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -154,7 +154,7 @@ enumeration_impl<T, U, defaultValue>::operator >= (enumeration_type e) const noe
     return this->m_storage >= to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -164,7 +164,7 @@ enumeration_impl<T, U, defaultValue>::operator < (enumeration_type e) const noex
     return this->m_storage < to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -174,7 +174,7 @@ enumeration_impl<T, U, defaultValue>::operator > (enumeration_type e) const noex
     return this->m_storage > to_underlying(e);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -184,7 +184,7 @@ enumeration_impl<T, U, defaultValue>::test(enumeration_type e) const noexcept
     return (this->m_storage & to_underlying(e)) != 0;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, typename U, U defaultValue>
@@ -196,14 +196,14 @@ enumeration_impl<T, U, defaultValue>::reset() const noexcept
 
 } // namespace details
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template<typename T>
 using enumeration = details::enumeration_impl<T, eastl::underlying_type_t<T>, 0>;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 template<typename T, T defaultValue>
 using defaulting_enumeration = details::enumeration_impl<
     T, eastl::underlying_type_t<T>, to_underlying(defaultValue)>;
 
 } // namespace xr::etl
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
