@@ -63,7 +63,7 @@ uint32_t on_splash_screen(void* const arg) noexcept
     if(!picture_control)
     {
         PostMessageA(splash_screen->hwnd, WM_DESTROY, 0, 0);
-        return;
+        return 1;
     }
 
     // ms-help://MS.VSCC.v90/MS.MSDNQTR.v90.en/shellcc/platform/commctls/staticcontrols/staticcontrolreference/staticcontrolmessages/stm_setimage.htm
