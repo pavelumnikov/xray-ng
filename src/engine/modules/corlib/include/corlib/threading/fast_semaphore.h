@@ -28,7 +28,7 @@ public:
 
 private:
     auto constexpr c_max_simultaneous_accessing_threads = MaxThreads;
-    volatile size_t m_active;
+    atomic_size_t m_active;
 };
 
 //-----------------------------------------------------------------------------------------------------------

@@ -21,6 +21,7 @@ fiber_context::fiber_context()
     , required_stack { task_stack_request::unknown }
     , children_fibers_count { 0 }
     , parent_fiber { nullptr }
+    , fiber_index { 0 }
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -120,7 +121,8 @@ size_t fiber_context::effective_coroutine_buckets(size_t task_count)
 {
     XR_DEBUG_ASSERTION_MSG(m_thread_context, "thread_context is nullptr");
     task_scheduler& scheduler = *(m_thread_context->current_scheduler);
-    size_t bucket_count = eastl::min(scheduler.get_workers_count(), task_count);
+    uint32_t input_tasks = static_cast<uint32_t>(task_count);
+    size_t bucket_count = eastl::min(scheduler.get_workers_count(), input_tasks);
     return bucket_count;
 }
 

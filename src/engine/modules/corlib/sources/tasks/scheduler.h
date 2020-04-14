@@ -114,7 +114,7 @@ public:
     task_group create_group();
     void release_group(task_group group);
 
-    size_t get_workers_count() const;
+    uint32_t get_workers_count() const;
 
     bool is_worker_thread() const;
 

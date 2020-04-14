@@ -31,14 +31,14 @@ public:
 private:
     struct cell
     {
-        volatile size_t sequence;
+        threading::atomic_size_t sequence;
         T data;
     };
 
     static constexpr size_t mask = (kBoundedSize - 1);
     // Align to avoid false sharing between head and tail
-    XR_ALIGNAS(XR_MAX_CACHE_LINE_SIZE) volatile size_t m_enqueue_pos;
-    XR_ALIGNAS(XR_MAX_CACHE_LINE_SIZE) volatile size_t m_dequeue_pos;
+    XR_ALIGNAS(XR_MAX_CACHE_LINE_SIZE) threading::atomic_size_t m_enqueue_pos;
+    XR_ALIGNAS(XR_MAX_CACHE_LINE_SIZE) threading::atomic_size_t m_dequeue_pos;
     XR_ALIGNAS(XR_MAX_CACHE_LINE_SIZE) eastl::array<cell, kBoundedSize> m_values;
 }; // class mpmc_queue
 

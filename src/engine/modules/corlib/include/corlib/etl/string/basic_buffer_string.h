@@ -27,8 +27,8 @@ public:
     using size_type = typename char_traits<T>::size_type;
     using iterator = pointer;
     using const_iterator = const_pointer;
-    using reverse_iterator = std::reverse_iterator<pointer>;
-    using const_reverse_iterator = std::reverse_iterator<const_pointer>;
+    using reverse_iterator = eastl::reverse_iterator<pointer>;
+    using const_reverse_iterator = eastl::reverse_iterator<const_pointer>;
 
     static constexpr size_type npos = size_type(-1);
 
@@ -153,16 +153,6 @@ constexpr basic_buffer_string<T>::basic_buffer_string(basic_buffer_string&& ref)
 /**
 */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(basic_buffer_string const& ref)
-    : m_begin { ref.m_begin }
-    , m_current { ref.m_current }
-    , m_end { ref.m_end }
-{}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-template<typename T>
 inline basic_buffer_string<T>&
 basic_buffer_string<T>::operator=(basic_buffer_string&& ref)
 {
@@ -187,7 +177,7 @@ inline basic_buffer_string<T>::operator view_type() const
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::iterator 
+inline typename basic_buffer_string<T>::iterator 
 basic_buffer_string<T>::begin() noexcept
 {
     return m_begin;
@@ -197,7 +187,7 @@ basic_buffer_string<T>::begin() noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_iterator 
+inline typename basic_buffer_string<T>::const_iterator 
 basic_buffer_string<T>::begin() const noexcept
 {
     return m_begin;
@@ -207,7 +197,7 @@ basic_buffer_string<T>::begin() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_iterator 
+inline typename basic_buffer_string<T>::const_iterator 
 basic_buffer_string<T>::cbegin() const noexcept
 {
     return m_begin;
@@ -217,7 +207,7 @@ basic_buffer_string<T>::cbegin() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::iterator 
+inline typename basic_buffer_string<T>::iterator 
 basic_buffer_string<T>::end() noexcept
 {
     return m_end;
@@ -227,7 +217,7 @@ basic_buffer_string<T>::end() noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_iterator
+inline typename basic_buffer_string<T>::const_iterator
 basic_buffer_string<T>::end() const noexcept
 {
     return m_end;
@@ -237,7 +227,7 @@ basic_buffer_string<T>::end() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_iterator 
+inline typename basic_buffer_string<T>::const_iterator 
 basic_buffer_string<T>::cend() const noexcept
 {
     return m_end;
@@ -247,7 +237,7 @@ basic_buffer_string<T>::cend() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::reverse_iterator 
+inline typename basic_buffer_string<T>::reverse_iterator 
 basic_buffer_string<T>::rbegin() noexcept
 {
     return reverse_iterator(m_end);
@@ -257,7 +247,7 @@ basic_buffer_string<T>::rbegin() noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_reverse_iterator 
+inline typename basic_buffer_string<T>::const_reverse_iterator 
 basic_buffer_string<T>::rbegin() const noexcept
 {
     return const_reverse_iterator(m_end);
@@ -267,7 +257,7 @@ basic_buffer_string<T>::rbegin() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_reverse_iterator
+inline typename basic_buffer_string<T>::const_reverse_iterator
 basic_buffer_string<T>::crbegin() const noexcept
 {
     return const_reverse_iterator(m_end);
@@ -277,7 +267,7 @@ basic_buffer_string<T>::crbegin() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::reverse_iterator 
+inline typename basic_buffer_string<T>::reverse_iterator 
 basic_buffer_string<T>::rend() noexcept
 {
     return reverse_iterator(m_begin);
@@ -287,7 +277,7 @@ basic_buffer_string<T>::rend() noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_reverse_iterator
+inline typename basic_buffer_string<T>::const_reverse_iterator
 basic_buffer_string<T>::rend() const noexcept
 {
     return const_reverse_iterator(m_begin);
@@ -297,7 +287,7 @@ basic_buffer_string<T>::rend() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::const_reverse_iterator
+inline typename basic_buffer_string<T>::const_reverse_iterator
 basic_buffer_string<T>::crend() const noexcept
 {
     return const_reverse_iterator(m_begin);
@@ -317,7 +307,7 @@ basic_buffer_string<T>::empty() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::size_type 
+inline typename basic_buffer_string<T>::size_type 
 basic_buffer_string<T>::size() const noexcept
 {
     return static_cast<size_t>(m_current - m_begin);
@@ -327,7 +317,7 @@ basic_buffer_string<T>::size() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::size_type 
+inline typename basic_buffer_string<T>::size_type 
 basic_buffer_string<T>::length() const noexcept
 {
     return size();
@@ -337,7 +327,7 @@ basic_buffer_string<T>::length() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::size_type 
+inline typename basic_buffer_string<T>::size_type 
 basic_buffer_string<T>::max_size() const noexcept
 {
     return static_cast<size_t>(m_end - m_begin);
@@ -347,7 +337,7 @@ basic_buffer_string<T>::max_size() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::size_type 
+inline typename basic_buffer_string<T>::size_type 
 basic_buffer_string<T>::capacity() const noexcept
 {
     return max_size();
@@ -357,7 +347,7 @@ basic_buffer_string<T>::capacity() const noexcept
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::this_type&
+inline typename basic_buffer_string<T>::this_type&
 basic_buffer_string<T>::append(const this_type& x)
 {
     XR_DEBUG_ASSERTION(x.size() <= (this->capacity() - this->size()));
@@ -371,7 +361,7 @@ basic_buffer_string<T>::append(const this_type& x)
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::this_type&
+inline typename basic_buffer_string<T>::this_type&
 basic_buffer_string<T>::append(const_pointer p, size_type n)
 {
     XR_DEBUG_ASSERTION(n <= (this->capacity() - this->size()));
@@ -384,7 +374,7 @@ basic_buffer_string<T>::append(const_pointer p, size_type n)
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::this_type&
+inline typename basic_buffer_string<T>::this_type&
 basic_buffer_string<T>::append(const_pointer p)
 {
     const size_t n = char_traits<T>::length(p);
@@ -398,7 +388,7 @@ basic_buffer_string<T>::append(const_pointer p)
 /**
 */
 template<typename T>
-inline basic_buffer_string<T>::this_type&
+inline typename basic_buffer_string<T>::this_type&
 basic_buffer_string<T>::append(const_pointer begin, const_pointer end)
 {
     XR_DEBUG_ASSERTION(size_type(end - begin) <= (this->capacity() - this->size()));

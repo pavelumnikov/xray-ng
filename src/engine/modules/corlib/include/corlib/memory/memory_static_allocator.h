@@ -96,8 +96,8 @@ private:
 
     pointer_and_counter m_free_list;
     uintptr_t m_allocator_stamp;
-    volatile size_t m_total_size;
-    volatile size_t m_allocated_size;
+    threading::atomic_size_t m_total_size;
+    threading::atomic_size_t m_allocated_size;
     bool m_is_valid;
 }; // class static_allocator<Size, MaxCount>
 

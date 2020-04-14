@@ -16,7 +16,7 @@ public:
     class ticket
     {
         friend class event_monitor;
-        volatile size_t aba_epoch;
+        atomic_size_t aba_epoch;
     };
 
     event_monitor() noexcept;

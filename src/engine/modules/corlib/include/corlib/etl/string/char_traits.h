@@ -144,7 +144,7 @@ char_traits<T>::assign(reference r, const_reference c)
 /**
 */
 template<typename T>
-inline char_traits<T>::pointer
+inline typename char_traits<T>::pointer
 char_traits<T>::assign(pointer p, size_t n, char_type c)
 {
     if(p != 0)
@@ -157,7 +157,7 @@ char_traits<T>::assign(pointer p, size_t n, char_type c)
 /**
 */
 template<typename T>
-inline char_traits<T>::pointer
+inline typename char_traits<T>::pointer
 char_traits<T>::move(pointer dest, const_pointer src, size_t count)
 {
     if((dest < src) || (dest > (src + count)))
@@ -177,7 +177,7 @@ char_traits<T>::move(pointer dest, const_pointer src, size_t count)
 /**
 */
 template<typename T>
-inline char_traits<T>::pointer
+inline typename char_traits<T>::pointer
 char_traits<T>::copy(pointer dest, const_pointer src, size_t count)
 {
     eastl::copy_n(src, src + count, dest);
@@ -198,7 +198,7 @@ char_traits<T>::compare(const_pointer s1, const_pointer s2, size_t count)
 /**
 */
 template<typename T>
-constexpr char_traits<T>::const_pointer
+constexpr typename char_traits<T>::const_pointer
 char_traits<T>::find(const_pointer p, size_t count, const_reference ch)
 {
     return eastl::Find(p, ch, count);
@@ -208,7 +208,7 @@ char_traits<T>::find(const_pointer p, size_t count, const_reference ch)
 /**
 */
 template<typename T>
-constexpr char_traits<T>::char_type
+constexpr typename char_traits<T>::char_type
 char_traits<T>::to_char_type(int_type c)
 {
     return static_cast<char_type>(c);
@@ -218,7 +218,7 @@ char_traits<T>::to_char_type(int_type c)
 /**
 */
 template<typename T>
-constexpr char_traits<T>::int_type
+constexpr typename char_traits<T>::int_type
 char_traits<T>::to_int_type(char_type c)
 {
     return static_cast<int_type>(c);
@@ -238,7 +238,7 @@ char_traits<T>::eq_int_type(int_type c1, int_type c2)
 /**
 */
 template<typename T>
-constexpr char_traits<T>::int_type 
+constexpr typename char_traits<T>::int_type
 char_traits<T>::eof()
 {
     return -1;
@@ -248,7 +248,7 @@ char_traits<T>::eof()
 /**
 */
 template<typename T>
-constexpr char_traits<T>::int_type 
+constexpr typename char_traits<T>::int_type
 char_traits<T>::not_eof(int_type e)
 {
     return (e == eof()) ? eof() - 1 : e;

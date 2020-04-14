@@ -5,10 +5,12 @@
 #include "fiber.h"
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/etl/static_vector.h"
+#include "corlib/etl/string/buffer_string.h"
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/tasks/details/work_distribution.h"
 #include "corlib/timer.h"
 #include <string.h> // for memset
+#include <stdio.h> // for _snwprintf
 
 // Enable low latency experimental wait code path.
 // Low latency hybrid wait works better on consoles, but a little worse on PC.
@@ -123,7 +125,7 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
 #endif // defined(DEBUG)
 
     // create worker thread pool
-    size_t total_threads_count = get_workers_count();
+    uint32_t total_threads_count = get_workers_count();
 
 #ifdef XR_INSTRUMENTED_BUILD
     notify_threads_created(total_thread_count);
@@ -132,7 +134,7 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
     m_thread_context = XR_ALLOCATE_OBJECT_ARRAY_T(m_aligned_allocator, 
         details::thread_context, total_threads_count, "thread contexts for threads");
 
-    for(size_t i = 0; i < total_threads_count; i++)
+    for(uint32_t i = 0; i < total_threads_count; i++)
     {
         details::thread_context& context = m_thread_context[i];
         memory::call_emplace_construct(&context, m_aligned_allocator);
@@ -142,8 +144,11 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
         context.current_scheduler = this;
 
         auto priority = sys::thread_priority::medium;
+
+        wchar_t worker_name[16];
+        _snwprintf(worker_name, sizeof(worker_name), L"task_worker %u", i);
         context.current_thread = sys::spawn_thread(worker_thread_main, &context,
-            L"task_worker", priority, scheduler_stack_size, thread_index);
+            worker_name, priority, scheduler_stack_size, thread_index);
     }
 }
 
@@ -843,7 +848,7 @@ signalling_bool task_scheduler::wait_all(uint32_t milliseconds)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-size_t task_scheduler::get_workers_count() const
+uint32_t task_scheduler::get_workers_count() const
 {
     return m_threads_count;
 }
@@ -957,7 +962,8 @@ size_t task_scheduler::effective_master_buckets(size_t tasks)
     XR_DEBUG_ASSERTION_MSG(!is_worker_thread(),
         "Can't use run_async inside Task. Use fiber_context.run_async() instead.");
 
-    size_t bucket_count = eastl::min(get_workers_count(), tasks);
+    uint32_t input_tasks = static_cast<uint32_t>(tasks);
+    size_t bucket_count = eastl::min(get_workers_count(), input_tasks);
     return bucket_count;
 }
 

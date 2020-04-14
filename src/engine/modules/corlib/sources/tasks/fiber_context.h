@@ -70,7 +70,7 @@ public:
     task_stack_request required_stack;
 
     //! Number of children fibers
-    volatile size_t children_fibers_count;
+    threading::atomic_size_t children_fibers_count;
 
     //! Parent fiber
     fiber_context* parent_fiber;
