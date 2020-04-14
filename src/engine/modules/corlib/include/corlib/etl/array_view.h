@@ -67,7 +67,7 @@ inline array_view<T>::array_view(pvoid memory_chunk, size_type instances_count)
 /**
  */
 template<typename T>
-inline array_view<T>::const_reference array_view<T>::operator[](size_type i) const
+inline typename array_view<T>::const_reference array_view<T>::operator[](size_type i) const
 {
     XR_DEBUG_ASSERTION_MSG(i < size(), "bad index");
     return m_data[i];
@@ -77,7 +77,7 @@ inline array_view<T>::const_reference array_view<T>::operator[](size_type i) con
 /**
  */
 template<typename T>
-inline array_view<T>::reference array_view<T>::operator[](size_type i)
+inline typename array_view<T>::reference array_view<T>::operator[](size_type i)
 {
     XR_DEBUG_ASSERTION_MSG(i < size(), "bad index");
     return m_data[i];
@@ -87,7 +87,7 @@ inline array_view<T>::reference array_view<T>::operator[](size_type i)
 /**
  */
 template<typename T>
-inline array_view<T>::size_type array_view<T>::size() const
+inline typename array_view<T>::size_type array_view<T>::size() const
 {
     return m_count;
 }
@@ -105,7 +105,7 @@ inline bool array_view<T>::is_empty() const
 /**
  */
 template<typename T>
-inline array_view<T>::pointer array_view<T>::get_raw_data()
+inline typename array_view<T>::pointer array_view<T>::get_raw_data()
 {
     return m_data;
 }
@@ -114,7 +114,7 @@ inline array_view<T>::pointer array_view<T>::get_raw_data()
 /**
  */
 template<typename T>
-inline array_view<T>::const_pointer array_view<T>::get_raw_data() const
+inline typename array_view<T>::const_pointer array_view<T>::get_raw_data() const
 {
     return m_data;
 }

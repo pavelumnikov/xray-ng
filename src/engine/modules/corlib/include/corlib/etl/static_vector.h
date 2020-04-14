@@ -11,7 +11,7 @@ namespace xr::etl
 
 //-----------------------------------------------------------------------------------------------------------
 // A variable-size array container with fixed capacity.
-template<class T, size_t Capacity, size_t Alignment>
+template<class T, size_t Capacity, size_t Alignment = 16>
 class static_vector
 {
 public:
@@ -43,7 +43,6 @@ public:
     pointer begin();
 
 private:
-    static constexpr uint32_t Alignment = 16;
     static constexpr uint32_t Alignment_mask = (Alignment - 1);
 
     T* index_to_object(size_type index);
@@ -89,7 +88,7 @@ inline static_vector<T, Capacity, Alignment>::~static_vector()
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-inline static_vector<T, Capacity, Alignment>::const_reference
+inline typename static_vector<T, Capacity, Alignment>::const_reference
 static_vector<T, Capacity, Alignment>::operator[](size_type i) const
 {
     XR_DEBUG_ASSERTION_MSG(i < size(), "bad index");
@@ -100,7 +99,7 @@ static_vector<T, Capacity, Alignment>::operator[](size_type i) const
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-inline static_vector<T, Capacity, Alignment>::reference
+inline typename static_vector<T, Capacity, Alignment>::reference
 static_vector<T, Capacity, Alignment>::operator[](size_type i)
 {
     XR_DEBUG_ASSERTION_MSG(i < size(), "bad index");
@@ -122,7 +121,7 @@ inline void static_vector<T, Capacity, Alignment>::push_back(value_type&& val)
  */
 template<class T, size_t Capacity, size_t Alignment>
 template<typename ... Args>
-inline static_vector<T, Capacity, Alignment>::reference
+inline typename static_vector<T, Capacity, Alignment>::reference
 static_vector<T, Capacity, Alignment>::emplace_back(Args&&... args)
 {
     XR_DEBUG_ASSERTION_MSG(m_count < Capacity, "Can't add element");
@@ -134,7 +133,8 @@ static_vector<T, Capacity, Alignment>::emplace_back(Args&&... args)
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-inline static_vector<T, Capacity, Alignment>::size_type static_vector<T, Capacity, Alignment>::size() const
+inline typename static_vector<T, Capacity, Alignment>::size_type
+static_vector<T, Capacity, Alignment>::size() const
 {
     return m_count;
 }
@@ -143,7 +143,7 @@ inline static_vector<T, Capacity, Alignment>::size_type static_vector<T, Capacit
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-constexpr static_vector<T, Capacity, Alignment>::size_type
+constexpr typename static_vector<T, Capacity, Alignment>::size_type
 static_vector<T, Capacity, Alignment>::capacity() const
 {
     return Capacity;
@@ -162,7 +162,8 @@ inline bool static_vector<T, Capacity, Alignment>::is_empty() const
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-inline static_vector<T, Capacity, Alignment>::pointer static_vector<T, Capacity, Alignment>::begin()
+inline typename static_vector<T, Capacity, Alignment>::pointer
+static_vector<T, Capacity, Alignment>::begin()
 {
     return index_to_object(0);
 }
@@ -171,7 +172,7 @@ inline static_vector<T, Capacity, Alignment>::pointer static_vector<T, Capacity,
 /**
  */
 template<class T, size_t Capacity, size_t Alignment>
-inline static_vector<T, Capacity, Alignment>::pointer
+inline typename static_vector<T, Capacity, Alignment>::pointer
 static_vector<T, Capacity, Alignment>::index_to_object(size_type index)
 {
     pbyte aligned_memory = (pbyte)(((uintptr_t)&m_raw_memory[0] + Alignment_mask) & ~(uintptr_t)Alignment_mask);
