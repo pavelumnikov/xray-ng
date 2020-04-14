@@ -10,11 +10,11 @@
 #include "corlib/etl/containers/std/deque.h"
 #include "file_async_result_win32.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::async_io
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 class file_api_win32 : public file_api
 {
 public:
@@ -38,7 +38,7 @@ private:
     using mutex = threading::spin_wait_fairness;
     static constexpr uint32_t max_io_threads = 2;
 
-    static void async_io_func(void* arg);
+    static uint32_t async_io_func(void* arg);
 
     void add_request(async_result_ptr& ptr);
     bool try_deque_request(async_result_ptr& ptr);
@@ -57,4 +57,4 @@ private:
 };
 
 } // namespace xr::async_io
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------

@@ -7,14 +7,14 @@
 #include "corlib/memory/proxy/eastl_proxy_allocator.h"
 #include "corlib/threading/scoped_lock.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::async_io
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 static memory::uninitialized_reference<file_api_win32> file_api_system;
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 file_api_win32::file_api_win32(memory::base_allocator& alloc)
@@ -27,7 +27,7 @@ file_api_win32::file_api_win32(memory::base_allocator& alloc)
     initialize();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 file_api_win32::~file_api_win32()
@@ -35,7 +35,7 @@ file_api_win32::~file_api_win32()
     finalize();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 file_handle file_api_win32::create_file_descriptor(path_view name, access_mode mode, access_pattern pattern)
@@ -98,7 +98,7 @@ file_handle file_api_win32::create_file_descriptor(path_view name, access_mode m
     return file;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::free_file_descriptor(file_handle handle)
@@ -109,7 +109,7 @@ void file_api_win32::free_file_descriptor(file_handle handle)
     handle.close();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 async_result_ptr file_api_win32::read_file_async(file_handle handle, 
@@ -121,7 +121,7 @@ async_result_ptr file_api_win32::read_file_async(file_handle handle,
     return ptr;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 async_result_ptr file_api_win32::write_file_async(file_handle handle, 
@@ -133,7 +133,7 @@ async_result_ptr file_api_win32::write_file_async(file_handle handle,
     return ptr;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::cancel_async_io(async_result_ptr& ptr)
@@ -142,7 +142,7 @@ void file_api_win32::cancel_async_io(async_result_ptr& ptr)
     file_async_ptr->set_current_status(async_status::cancelled);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::add_request(async_result_ptr& ptr)
@@ -151,7 +151,7 @@ void file_api_win32::add_request(async_result_ptr& ptr)
     m_async_requests.push_back(ptr);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 bool file_api_win32::try_deque_request(async_result_ptr& ptr)
@@ -165,7 +165,7 @@ bool file_api_win32::try_deque_request(async_result_ptr& ptr)
     return true;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::process_request(async_result_ptr& ptr)
@@ -180,7 +180,7 @@ void file_api_win32::process_request(async_result_ptr& ptr)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::process_read_request(read_file_async_result_ptr& ptr)
@@ -210,18 +210,18 @@ void file_api_win32::process_read_request(read_file_async_result_ptr& ptr)
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::initialize()
 {
     for(size_t i = 0; i < eastl::size(m_thread_handles); ++i)
     {
-        m_thread_handles[i] = sys::spawn_thread(m_allocator, async_io_func, this, L"io_worker_thread", sys::thread_priority::high, 1_mb, static_cast<uint32_t>(i));
+        m_thread_handles[i] = sys::spawn_thread(async_io_func, this, L"io_worker_thread", sys::thread_priority::high, 1_mb, static_cast<uint32_t>(i));
     }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_api_win32::finalize()
@@ -230,10 +230,10 @@ void file_api_win32::finalize()
     bool result = sys::wait_threads(m_thread_handles, eastl::size(m_thread_handles));
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
-void file_api_win32::async_io_func(void* arg)
+uint32_t file_api_win32::async_io_func(void* arg)
 {
     file_api_win32* ptr = reinterpret_cast<file_api_win32*>(arg);
     XR_DEBUG_ASSERTION_MSG(ptr, "async io thread invalid argument");
@@ -249,9 +249,11 @@ void file_api_win32::async_io_func(void* arg)
             sys::yield(15);
         }
     }
+
+    return 0;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void initialize_async_io(memory::base_allocator& alloc)
@@ -262,7 +264,7 @@ void initialize_async_io(memory::base_allocator& alloc)
     memory::construct_reference(file_api_system, alloc);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void shutdown_async_io()
@@ -273,7 +275,7 @@ void shutdown_async_io()
     memory::destruct_reference(file_api_system);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 file_api& current_file_api()

@@ -3,11 +3,11 @@
 
 #include "file_async_result_win32.h"
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 namespace xr::async_io
 {
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 file_async_result::file_async_result(async_request request, file_handle& handle, uint32_t offset) noexcept
@@ -17,7 +17,7 @@ file_async_result::file_async_result(async_request request, file_handle& handle,
     m_overlapped.Offset = offset;
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_async_result::set_current_status(async_status status) noexcept
@@ -25,7 +25,7 @@ void file_async_result::set_current_status(async_status status) noexcept
     threading::atomic_store_rel(m_async_status, status);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 void file_async_result::request_func(DWORD dwErrorCode,
@@ -35,7 +35,7 @@ void file_async_result::request_func(DWORD dwErrorCode,
 }
 
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
  */
 read_file_async_result::read_file_async_result(file_handle& handle,
@@ -46,4 +46,4 @@ read_file_async_result::read_file_async_result(file_handle& handle,
 {}
 
 } // namespace xr::async_io
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
