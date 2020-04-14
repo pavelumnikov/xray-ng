@@ -5,7 +5,7 @@
 
 #include "corlib/tasks/details/task_bucket.h"
 #include "corlib/tasks/details/grouped_task.h"
-#include "corlib/etl/containers/array_view.h"
+#include "corlib/etl/array_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details

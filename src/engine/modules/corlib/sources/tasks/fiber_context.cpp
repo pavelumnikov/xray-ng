@@ -6,7 +6,7 @@
 #include "fiber_context.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/containers/static_vector.h"
+#include "corlib/etl/static_vector.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks

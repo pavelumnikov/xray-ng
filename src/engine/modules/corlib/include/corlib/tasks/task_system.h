@@ -10,7 +10,7 @@
 #include "corlib/tasks/details/task_group.h"
 #include "corlib/tasks/details/work_distribution.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/containers/static_vector.h"
+#include "corlib/etl/static_vector.h"
 #include "corlib/memory/allocator_macro.h"
 
 // TODO: add profiling scope(or move inside scheduler)

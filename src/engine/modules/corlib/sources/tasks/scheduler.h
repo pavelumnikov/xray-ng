@@ -8,7 +8,7 @@
 #include "mpmc_queue.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/memory/memory_aligned_allocator.h"
-#include "corlib/etl/containers/static_vector.h"
+#include "corlib/etl/static_vector.h"
 #include "corlib/sys/thread.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ private:
 
     task_group_description& get_group_desc(task_group group);
 
-    static void worker_thread_main(void* user_data);
+    static uint32_t worker_thread_main(void* user_data);
     static void scheduler_fiber_main(void* user_data);
     static void scheduler_fiber_wait(void* user_data);
     static bool scheduler_fiber_step(details::thread_context& thread_ctx);

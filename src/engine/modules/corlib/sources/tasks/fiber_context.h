@@ -4,7 +4,7 @@
 #pragma once
 
 #include "corlib/tasks/task_system.h"
-#include "corlib/etl/containers/array_view.h"
+#include "corlib/etl/array_view.h"
 #include "thread_context.h"
 #include "fiber.h"
 

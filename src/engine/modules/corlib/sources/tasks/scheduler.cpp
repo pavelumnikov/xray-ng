@@ -4,7 +4,7 @@
 #include "scheduler.h"
 #include "fiber.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/containers/static_vector.h"
+#include "corlib/etl/static_vector.h"
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/tasks/details/work_distribution.h"
 #include "corlib/timer.h"
@@ -142,7 +142,7 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
         context.current_scheduler = this;
 
         auto priority = sys::thread_priority::medium;
-        context.current_thread = sys::spawn_thread(m_aligned_allocator, worker_thread_main, &context,
+        context.current_thread = sys::spawn_thread(worker_thread_main, &context,
             L"task_worker", priority, scheduler_stack_size, thread_index);
     }
 }
@@ -417,12 +417,13 @@ bool task_scheduler::try_steal_task(details::thread_context& thread_context, det
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void task_scheduler::worker_thread_main(void* user_data)
+uint32_t task_scheduler::worker_thread_main(void* user_data)
 {
     details::thread_context& context = *reinterpret_cast<details::thread_context*>(user_data);
     XR_DEBUG_ASSERTION_MSG(context.current_scheduler, "Task scheduler must be not null!");
     context.current_thread_id = sys::current_thread_id();
     context.scheduler_fiber.create_from_thread_and_run(scheduler_fiber_main, user_data);
+    return 0;
 }
 
 //-----------------------------------------------------------------------------------------------------------
