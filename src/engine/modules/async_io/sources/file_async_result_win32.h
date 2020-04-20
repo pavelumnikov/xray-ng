@@ -83,7 +83,7 @@ private:
     memory::buffer_ref& m_buffer_ref;
     const size_t m_read_size;
 }; // class read_file_async_result
-using read_file_async_result_ptr = etl::shared_ptr<read_file_async_result>;
+using read_file_async_result_ptr = utils::shared_ptr<read_file_async_result>;
 
 //-----------------------------------------------------------------------------------------------------------
 /**

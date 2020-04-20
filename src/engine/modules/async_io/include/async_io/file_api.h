@@ -4,11 +4,11 @@
 #pragma once
 
 #include "corlib/memory/buffer_ref.h"
-#include "corlib/etl/string/fixed_string.h"
-#include "corlib/etl/ptr.h"
+#include "corlib/utils/string/fixed_string.h"
+#include "corlib/utils/string_view.h"
+#include "corlib/utils/ptr.h"
 #include "corlib/sys/win/handle.h"
 #include "async_io/async_result.h"
-#include "EASTL/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
@@ -25,9 +25,9 @@ auto constexpr path_length = 256;
 // file handle definition
 using file_handle = sys::win::handle_wrapper<sys::win::handle_traits>;
 
-using async_result_ptr = etl::shared_ptr<async_result>;
-using path = etl::string::fixed_wstring<path_length>;
-using path_view = eastl::wstring_view;
+using async_result_ptr = utils::shared_ptr<async_result>;
+using path = utils::string::fixed_wstring<path_length>;
+using path_view = utils::wstring_view;
 
 //-----------------------------------------------------------------------------------------------------------
 // how stream must be opened.

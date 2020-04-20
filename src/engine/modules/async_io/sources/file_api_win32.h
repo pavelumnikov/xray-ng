@@ -7,7 +7,7 @@
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/sys/thread.h"
 #include "corlib/threading/spin_wait.h"
-#include "corlib/etl/containers/std/deque.h"
+#include "corlib/utils/containers/std/deque.h"
 #include "file_async_result_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ private:
     void initialize();
     void finalize();
 
-    etl::containers::std::deque<async_result_ptr> m_async_requests;
+    utils::containers::std::deque<async_result_ptr> m_async_requests;
     mutex m_async_requests_lock;
     sys::thread_handle m_thread_handles[max_io_threads];
     memory::base_allocator& m_allocator;
