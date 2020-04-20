@@ -35,5 +35,5 @@ public:
     using raii = scoped_lock<locker>;
 }; // class custom_threaded_traits
 
-} // namespace xr::etl::containers
+} // namespace xr::utils
 //-----------------------------------------------------------------------------------------------------------

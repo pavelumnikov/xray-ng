@@ -2,7 +2,6 @@
 //
 
 #include "corlib/sys/arg_list.h"
-#include "corlib/etl/string/constexpr_string.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::sys
@@ -11,30 +10,29 @@ namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-arg_list::arg_list(memory::base_allocator& alloc, eastl::string_view cmd_line)
+arg_list::arg_list(memory::base_allocator& alloc, utils::string_view cmd_line)
     : m_allocator { alloc }
     , m_map { m_allocator }
 {
-    eastl::string_view line_delims { " " };
-    eastl::string_view kv_delims { "=" };
+    utils::string_view line_delims { " " };
+    utils::string_view kv_delims { "=" };
 
-    auto first = eastl::cbegin(cmd_line);
-    while(first != eastl::cend(cmd_line))
+    auto first = cmd_line.cbegin();
+    while(first != cmd_line.cend())
     {
-        const auto second = eastl::find_first_of(first, eastl::cend(cmd_line),
-            eastl::cbegin(line_delims), eastl::cend(line_delims));
+        pcstr second = eastl::find_first_of(first, cmd_line.cend(),
+            line_delims.cbegin(), line_delims.cend());
 
         if(first != second)
         {
-            eastl::string_view key { first, size_t(second - first) };
-            auto value = eastl::find_first_of(eastl::cbegin(key), second,
-                eastl::cbegin(kv_delims), eastl::cend(kv_delims));
+            utils::string_view key { first, size_t(second - first) };
+            pcstr value = eastl::find_first_of(key.cbegin(), second, kv_delims.cbegin(), kv_delims.cend());
 
-            eastl::string_view key_data { key.data(), size_t(value - first) };
-            if(value != std::cend(key))
+            utils::string_view key_data { key.data(), size_t(value - first) };
+            if(value != key.cend())
             {
-                value = std::next(value);
-                eastl::string_view value_data { value, size_t(second - value) };
+                value = eastl::next(value);
+                utils::string_view value_data { value, size_t(second - value) };
                 add_arg(key_data, value_data);
             }
             else
@@ -43,7 +41,7 @@ arg_list::arg_list(memory::base_allocator& alloc, eastl::string_view cmd_line)
             }
         }
 
-        if(second == eastl::cend(cmd_line))
+        if(second == cmd_line.cend())
             break;
 
         first = eastl::next(second);
@@ -53,9 +51,9 @@ arg_list::arg_list(memory::base_allocator& alloc, eastl::string_view cmd_line)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::add_arg(eastl::string_view key) noexcept
+bool arg_list::add_arg(utils::string_view key) noexcept
 {
-    key_type const k(eastl::begin(key), eastl::end(key));
+    key_type const k(key.cbegin(), key.cend());
 
     if(internal_key_exists(k))
         return false;
@@ -67,16 +65,16 @@ bool arg_list::add_arg(eastl::string_view key) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::add_arg(eastl::string_view key, eastl::string_view arg) noexcept
+bool arg_list::add_arg(utils::string_view key, utils::string_view arg) noexcept
 {
-    key_type const k(eastl::begin(key), eastl::end(key));
+    key_type const k(key.cbegin(), key.cend());
 
     if(internal_key_exists(k))
         return false;
 
     auto const result = m_map.emplace(eastl::piecewise_construct,
         eastl::forward_as_tuple(k), 
-        eastl::forward_as_tuple(eastl::begin(arg), eastl::end(arg)));
+        eastl::forward_as_tuple(arg.cbegin(), arg.cend()));
 
     return result.second;
 }
@@ -84,21 +82,21 @@ bool arg_list::add_arg(eastl::string_view key, eastl::string_view arg) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::has_arg(eastl::string_view key) const noexcept
+bool arg_list::has_arg(utils::string_view key) const noexcept
 {
-    key_type const k(eastl::begin(key), eastl::end(key));
+    key_type const k(key.cbegin(), key.cend());
     return internal_key_exists(k);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::string_view arg_list::at(eastl::string_view key) const noexcept
+utils::string_view arg_list::at(utils::string_view key) const noexcept
 {
-    key_type const k(eastl::begin(key), eastl::end(key));
+    key_type const k(key.cbegin(), key.cend());
 
     XR_DEBUG_ASSERTION(m_map.find(k) != eastl::end(m_map));
-    return etl::string::to_string_view(m_map.at(k));
+    return utils::stdext::to_string_view(m_map.at(k));
 }
 
 //-----------------------------------------------------------------------------------------------------------

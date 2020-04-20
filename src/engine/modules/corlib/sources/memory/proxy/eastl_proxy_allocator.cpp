@@ -67,10 +67,10 @@ eastl_proxy_allocator::deallocate(void* p, size_t n) const noexcept
 /**
 */
 void 
-eastl_proxy_allocator::set_name(eastl::string_view s) noexcept
+eastl_proxy_allocator::set_name(utils::string_view s) noexcept
 {
     assert(eastl::size(m_allocator_name) <= s.size());
-    eastl::copy(eastl::begin(s), eastl::end(s), m_allocator_name);
+    eastl::copy(s.cbegin(), s.cend(), m_allocator_name);
 }
 
 #endif // #if defined(_DEBUG)

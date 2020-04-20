@@ -7,7 +7,7 @@
 namespace xr::sys
 {
 
-using exit_handlers_container = etl::containers::intrusive_list_node<exit_handler>;
+using exit_handlers_container = utils::intrusive_list_node<exit_handler>;
 static exit_handlers_container s_exit_handlers {};
 
 //-----------------------------------------------------------------------------------------------------------

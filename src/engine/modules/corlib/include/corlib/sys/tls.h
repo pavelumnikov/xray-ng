@@ -4,7 +4,6 @@
 #pragma once
 
 #include "corlib/types.h"
-#include "EASTL/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::sys
@@ -13,8 +12,7 @@ namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------
 using tls_handle = uint32_t;
 
-uintptr_t constexpr invalid_thread_local_storage =
-    (eastl::numeric_limits<tls_handle>::max)();
+uintptr_t constexpr invalid_thread_local_storage = UINT32_MAX;
 
 //-----------------------------------------------------------------------------------------------------------
 /**

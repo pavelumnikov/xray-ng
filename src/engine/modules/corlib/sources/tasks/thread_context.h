@@ -93,7 +93,7 @@ struct thread_context
     threading::atomic_uint32 state;
 
     // Temporary buffer, fixed size = max_task_buffer_capacity
-    void* desc_buffer;
+    pvoid desc_buffer;
 
     // Thread index
     uint32_t current_worker_index;

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/packed.h"
+#include "corlib/utils/packed.h"
 #include "corlib/math/mathlib.h"
 
 namespace xr::math::details

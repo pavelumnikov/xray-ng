@@ -10,7 +10,7 @@
 #include "corlib/tasks/details/task_group.h"
 #include "corlib/tasks/details/work_distribution.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/static_vector.h"
+#include "corlib/utils/static_vector.h"
 #include "corlib/memory/allocator_macro.h"
 
 // TODO: add profiling scope(or move inside scheduler)
@@ -70,10 +70,10 @@ public:
     void run_subtasks_and_yield(task_group group, TTask(&tasks)[N]);
 
     template<typename TTask, size_t N>
-    void run_async(task_group group, etl::static_vector<TTask, N>& tasks);
+    void run_async(task_group group, utils::static_vector<TTask, N>& tasks);
 
     template<typename TTask, size_t N>
-    void run_subtasks_and_yield(task_group group, etl::static_vector<TTask, N>& tasks);
+    void run_subtasks_and_yield(task_group group, utils::static_vector<TTask, N>& tasks);
 
     virtual void yield() = 0;
 
@@ -83,11 +83,11 @@ protected:
     virtual pvoid current_effective_buffer() = 0;
 
     virtual void run_subtasks_on_scheduler(
-        etl::array_view<details::task_bucket>& buckets,
+        utils::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) = 0;
 
     virtual void run_subtasks_and_yield_impl(
-        etl::array_view<details::task_bucket>& buckets) = 0;
+        utils::array_view<details::task_bucket>& buckets) = 0;
 }; // class execution_context
 
 //-----------------------------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ public:
     void run_async(task_group group, TTask(&tasks)[N]);
 
     template<typename TTask, size_t N>
-    void run_async(task_group group, etl::static_vector<TTask, N>& tasks);
+    void run_async(task_group group, utils::static_vector<TTask, N>& tasks);
 
     virtual task_group create_group() = 0;
     virtual void release_group(task_group group) = 0;
@@ -112,7 +112,7 @@ public:
 protected:
     virtual size_t effective_master_buckets(size_t tasks) = 0;
     virtual void run_subtasks_on_scheduler(
-        etl::array_view<details::task_bucket>& buckets,
+        utils::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) = 0;
 }; // class scheduler
 
@@ -149,8 +149,8 @@ execution_context::run_async(task_group group, const TTask* tasks, size_t count)
     pvoid desc_buffer = current_effective_buffer();
     size_t bucket_count = effective_coroutine_buckets(count);
 
-    etl::array_view<details::grouped_task> buffer(desc_buffer, count);
-    etl::array_view<details::task_bucket> buckets(
+    utils::array_view<details::grouped_task> buffer(desc_buffer, count);
+    utils::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket) * bucket_count), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
@@ -168,8 +168,8 @@ execution_context::run_subtasks_and_yield(task_group group, const TTask* tasks, 
     pvoid desc_buffer = current_effective_buffer();
     size_t bucket_count = effective_coroutine_buckets(count);
 
-    etl::array_view<details::grouped_task> buffer(desc_buffer, count);
-    etl::array_view<details::task_bucket> buckets(
+    utils::array_view<details::grouped_task> buffer(desc_buffer, count);
+    utils::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket) * bucket_count), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
@@ -202,7 +202,7 @@ execution_context::run_subtasks_and_yield(task_group group, TTask(&tasks)[N])
 template<typename TTask, size_t N>
 inline void
 execution_context::run_async(task_group group,
-    etl::static_vector<TTask, N>& tasks)
+    utils::static_vector<TTask, N>& tasks)
 {
     run_async(group, tasks.begin(), tasks.size());
 }
@@ -213,7 +213,7 @@ execution_context::run_async(task_group group,
 template<typename TTask, size_t N>
 inline void
 execution_context::run_subtasks_and_yield(task_group group,
-    etl::static_vector<TTask, N>& tasks)
+    utils::static_vector<TTask, N>& tasks)
 {
     run_subtasks_and_yield(group, tasks.begin(), tasks.size());
 }
@@ -227,11 +227,11 @@ scheduler::run_async(task_group group, const TTask* tasks, size_t count)
 {
     size_t bucket_count = effective_master_buckets(count);
     size_t bytes_count_for_grouped_tasks = sizeof(details::grouped_task) * count;
-    etl::array_view<details::grouped_task> buffer(
+    utils::array_view<details::grouped_task> buffer(
         XR_STACK_ALLOCATE_MEMORY(bytes_count_for_grouped_tasks), count);
 
     size_t bytes_count_for_task_buckets = sizeof(details::task_bucket) * bucket_count;
-    etl::array_view<details::task_bucket> buckets(
+    utils::array_view<details::task_bucket> buckets(
         XR_STACK_ALLOCATE_MEMORY(bytes_count_for_task_buckets), bucket_count);
 
     details::distibute_descriptions(group, tasks, buffer, buckets);
@@ -253,7 +253,7 @@ scheduler::run_async(task_group group, TTask(&tasks)[N])
  */
 template<typename TTask, size_t N>
 inline void
-scheduler::run_async(task_group group, etl::static_vector<TTask, N>& tasks)
+scheduler::run_async(task_group group, utils::static_vector<TTask, N>& tasks)
 {
     run_async(group, tasks.begin(), tasks.size());
 }

@@ -2,7 +2,7 @@
 //
 
 #include "corlib/memory/memory_functions.h"
-#include "corlib/etl/algorithms/aligning.h"
+#include "corlib/utils/aligning.h"
 #include <string.h>
 #include <intrin.h>
 
@@ -36,8 +36,8 @@ void copy_align_16(void* destination, size_t const destination_size,
     XR_DEBUG_ASSERTION_MSG(destination_size, 
         "Size of copyable data must be higher than zero!");
 
-    XR_DEBUG_ASSERTION(etl::algorithms::is_aligned(source, 16));
-    XR_DEBUG_ASSERTION(etl::algorithms::is_aligned(destination, 16));
+    XR_DEBUG_ASSERTION(utils::is_aligned(source, 16));
+    XR_DEBUG_ASSERTION(utils::is_aligned(destination, 16));
 
     // To prevent stack growing(useful in cases like multitasking)
     auto const src = const_cast<char*>(static_cast<const char*>(source));

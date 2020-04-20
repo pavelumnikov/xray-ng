@@ -4,11 +4,9 @@
 #include "scheduler.h"
 #include "fiber.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/static_vector.h"
-#include "corlib/etl/string/buffer_string.h"
+#include "corlib/utils/static_vector.h"
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/tasks/details/work_distribution.h"
-#include "corlib/timer.h"
 #include <string.h> // for memset
 #include <stdio.h> // for _snwprintf
 
@@ -642,12 +640,12 @@ void task_scheduler::scheduler_fiber_process_task(details::thread_context& conte
             if(task_status == fiber_task_status::YIELDED)
             {
                 // Task is yielded, add to tasks queue
-                etl::array_view<details::grouped_task> buffer(context.desc_buffer, 1);
-                etl::array_view<details::task_bucket> buckets(
+                utils::array_view<details::grouped_task> buffer(context.desc_buffer, 1);
+                utils::array_view<details::task_bucket> buckets(
                     XR_STACK_ALLOCATE_MEMORY(sizeof(details::task_bucket)), 1);
 
                 fiber_context* yieldedTask = fiber_ctx;
-                etl::static_vector<fiber_context*, 1> yielded_tasks_queue(1, yieldedTask);
+                utils::static_vector<fiber_context*, 1> yielded_tasks_queue(1, yieldedTask);
 
                 details::distibute_descriptions(task_group(task_group::assign_from_context),
                     yielded_tasks_queue.begin(), buffer, buckets);
@@ -689,7 +687,7 @@ bool task_scheduler::scheduler_fiber_step(details::thread_context& context)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void task_scheduler::run_tasks_internal(etl::array_view<details::task_bucket>& buckets, 
+void task_scheduler::run_tasks_internal(utils::array_view<details::task_bucket>& buckets, 
     fiber_context* parent_fiber, bool restored_from_awaiting)
 {
 #if XR_EXPERIMENTAL_WAIT
@@ -788,7 +786,7 @@ signalling_bool task_scheduler::wait_group(task_group group, uint32_t millisecon
         return true;
 
     size_t bytes_count_for_desc_buffer = details::memory_requrements_for_desc_buffer;
-    void* desc_buffer = XR_STACK_ALLOCATE_MEMORY(bytes_count_for_desc_buffer);
+    pvoid desc_buffer = XR_STACK_ALLOCATE_MEMORY(bytes_count_for_desc_buffer);
 
     details::thread_context context { desc_buffer };
     context.current_scheduler = this;
@@ -822,7 +820,7 @@ signalling_bool task_scheduler::wait_all(uint32_t milliseconds)
         return true;
 
     size_t bytes_count_for_desc_buffer = details::memory_requrements_for_desc_buffer;
-    void* desc_buffer = XR_STACK_ALLOCATE_MEMORY(bytes_count_for_desc_buffer);
+    pvoid desc_buffer = XR_STACK_ALLOCATE_MEMORY(bytes_count_for_desc_buffer);
 
     details::thread_context context { desc_buffer };
     context.current_scheduler = this;
@@ -971,7 +969,7 @@ size_t task_scheduler::effective_master_buckets(size_t tasks)
 /**
  */
 void task_scheduler::run_subtasks_on_scheduler(
-    etl::array_view<details::task_bucket>& buckets,
+    utils::array_view<details::task_bucket>& buckets,
     bool restored_from_awaiting)
 {
     run_tasks_internal(buckets, nullptr, restored_from_awaiting);

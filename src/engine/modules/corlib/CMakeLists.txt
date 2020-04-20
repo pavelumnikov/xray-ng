@@ -16,141 +16,12 @@ project(corlib)
 ##
 
 set(CORE_MODULE_HEADERS
-	"include/corlib/check_invariants.h"
-	"include/corlib/packed.h"
 	"include/corlib/platform.h"
-	"include/corlib/pointer_cast.h"
-	"include/corlib/scoped.h"
 	"include/corlib/signalling_bool.h"
-	"include/corlib/timer.h"
 	"include/corlib/types.h"
 )
 
 source_group("include" FILES ${CORE_MODULE_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_HEADERS
-	"include/corlib/etl/array_view.h"
-	"include/corlib/etl/delegate.h"
-	"include/corlib/etl/enumeration.h"
-	"include/corlib/etl/fourcc.h"
-	"include/corlib/etl/function_pointer.h"
-	"include/corlib/etl/integer.h"
-	"include/corlib/etl/integer_fwd.h"
-	"include/corlib/etl/integer_traits.h"
-	"include/corlib/etl/not_null_ptr.h"
-	"include/corlib/etl/padded.h"
-	"include/corlib/etl/pseudo_virtual_pointer.h"
-	"include/corlib/etl/ptr.h"
-	"include/corlib/etl/static_vector.h"
-	"include/corlib/etl/select_sizet_constant.h"
-	"include/corlib/etl/type_conversions.h"
-	"include/corlib/etl/type_inversions.h"
-	"include/corlib/etl/type_traits.h"
-)
-
-source_group("include\\etl" FILES ${CORE_MODULE_ETL_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_ALGORITHMS_HEADERS
-	"include/corlib/etl/algorithms/aligning.h"
-	"include/corlib/etl/algorithms/constexpr_binarysearch.h"
-	"include/corlib/etl/algorithms/constexpr_lowerbound.h"
-	"include/corlib/etl/algorithms/constexpr_partition.h"
-	"include/corlib/etl/algorithms/constexpr_quicksort.h"
-	"include/corlib/etl/algorithms/constexpr_swap.h"
-	"include/corlib/etl/algorithms/enumerator.h"
-	"include/corlib/etl/algorithms/perfect_forwarding.h"
-	"include/corlib/etl/algorithms/search.h"
-	"include/corlib/etl/algorithms/utility.h")
-
-source_group("include\\etl\\algorithms" FILES ${CORE_MODULE_ETL_ALGORITHMS_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_ALGORITHMS_SEARCHERS_HEADERS
-	"include/corlib/etl/algorithms/searchers/constexpr_knuth_morris_pratt_searcher.h"
-	"include/corlib/etl/algorithms/searchers/constexpr_boyer_moore_searcher.h")
-
-source_group("include\\etl\\algorithms\\searchers" FILES ${CORE_MODULE_ETL_ALGORITHMS_SEARCHERS_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_CONTAINERS_HEADERS
-	"include/corlib/etl/containers/associative_vector.h"
-	"include/corlib/etl/containers/associative_vector_compare_predicate.h"
-	"include/corlib/etl/containers/constexpr_array.h"
-	"include/corlib/etl/containers/constexpr_map.h"
-	"include/corlib/etl/containers/constexpr_vector.h"
-	"include/corlib/etl/containers/hierarchy_node.h"
-	"include/corlib/etl/containers/intrusive_list_node.h"
-	"include/corlib/etl/containers/lru_cache.h"
-)
-
-source_group("include\\etl\\containers" FILES ${CORE_MODULE_ETL_CONTAINERS_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_CONTAINERS_MT_HEADERS)
-source_group("include\\etl\\containers\\mt" FILES ${CORE_MODULE_ETL_CONTAINERS_MT_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_CONTAINERS_STD_HEADERS
-	"include/corlib/etl/containers/std/deque.h"
-	"include/corlib/etl/containers/std/map.h"
-	"include/corlib/etl/containers/std/set.h"
-	"include/corlib/etl/containers/std/unordered_map.h"
-	"include/corlib/etl/containers/std/unordered_set.h"
-	"include/corlib/etl/containers/std/vector.h")
-
-source_group("include\\etl\\containers\\std" FILES ${CORE_MODULE_ETL_CONTAINERS_STD_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_CONTAINERS_STDEXT_HEADERS
-	"include/corlib/etl/containers/stdext/fixed_vector.h")
-
-source_group("include\\etl\\containers\\stdext" FILES ${CORE_MODULE_ETL_CONTAINERS_STDEXT_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_STRING_HEADERS
-	"include/corlib/etl/string/basic_buffer_string.h"
-	"include/corlib/etl/string/basic_constexpr_string.h"
-	"include/corlib/etl/string/buffer_string.h"
-	"include/corlib/etl/string/char_traits.h"
-	"include/corlib/etl/string/constexpr_string.h"
-	"include/corlib/etl/string/conversion.h"
-	"include/corlib/etl/string/fixed_string.h"
-)
-
-source_group("include\\etl\\string" FILES ${CORE_MODULE_ETL_STRING_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_STRING_SOURCES
-	"sources/etl/string/conversion.cpp")
-
-source_group("sources\\etl\\string" FILES ${CORE_MODULE_ETL_STRING_SOURCES})
-
-##
-
-set(CORE_MODULE_ETL_HASHING_HEADERS
-	"include/corlib/etl/hashing/elsa_hash.h"
-	"include/corlib/etl/hashing/prehashed.h"
-)
-
-source_group("include\\etl\\hashing" FILES ${CORE_MODULE_ETL_HASHING_HEADERS})
-
-##
-
-set(CORE_MODULE_ETL_HASHING_STD_HEADERS
-	"include/corlib/etl/hashing/std/string_hash.h")
-
-source_group("include\\etl\\hashing\\std" FILES ${CORE_MODULE_ETL_HASHING_STD_HEADERS})
 
 ##
 
@@ -266,11 +137,11 @@ endif(WIN32)
 set(CORE_MODULE_SYS_HEADERS
 	"include/corlib/sys/arg_list.h"
 	"include/corlib/sys/chrono.h"
+	"include/corlib/sys/debug.h"
 	"include/corlib/sys/dll.h"
+	"include/corlib/sys/error.h"
 	"include/corlib/sys/exit_handler.h"
 	"include/corlib/sys/net.h"
-	"include/corlib/sys/page_protection.h"
-	"include/corlib/sys/profiling_thread.h"
 	"include/corlib/sys/thread.h"
 	"include/corlib/sys/tls.h")
 	
@@ -308,6 +179,7 @@ endif(WIN32)
 if(WIN32)
 	set(CORE_MODULE_SYS_SOURCES_WIN32
 		"sources/sys/chrono_win32.cpp"
+		"sources/sys/debug_win32.cpp"
 		"sources/sys/dll_win32.cpp"
 		"sources/sys/thread_win32.cpp"
 		"sources/sys/tls_win32.cpp")
@@ -421,19 +293,101 @@ endif(WIN32)
 
 ##
 
+set(CORE_MODULE_UTILS_HEADERS
+	"include/corlib/utils/algorithm.h"
+	"include/corlib/utils/aligning.h"
+	"include/corlib/utils/array_view.h"
+	"include/corlib/utils/buffer_string.h"
+	"include/corlib/utils/constexpr_array.h"
+	"include/corlib/utils/constexpr_string.h"
+	"include/corlib/utils/constexpr_map.h"
+	"include/corlib/utils/constexpr_vector.h"
+	"include/corlib/utils/check_invariants.h"
+	"include/corlib/utils/delegate.h"
+	"include/corlib/utils/enumeration.h"
+	"include/corlib/utils/enumerator.h"
+	"include/corlib/utils/fourcc.h"
+	"include/corlib/utils/function_pointer.h"
+	"include/corlib/utils/hash_elsa.h"
+	"include/corlib/utils/hash_string.h"
+	"include/corlib/utils/integer.h"
+	"include/corlib/utils/integer_fwd.h"
+	"include/corlib/utils/integer_traits.h"
+	"include/corlib/utils/intrusive_list_node.h"
+	"include/corlib/utils/not_null_ptr.h"
+	"include/corlib/utils/packed.h"
+	"include/corlib/utils/padded.h"
+	"include/corlib/utils/perfect_forwarding.h"
+	"include/corlib/utils/pseudo_virtual_pointer.h"
+	"include/corlib/utils/prehashed.h"
+	"include/corlib/utils/ptr.h"
+	"include/corlib/utils/pointer_cast.h"
+	"include/corlib/utils/scoped.h"
+	"include/corlib/utils/static_vector.h"
+	"include/corlib/utils/string_conversion.h"
+	"include/corlib/utils/string_view.h"
+	"include/corlib/utils/search.h"
+	"include/corlib/utils/select_sizet_constant.h"
+	"include/corlib/utils/timer.h"
+	"include/corlib/utils/type_conversions.h"
+	"include/corlib/utils/type_inversions.h"
+	"include/corlib/utils/type_traits.h"
+	"include/corlib/utils/utility.h"
+)
+
+source_group("include\\utils" FILES ${CORE_MODULE_UTILS_HEADERS})
+
+##
+
+set(CORE_MODULE_UTILS_SOURCES
+	"sources/utils/string_conversion.cpp")
+
+source_group("sources\\utils" FILES ${CORE_MODULE_UTILS_SOURCES})
+
+##
+
+set(CORE_MODULE_UTILS_DETAILS_HEADERS
+	"include/corlib/utils/details/basic_buffer_string.h"
+	"include/corlib/utils/details/basic_constexpr_string.h"
+	"include/corlib/utils/details/basic_string_view.h"
+	"include/corlib/utils/details/char_traits.h"
+	"include/corlib/utils/details/compare_key.h"
+	"include/corlib/utils/details/constexpr_knuth_morris_pratt_searcher.h"
+	"include/corlib/utils/details/constexpr_boyer_moore_searcher.h"
+	"include/corlib/utils/details/constexpr_binarysearch.h"
+	"include/corlib/utils/details/constexpr_lowerbound.h"
+	"include/corlib/utils/details/constexpr_partition.h"
+	"include/corlib/utils/details/constexpr_quicksort.h"
+	"include/corlib/utils/details/constexpr_swap.h"
+)
+
+source_group("include\\utils\\details" FILES ${CORE_MODULE_UTILS_DETAILS_HEADERS})
+
+##
+
+set(CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS
+	"include/corlib/utils/std/deque.h"
+	"include/corlib/utils/std/map.h"
+	"include/corlib/utils/std/set.h"
+	"include/corlib/utils/std/unordered_map.h"
+	"include/corlib/utils/std/unordered_set.h"
+	"include/corlib/utils/std/vector.h")
+
+source_group("include\\utils\\std" FILES ${CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS})
+
+##
+
+set(CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS
+	"include/corlib/utils/stdext/fixed_vector.h"
+	"include/corlib/utils/stdext/fixed_string.h"
+)
+
+source_group("include\\utils\\stdext" FILES ${CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS})
+
+##
+
 set(SOURCES
 	${CORE_MODULE_HEADERS}
-	${CORE_MODULE_ETL_HEADERS}
-	${CORE_MODULE_ETL_ALGORITHMS_HEADERS}
-	${CORE_MODULE_ETL_ALGORITHMS_SEARCHERS_HEADERS}
-	${CORE_MODULE_ETL_CONTAINERS_HEADERS}
-	${CORE_MODULE_ETL_CONTAINERS_MT_HEADERS}
-	${CORE_MODULE_ETL_CONTAINERS_STD_HEADERS}
-	${CORE_MODULE_ETL_CONTAINERS_STDEXT_HEADERS}
-	${CORE_MODULE_ETL_HASHING_HEADERS}
-	${CORE_MODULE_ETL_HASHING_STD_HEADERS}
-	${CORE_MODULE_ETL_STRING_SOURCES}
-	${CORE_MODULE_ETL_STRING_HEADERS}
 	${CORE_MODULE_MATH_HEADERS}
 	${CORE_MODULE_MATH_SSE_HEADERS}
 	${CORE_MODULE_MATH_SOURCES}
@@ -447,7 +401,13 @@ set(SOURCES
 	${CORE_MODULE_TASK_DETAILS_HEADERS}
 	${CORE_MODULE_TASK_SOURCES}
 	${CORE_MODULE_THREADING_SOURCES}
-	${CORE_MODULE_THREADING_HEADERS})
+	${CORE_MODULE_THREADING_HEADERS}
+	${CORE_MODULE_UTILS_HEADERS}
+	${CORE_MODULE_UTILS_SOURCES}
+	${CORE_MODULE_UTILS_DETAILS_HEADERS}
+	${CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS}
+	${CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS}
+)
 
 if(WIN32)
 	list(APPEND SOURCES ${CORE_MODULE_SOURCES_WIN32})

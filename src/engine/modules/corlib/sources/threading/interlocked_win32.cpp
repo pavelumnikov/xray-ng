@@ -8,7 +8,7 @@
 #include "corlib/platform.h"
 #include "corlib/types.h"
 #include "../os_include_win32.h"
-#include "corlib/etl/type_conversions.h"
+#include "corlib/utils/type_conversions.h"
 #include <intrin.h>
 #include <cassert>
 
@@ -45,9 +45,9 @@ int8_t __atomic_exchange(volatile int8_t* ptr, int8_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile CHAR*>(ptr);
-    auto const v = etl::implicit_cast<CHAR>(value);
+    auto const v = utils::implicit_cast<CHAR>(value);
 
-    return etl::implicit_cast<int8_t>(_InterlockedExchange8(p, v));
+    return utils::implicit_cast<int8_t>(_InterlockedExchange8(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -58,9 +58,9 @@ int16_t __atomic_exchange(volatile int16_t* ptr, int16_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile SHORT*>(ptr);
-    auto const v = etl::implicit_cast<SHORT>(value);
+    auto const v = utils::implicit_cast<SHORT>(value);
 
-    return etl::implicit_cast<int16_t>(_InterlockedExchange16(p, v));
+    return utils::implicit_cast<int16_t>(_InterlockedExchange16(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -71,9 +71,9 @@ int32_t __atomic_exchange(volatile int32_t* ptr, int32_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG*>(ptr);
-    auto const v = etl::implicit_cast<LONG>(value);
+    auto const v = utils::implicit_cast<LONG>(value);
 
-    return etl::implicit_cast<int32_t>(_InterlockedExchange(p, v));
+    return utils::implicit_cast<int32_t>(_InterlockedExchange(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -84,9 +84,9 @@ int64_t __atomic_exchange(volatile int64_t* ptr, int64_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG64*>(ptr);
-    auto const v = etl::implicit_cast<LONG64>(value);
+    auto const v = utils::implicit_cast<LONG64>(value);
 
-    return etl::implicit_cast<int64_t>(_InterlockedExchange64(p, v));
+    return utils::implicit_cast<int64_t>(_InterlockedExchange64(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -105,9 +105,9 @@ int8_t __atomic_exchange_add(volatile int8_t* ptr, int8_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile CHAR*>(ptr);
-    auto const v = etl::implicit_cast<CHAR>(value);
+    auto const v = utils::implicit_cast<CHAR>(value);
 
-    return etl::implicit_cast<int8_t>(_InterlockedExchangeAdd8(p, v));
+    return utils::implicit_cast<int8_t>(_InterlockedExchangeAdd8(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -118,9 +118,9 @@ int16_t __atomic_exchange_add(volatile int16_t* ptr, int16_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile SHORT*>(ptr);
-    auto const v = etl::implicit_cast<SHORT>(value);
+    auto const v = utils::implicit_cast<SHORT>(value);
 
-    return etl::implicit_cast<int16_t>(_InterlockedExchangeAdd16(p, v));
+    return utils::implicit_cast<int16_t>(_InterlockedExchangeAdd16(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -131,9 +131,9 @@ int32_t __atomic_exchange_add(volatile int32_t* ptr, int32_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG*>(ptr);
-    auto const v = etl::implicit_cast<LONG>(value);
+    auto const v = utils::implicit_cast<LONG>(value);
 
-    return etl::implicit_cast<int32_t>(_InterlockedExchangeAdd(p, v));
+    return utils::implicit_cast<int32_t>(_InterlockedExchangeAdd(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -144,9 +144,9 @@ int64_t __atomic_exchange_add(volatile int64_t* ptr, int64_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG64*>(ptr);
-    auto const v = etl::implicit_cast<LONG64>(value);
+    auto const v = utils::implicit_cast<LONG64>(value);
 
-    return etl::implicit_cast<int64_t>(_InterlockedExchangeAdd64(p, v));
+    return utils::implicit_cast<int64_t>(_InterlockedExchangeAdd64(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -157,10 +157,10 @@ int8_t __atomic_compare_exchange(volatile int8_t* ptr, int8_t value, int8_t comp
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile CHAR*>(ptr);
-    auto const v = etl::implicit_cast<CHAR>(value);
-    auto const c = etl::implicit_cast<CHAR>(comparand);
+    auto const v = utils::implicit_cast<CHAR>(value);
+    auto const c = utils::implicit_cast<CHAR>(comparand);
 
-    return etl::implicit_cast<int8_t>(_InterlockedCompareExchange8(p, v, c));
+    return utils::implicit_cast<int8_t>(_InterlockedCompareExchange8(p, v, c));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -171,10 +171,10 @@ int16_t __atomic_compare_exchange(volatile int16_t* ptr, int16_t value, int16_t 
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile SHORT*>(ptr);
-    auto const v = etl::implicit_cast<SHORT>(value);
-    auto const c = etl::implicit_cast<SHORT>(comparand);
+    auto const v = utils::implicit_cast<SHORT>(value);
+    auto const c = utils::implicit_cast<SHORT>(comparand);
 
-    return etl::implicit_cast<int16_t>(_InterlockedCompareExchange16(p, v, c));
+    return utils::implicit_cast<int16_t>(_InterlockedCompareExchange16(p, v, c));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -185,10 +185,10 @@ int32_t __atomic_compare_exchange(volatile int32_t* ptr, int32_t value, int32_t 
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG*>(ptr);
-    auto const v = etl::implicit_cast<LONG>(value);
-    auto const c = etl::implicit_cast<LONG>(comparand);
+    auto const v = utils::implicit_cast<LONG>(value);
+    auto const c = utils::implicit_cast<LONG>(comparand);
 
-    return etl::implicit_cast<int32_t>(_InterlockedCompareExchange(p, v, c));
+    return utils::implicit_cast<int32_t>(_InterlockedCompareExchange(p, v, c));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -199,10 +199,10 @@ int64_t __atomic_compare_exchange(volatile int64_t* ptr, int64_t value, int64_t 
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG64*>(ptr);
-    auto const v = etl::implicit_cast<LONG64>(value);
-    auto const c = etl::implicit_cast<LONG64>(comparand);
+    auto const v = utils::implicit_cast<LONG64>(value);
+    auto const c = utils::implicit_cast<LONG64>(comparand);
 
-    return etl::implicit_cast<int64_t>(_InterlockedCompareExchange64(p, v, c));
+    return utils::implicit_cast<int64_t>(_InterlockedCompareExchange64(p, v, c));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -221,9 +221,9 @@ int8_t __atomic_or_operation(volatile int8_t* ptr, int8_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile CHAR*>(ptr);
-    auto const v = etl::implicit_cast<CHAR>(value);
+    auto const v = utils::implicit_cast<CHAR>(value);
 
-    return etl::implicit_cast<int8_t>(_InterlockedOr8(p, v));
+    return utils::implicit_cast<int8_t>(_InterlockedOr8(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -234,9 +234,9 @@ int16_t __atomic_or_operation(volatile int16_t* ptr, int16_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile SHORT*>(ptr);
-    auto const v = etl::implicit_cast<SHORT>(value);
+    auto const v = utils::implicit_cast<SHORT>(value);
 
-    return etl::implicit_cast<int16_t>(_InterlockedOr16(p, v));
+    return utils::implicit_cast<int16_t>(_InterlockedOr16(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -247,9 +247,9 @@ int32_t __atomic_or_operation(volatile int32_t* ptr, int32_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG*>(ptr);
-    auto const v = etl::implicit_cast<LONG>(value);
+    auto const v = utils::implicit_cast<LONG>(value);
 
-    return etl::implicit_cast<int32_t>(_InterlockedOr(p, v));
+    return utils::implicit_cast<int32_t>(_InterlockedOr(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -260,9 +260,9 @@ int64_t __atomic_or_operation(volatile int64_t* ptr, int64_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG64*>(ptr);
-    auto const v = etl::implicit_cast<LONG64>(value);
+    auto const v = utils::implicit_cast<LONG64>(value);
 
-    return etl::implicit_cast<int64_t>(_InterlockedOr64(p, v));
+    return utils::implicit_cast<int64_t>(_InterlockedOr64(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -273,9 +273,9 @@ int8_t __atomic_and_operation(volatile int8_t* ptr, int8_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile CHAR*>(ptr);
-    auto const v = etl::implicit_cast<CHAR>(value);
+    auto const v = utils::implicit_cast<CHAR>(value);
 
-    return etl::implicit_cast<int8_t>(_InterlockedAnd8(p, v));
+    return utils::implicit_cast<int8_t>(_InterlockedAnd8(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -286,9 +286,9 @@ int16_t __atomic_and_operation(volatile int16_t* ptr, int16_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile SHORT*>(ptr);
-    auto const v = etl::implicit_cast<SHORT>(value);
+    auto const v = utils::implicit_cast<SHORT>(value);
 
-    return etl::implicit_cast<int16_t>(_InterlockedAnd16(p, v));
+    return utils::implicit_cast<int16_t>(_InterlockedAnd16(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -299,9 +299,9 @@ int32_t __atomic_and_operation(volatile int32_t* ptr, int32_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG*>(ptr);
-    auto const v = etl::implicit_cast<LONG>(value);
+    auto const v = utils::implicit_cast<LONG>(value);
 
-    return etl::implicit_cast<int32_t>(_InterlockedAnd(p, v));
+    return utils::implicit_cast<int32_t>(_InterlockedAnd(p, v));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -312,9 +312,9 @@ int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) noexcept
     assert(ptr);
 
     auto const p = reinterpret_cast<volatile LONG64*>(ptr);
-    auto const v = etl::implicit_cast<LONG64>(value);
+    auto const v = utils::implicit_cast<LONG64>(value);
 
-    return etl::implicit_cast<int64_t>(_InterlockedAnd64(p, v));
+    return utils::implicit_cast<int64_t>(_InterlockedAnd64(p, v));
 }
 
 } // namespace xr::threading::internal

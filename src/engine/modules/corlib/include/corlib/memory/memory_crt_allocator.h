@@ -4,7 +4,7 @@
 #pragma once
 
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/function_pointer.h"
+#include "corlib/utils/function_pointer.h"
 
 namespace xr::memory
 {
@@ -30,9 +30,9 @@ protected:
         XR_DEBUG_PARAMETERS_DECLARATION) override;
 
 private:
-    using malloc_ptr_type = etl::function_pointer_t<pvoid, size_t>;
-    using free_ptr_type = etl::function_pointer_t<void, pvoid>;
-    using realloc_ptr_type = etl::function_pointer_t<pvoid, pvoid, size_t>;
+    using malloc_ptr_type = utils::function_pointer_t<pvoid, size_t>;
+    using free_ptr_type = utils::function_pointer_t<void, pvoid>;
+    using realloc_ptr_type = utils::function_pointer_t<pvoid, pvoid, size_t>;
 
     malloc_ptr_type m_malloc_ptr;
     free_ptr_type m_free_ptr;

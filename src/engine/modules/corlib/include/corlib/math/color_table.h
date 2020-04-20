@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/etl/type_conversions.h"
+#include "corlib/utils/type_conversions.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::math
@@ -163,7 +163,7 @@ enum class color_table : uint32_t
 constexpr uint32_t
 convert_to_abgr(color_table const col)
 {
-    auto const c = etl::to_underlying(col);
+    auto const c = utils::to_underlying(col);
 
     uint8_t const r = (c >> 16) & 0xFF;
     uint8_t const b = (c) & 0xFF;

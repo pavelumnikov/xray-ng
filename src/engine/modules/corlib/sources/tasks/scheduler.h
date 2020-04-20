@@ -8,7 +8,7 @@
 #include "mpmc_queue.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/memory/memory_aligned_allocator.h"
-#include "corlib/etl/static_vector.h"
+#include "corlib/utils/static_vector.h"
 #include "corlib/sys/thread.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ public:
 protected:
     virtual size_t effective_master_buckets(size_t tasks) override;
     virtual void run_subtasks_on_scheduler(
-        etl::array_view<details::task_bucket>& buckets,
+        utils::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) override;
 
 private:
@@ -152,7 +152,7 @@ private:
     fiber_context* request_fiber_context(details::grouped_task& task);
     void release_fiber_context(fiber_context*&& execution_context);
 
-    void run_tasks_internal(etl::array_view<details::task_bucket>& buckets,
+    void run_tasks_internal(utils::array_view<details::task_bucket>& buckets,
         fiber_context* parent_fiber, bool restored_from_awaiting);
 
     task_group_description& get_group_desc(task_group group);

@@ -15,7 +15,7 @@ namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid dll_load(eastl::string_view str)
+pvoid dll_load(utils::string_view str)
 {
     if(str.empty())
         return nullptr;
@@ -39,7 +39,7 @@ void dll_unload(pvoid library)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid dll_require_symbol(pvoid library, eastl::string_view str)
+pvoid dll_require_symbol(pvoid library, utils::string_view str)
 {
     if(!library)
         return nullptr;

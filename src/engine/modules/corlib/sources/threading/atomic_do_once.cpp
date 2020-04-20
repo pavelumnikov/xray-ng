@@ -10,7 +10,7 @@ namespace xr::threading::internal
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void run_initializer(etl::action_func f, atomic_do_once_state& state)
+void run_initializer(utils::action_func f, atomic_do_once_state& state)
 {
     // Run function handle
     f();
@@ -21,7 +21,7 @@ void run_initializer(etl::action_func f, atomic_do_once_state& state)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void run_initializer(etl::prediction_func f, atomic_do_once_state& state)
+void run_initializer(utils::prediction_func f, atomic_do_once_state& state)
 {
     // Run function handle
     auto const result = f();

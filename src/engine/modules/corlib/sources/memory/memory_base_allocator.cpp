@@ -13,7 +13,7 @@ namespace xr::memory
 */
 void
 base_allocator::on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size,
-    eastl::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const
+    utils::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const
 {
     if(base_profiler_event_listener* event_listener = m_event_listener)
     {

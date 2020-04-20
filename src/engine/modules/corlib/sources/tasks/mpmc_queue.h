@@ -4,7 +4,7 @@
 #pragma once
 
 #include "corlib/threading/interlocked.h"
-#include "corlib/etl/type_traits.h"
+#include "corlib/utils/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks

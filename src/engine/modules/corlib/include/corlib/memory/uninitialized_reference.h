@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/pointer_cast.h"
+#include "corlib/utils/pointer_cast.h"
 #include "corlib/memory/memory_functions.h"
 #include "EASTL/memory.h"
 #include <cassert>
@@ -202,7 +202,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::construct()
 {
     XR_DEBUG_ASSERTION(!m_is_constructed);
     m_is_constructed = true;
-    return pointer_cast<Class*>(m_static_memory);
+    return utils::pointer_cast<Class*>(m_static_memory);
 }
 
 //-----------------------------------------------------------------------------------------------------------

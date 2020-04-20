@@ -2,7 +2,7 @@
 //
 
 #include "catch/catch.hpp"
-#include "corlib/etl/ptr.h"
+#include "corlib/utils/ptr.h"
 
 using namespace xr;
 
@@ -17,7 +17,7 @@ void f(int* i)
 
 TEST_CASE("Basic test")
 {
-    etl::owner<int*> p { new int(120) };
+    utils::owner<int*> p { new int(120) };
     CHECK(*p == 120);
     f(p);
     CHECK(*p == 121);

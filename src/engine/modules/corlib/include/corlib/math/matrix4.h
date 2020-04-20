@@ -87,6 +87,8 @@ struct XR_ALIGNAS(16) matrix4
     void multiply_3x3(float scale) noexcept;
     void set_identity() noexcept;
 
+    float* to_float_ptr() noexcept;
+
     float m11 { 0.0f }, m12 { 0.0f }, m13 { 0.0f }, m14 { 0.0f };
     float m21 { 0.0f }, m22 { 0.0f }, m23 { 0.0f }, m24 { 0.0f };
     float m31 { 0.0f }, m32 { 0.0f }, m33 { 0.0f }, m34 { 0.0f };
@@ -385,6 +387,14 @@ constexpr void matrix4::get_translation(vec3f& pos) const noexcept
 constexpr vec3f matrix4::get_translation() const noexcept
 {
     return vec3f(m41, m42, m43);
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline float* matrix4::to_float_ptr() noexcept
+{
+    return &m11;
 }
 
 } // namespace xr::math

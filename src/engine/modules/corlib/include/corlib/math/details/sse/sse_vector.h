@@ -4,7 +4,7 @@
 #pragma once
 
 #include "corlib/math/details/sse/sse_float_in_vec.h"
-#include "corlib/etl/algorithms/aligning.h"
+#include "corlib/utils/aligning.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::math::details
@@ -141,7 +141,7 @@ inline sse_vector::sse_vector(const sse_vector& rhs)
 inline sse_vector::sse_vector(_In_count_c_(4) const float* pFloats)
     : sse_vector {}
 {
-    XR_DEBUG_ASSERTION_MSG(etl::algorithms::is_aligned(pFloats, 16),
+    XR_DEBUG_ASSERTION_MSG(utils::is_aligned(pFloats, 16),
         "Input data block must be aligned to 16 bytes!");
     v = _mm_load_ps(pFloats);
 }

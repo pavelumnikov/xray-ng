@@ -2,7 +2,7 @@
 //
 
 #include "catch/catch.hpp"
-#include "corlib/etl/not_null_ptr.h"
+#include "corlib/utils/not_null_ptr.h"
 
 using namespace xr;
 

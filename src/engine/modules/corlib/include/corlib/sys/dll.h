@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "corlib/types.h"
-#include "EASTL/string_view.h"
+#include "corlib/utils/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::sys
@@ -13,7 +12,7 @@ namespace xr::sys
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid dll_load(eastl::string_view str);
+pvoid dll_load(utils::string_view str);
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -23,13 +22,13 @@ void dll_unload(pvoid library);
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid dll_require_symbol(pvoid library, eastl::string_view str);
+pvoid dll_require_symbol(pvoid library, utils::string_view str);
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename Type>
-Type dll_require_typed_symbol(pvoid library, eastl::string_view str)
+Type dll_require_typed_symbol(pvoid library, utils::string_view str)
 {
     return reinterpret_cast<Type>(dll_require_symbol(library, str));
 }

@@ -4,8 +4,9 @@
 #pragma once
 
 #include "corlib/memory/allocator_helper.h"
-#include "corlib/etl/algorithms/aligning.h"
-#include "corlib/etl/type_traits.h"
+#include "corlib/utils/aligning.h"
+#include "corlib/utils/type_traits.h"
+#include "corlib/utils/string_view.h"
 #include "corlib/memory/memory_debug_parameters.h"
 #include "corlib/memory/memory_functions.h"
 #include "corlib/memory/profiler_event_listener.h"
@@ -55,7 +56,7 @@ protected:
         XR_DEBUG_PARAMETERS_DECLARATION) = 0;
 
     void on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size, 
-        eastl::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const;
+        utils::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const;
 
     void on_free(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) const;
 

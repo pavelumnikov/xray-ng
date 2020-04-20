@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/etl/containers/std/vector.h"
+#include "corlib/utils/std/vector.h"
 #include "corlib/threading/spin_wait.h"
 #include "corlib/threading/scoped_lock.h"
 #include "corlib/memory/memory_aligned_allocator.h"

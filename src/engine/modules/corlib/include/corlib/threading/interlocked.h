@@ -4,8 +4,8 @@
 #pragma once
 
 #include "corlib/threading/atomic_types.h"
-#include "corlib/etl/type_conversions.h"
-#include "corlib/etl/type_inversions.h"
+#include "corlib/utils/type_conversions.h"
+#include "corlib/utils/type_inversions.h"
 #include "corlib/signalling_bool.h"
 #include "EASTL/type_traits.h"
 
@@ -204,7 +204,7 @@ void atomic_store(volatile T& address, T value) noexcept
 
             (void)internal::__atomic_exchange(
                 reinterpret_cast<pointer_type>(&address),
-                etl::unsafe_type_cast<value_type, T>(value));
+                utils::unsafe_type_cast<value_type, T>(value));
         }
         else if(eastl::is_trivial_v<T>)
         {
@@ -214,7 +214,7 @@ void atomic_store(volatile T& address, T value) noexcept
 
                 (void)internal::__atomic_exchange(
                     reinterpret_cast<pointer>(&address),
-                    etl::unsafe_type_cast<int8_t, T>(value));
+                    utils::unsafe_type_cast<int8_t, T>(value));
             }
             else if constexpr(sizeof(T) == sizeof(int16_t))
             {
@@ -222,7 +222,7 @@ void atomic_store(volatile T& address, T value) noexcept
 
                 (void)internal::__atomic_exchange(
                     reinterpret_cast<pointer>(&address),
-                    etl::unsafe_type_cast<int16_t, T>(value));
+                    utils::unsafe_type_cast<int16_t, T>(value));
             }
             else if constexpr(sizeof(T) == sizeof(int32_t))
             {
@@ -230,7 +230,7 @@ void atomic_store(volatile T& address, T value) noexcept
 
                 (void)internal::__atomic_exchange(
                     reinterpret_cast<pointer>(&address),
-                    etl::unsafe_type_cast<int32_t, T>(value));
+                    utils::unsafe_type_cast<int32_t, T>(value));
             }
             else if constexpr(sizeof(T) == sizeof(int64_t))
             {
@@ -238,7 +238,7 @@ void atomic_store(volatile T& address, T value) noexcept
 
                 (void)internal::__atomic_exchange(
                     reinterpret_cast<pointer>(&address),
-                    etl::unsafe_type_cast<int64_t, T>(value));
+                    utils::unsafe_type_cast<int64_t, T>(value));
             }
         }
     }
@@ -320,7 +320,7 @@ T atomic_fetch_store(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int8_t, T>(value));
+                utils::unsafe_type_cast<int8_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int16_t))
         {
@@ -328,7 +328,7 @@ T atomic_fetch_store(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int16_t, T>(value));
+                utils::unsafe_type_cast<int16_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int32_t))
         {
@@ -336,7 +336,7 @@ T atomic_fetch_store(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int32_t, T>(value));
+                utils::unsafe_type_cast<int32_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int64_t))
         {
@@ -344,7 +344,7 @@ T atomic_fetch_store(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int64_t, T>(value));
+                utils::unsafe_type_cast<int64_t, T>(value));
         }
     }
 
@@ -425,7 +425,7 @@ T atomic_fetch_add(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int8_t, T>(value));
+                utils::unsafe_type_cast<int8_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int16_t))
         {
@@ -433,7 +433,7 @@ T atomic_fetch_add(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int16_t, T>(value));
+                utils::unsafe_type_cast<int16_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int32_t))
         {
@@ -441,7 +441,7 @@ T atomic_fetch_add(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int32_t, T>(value));
+                utils::unsafe_type_cast<int32_t, T>(value));
         }
         else if constexpr(sizeof(T) == sizeof(int64_t))
         {
@@ -449,7 +449,7 @@ T atomic_fetch_add(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::unsafe_type_cast<int64_t, T>(value));
+                utils::unsafe_type_cast<int64_t, T>(value));
         }
     }
 
@@ -644,7 +644,7 @@ T atomic_fetch_sub(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::implicit_cast<int8_t, etl::invert_if_unsigned_t<T>>((0 - value)));
+                utils::implicit_cast<int8_t, utils::invert_if_unsigned_t<T>>((0 - value)));
         }
         else if constexpr(sizeof(T) == sizeof(int16_t))
         {
@@ -652,7 +652,7 @@ T atomic_fetch_sub(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::implicit_cast<int16_t, etl::invert_if_unsigned_t<T>>((0 - value)));
+                utils::implicit_cast<int16_t, utils::invert_if_unsigned_t<T>>((0 - value)));
         }
         else if constexpr(sizeof(T) == sizeof(int32_t))
         {
@@ -660,7 +660,7 @@ T atomic_fetch_sub(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::implicit_cast<int32_t, etl::invert_if_unsigned_t<T>>((0 - value)));
+                utils::implicit_cast<int32_t, utils::invert_if_unsigned_t<T>>((0 - value)));
         }
         else if constexpr(sizeof(T) == sizeof(int64_t))
         {
@@ -668,7 +668,7 @@ T atomic_fetch_sub(volatile T& address, T value) noexcept
 
             prev = (result)internal::__atomic_exchange_add(
                 reinterpret_cast<pointer>(&address),
-                etl::implicit_cast<int64_t, etl::invert_if_unsigned_t<T>>((0 - value)));
+                utils::implicit_cast<int64_t, utils::invert_if_unsigned_t<T>>((0 - value)));
         }
     }
 
@@ -824,8 +824,8 @@ T atomic_cas(volatile T& address, T value, T comparand) noexcept
         {
             prev = (result)internal::__atomic_compare_exchange(
                 reinterpret_cast<void* volatile*>(&address),
-                etl::unsafe_type_cast<void*, T>(value),
-                etl::unsafe_type_cast<void*, T>(comparand));
+                utils::unsafe_type_cast<void*, T>(value),
+                utils::unsafe_type_cast<void*, T>(comparand));
         }
         else if(eastl::is_trivial_v<T>)
         {
@@ -833,29 +833,29 @@ T atomic_cas(volatile T& address, T value, T comparand) noexcept
             {
                 prev = (result)internal::__atomic_compare_exchange(
                     reinterpret_cast<int8_t volatile*>(&address),
-                    etl::unsafe_type_cast<int8_t, T>(value),
-                    etl::unsafe_type_cast<int8_t, T>(comparand));
+                    utils::unsafe_type_cast<int8_t, T>(value),
+                    utils::unsafe_type_cast<int8_t, T>(comparand));
             }
             else if constexpr(sizeof(T) == sizeof(int16_t))
             {
                 prev = (result)internal::__atomic_compare_exchange(
                     reinterpret_cast<int16_t volatile*>(&address),
-                    etl::unsafe_type_cast<int16_t, T>(value),
-                    etl::unsafe_type_cast<int16_t, T>(comparand));
+                    utils::unsafe_type_cast<int16_t, T>(value),
+                    utils::unsafe_type_cast<int16_t, T>(comparand));
             }
             else if constexpr(sizeof(T) == sizeof(int32_t))
             {
                 prev = (result)internal::__atomic_compare_exchange(
                     reinterpret_cast<int32_t volatile*>(&address),
-                    etl::unsafe_type_cast<int32_t, T>(value),
-                    etl::unsafe_type_cast<int32_t, T>(comparand));
+                    utils::unsafe_type_cast<int32_t, T>(value),
+                    utils::unsafe_type_cast<int32_t, T>(comparand));
             }
             else if constexpr(sizeof(T) == sizeof(int64_t))
             {
                 prev = (result)internal::__atomic_compare_exchange(
                     reinterpret_cast<int64_t volatile*>(&address),
-                    etl::unsafe_type_cast<int64_t, T>(value),
-                    etl::unsafe_type_cast<int64_t, T>(comparand));
+                    utils::unsafe_type_cast<int64_t, T>(value),
+                    utils::unsafe_type_cast<int64_t, T>(comparand));
             }
         }
     }
@@ -952,25 +952,25 @@ T atomic_or(volatile T& address, T value) noexcept
     {
         prev = (result)internal::__atomic_or_operation(
             reinterpret_cast<int8_t volatile*>(&address),
-            etl::unsafe_type_cast<int8_t, T>(value));
+            utils::unsafe_type_cast<int8_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int16_t))
     {
         prev = (result)internal::__atomic_or_operation(
             reinterpret_cast<int16_t volatile*>(&address),
-            etl::unsafe_type_cast<int16_t, T>(value));
+            utils::unsafe_type_cast<int16_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int32_t))
     {
         prev = (result)internal::__atomic_or_operation(
             reinterpret_cast<int32_t volatile*>(&address),
-            etl::unsafe_type_cast<int32_t, T>(value));
+            utils::unsafe_type_cast<int32_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int64_t))
     {
         prev = (result)internal::__atomic_or_operation(
             reinterpret_cast<int64_t volatile*>(&address),
-            etl::unsafe_type_cast<int64_t, T>(value));
+            utils::unsafe_type_cast<int64_t, T>(value));
     }
 
     return prev;
@@ -995,25 +995,25 @@ T atomic_and(volatile T& address, T value) noexcept
     {
         prev = (result)internal::__atomic_and_operation(
             reinterpret_cast<int8_t volatile*>(&address),
-            etl::unsafe_type_cast<int8_t, T>(value));
+            utils::unsafe_type_cast<int8_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int16_t))
     {
         prev = (result)internal::__atomic_and_operation(
             reinterpret_cast<int16_t volatile*>(&address),
-            etl::unsafe_type_cast<int16_t, T>(value));
+            utils::unsafe_type_cast<int16_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int32_t))
     {
         prev = (result)internal::__atomic_and_operation(
             reinterpret_cast<int32_t volatile*>(&address),
-            etl::unsafe_type_cast<int32_t, T>(value));
+            utils::unsafe_type_cast<int32_t, T>(value));
     }
     else if constexpr(sizeof(T) == sizeof(int64_t))
     {
         prev = (result)internal::__atomic_and_operation(
             reinterpret_cast<int64_t volatile*>(&address),
-            etl::unsafe_type_cast<int64_t, T>(value));
+            utils::unsafe_type_cast<int64_t, T>(value));
     }
 
     return prev;

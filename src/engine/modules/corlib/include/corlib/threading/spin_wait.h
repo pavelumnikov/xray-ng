@@ -7,7 +7,7 @@
 #include "corlib/threading/spin_wait_speculative_locking_strategy.h"
 #include "corlib/threading/spin_wait_precise_locking_streategy.h"
 #include "corlib/threading/spin_wait_noop_locking_strategy.h"
-#include "corlib/etl/padded.h"
+#include "corlib/utils/padded.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
@@ -63,7 +63,7 @@ struct spin_wait_cache_line
 // constant expression field cache_line_size with some selected size of cache line.
 template< typename LockingStrategy >
 class spin_wait final 
-    : protected etl::padded_with_cache_line_size<details::spin_wait_cache_line<LockingStrategy>>
+    : protected utils::padded_with_cache_line_size<details::spin_wait_cache_line<LockingStrategy>>
 {
 public:
     spin_wait() noexcept;

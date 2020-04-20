@@ -5,7 +5,7 @@
 
 #include "corlib/tasks/details/task_bucket.h"
 #include "corlib/tasks/details/grouped_task.h"
-#include "corlib/etl/array_view.h"
+#include "corlib/utils/array_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks::details
@@ -41,7 +41,7 @@ struct grouped_task_selector
  */
 template<typename TTask>
 inline bool distibute_descriptions(task_group group, const TTask* tasks,
-    etl::array_view<grouped_task>& descriptions, etl::array_view<task_bucket>& buckets)
+    utils::array_view<grouped_task>& descriptions, utils::array_view<task_bucket>& buckets)
 {
     grouped_task_selector<TTask> helper {};
 

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "corlib/etl/type_traits.h"
+#include "corlib/utils/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::memory
@@ -24,5 +24,5 @@ void call_destruct(T* p)
     p->~T();
 }
 
-} // namespace xr::etl
+} // namespace xr::utils
 //-----------------------------------------------------------------------------------------------------------

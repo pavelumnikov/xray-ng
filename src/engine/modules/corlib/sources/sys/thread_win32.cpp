@@ -18,7 +18,7 @@ namespace xr::sys
 /**
  */
 thread_handle spawn_thread(thread_function function, void* const arg,
-    eastl::wstring_view debug_thread_name, thread_priority priority,
+    utils::wstring_view debug_thread_name, thread_priority priority,
     size_t stack_size, eastl::optional<uint32_t> hardware_thread)
 {
     XR_DEBUG_ASSERTION_MSG(stack_size, "Stack size must be set for thread");

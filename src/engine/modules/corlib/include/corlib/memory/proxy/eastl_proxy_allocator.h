@@ -4,7 +4,6 @@
 #pragma once
 
 #include "corlib/memory/memory_allocator_base.h"
-#include "EASTL/string_view.h"
 
 namespace xr::memory::proxy
 {
@@ -78,7 +77,7 @@ public:
 #endif
     }
 
-    void set_name(eastl::string_view s) noexcept;
+    void set_name(utils::string_view s) noexcept;
 
     void set_base_allocator(base_allocator& alloc) noexcept;
 
@@ -96,7 +95,7 @@ private:
 /**
  */
 void 
-eastl_proxy_allocator::set_name(eastl::string_view s) const noexcept
+eastl_proxy_allocator::set_name(utils::string_view s) const noexcept
 {}
 
 #endif

@@ -13,6 +13,12 @@
         XR_DEBUG_PARAMETERS_DEFINITION)
 
 //-----------------------------------------------------------------------------------------------------------
+#define XR_REALLOCATE_MEMORY(allocator, ptr, size, desc) \
+    (allocator).realloc_impl(ptr, size \
+        XR_DEBUG_PARAMETERS_DESCRIPTION_DEFINITION(desc) \
+        XR_DEBUG_PARAMETERS_DEFINITION)
+
+//-----------------------------------------------------------------------------------------------------------
 #define XR_ALLOCATE_MEMORY_T(allocator, type, desc) \
     reinterpret_cast<type*>((allocator).malloc_impl(sizeof(type) \
         XR_DEBUG_PARAMETERS_DESCRIPTION_DEFINITION(desc) \

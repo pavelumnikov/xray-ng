@@ -6,7 +6,7 @@
 #include "fiber_context.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/etl/static_vector.h"
+#include "corlib/utils/static_vector.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::tasks
@@ -139,7 +139,7 @@ pvoid fiber_context::current_effective_buffer()
 /**
  */
 void fiber_context::run_subtasks_on_scheduler(
-    etl::array_view<details::task_bucket>& buckets,
+    utils::array_view<details::task_bucket>& buckets,
     bool restored_from_awaiting)
 {
     XR_DEBUG_ASSERTION_MSG(m_thread_context, "Sanity check failed!");
@@ -150,7 +150,7 @@ void fiber_context::run_subtasks_on_scheduler(
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void fiber_context::run_subtasks_and_yield_impl(etl::array_view<details::task_bucket>& buckets)
+void fiber_context::run_subtasks_and_yield_impl(utils::array_view<details::task_bucket>& buckets)
 {
     XR_DEBUG_ASSERTION_MSG(m_thread_context, "Sanity check failed!");
     XR_DEBUG_ASSERTION_MSG(m_thread_context->current_scheduler, "Sanity check failed!");

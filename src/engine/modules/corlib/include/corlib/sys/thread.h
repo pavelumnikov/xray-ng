@@ -6,8 +6,7 @@
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/signalling_bool.h"
 #include "corlib/sys/chrono.h"
-#include "corlib/etl/function_pointer.h"
-#include "EASTL/string_view.h"
+#include "corlib/utils/function_pointer.h"
 #include "EASTL/optional.h"
 
 #if defined(XRAY_PLATFORM_WINDOWS)
@@ -29,7 +28,7 @@ enum class thread_priority
 #if defined(XRAY_PLATFORM_WINDOWS)
 using thread_handle = win::HANDLE;
 using thread_id = uint32_t;
-using thread_function = etl::function_pointer_t<uint32_t, void*>;
+using thread_function = utils::function_pointer_t<uint32_t, void*>;
 auto constexpr unknown_thread_handle = nullptr;
 // See http://blogs.msdn.com/b/oldnewthing/archive/2004/02/23/78395.aspx
 thread_id constexpr invalid_thread_id = 0;
@@ -43,7 +42,7 @@ thread_id constexpr invalid_thread_id = 0;
 /**
 */
 thread_handle spawn_thread(thread_function function, void* const arg,
-    eastl::wstring_view debug_thread_name, thread_priority priority,
+    utils::wstring_view debug_thread_name, thread_priority priority,
     size_t stack_size, eastl::optional<uint32_t> hardware_thread = {});
 
 //-----------------------------------------------------------------------------------------------------------

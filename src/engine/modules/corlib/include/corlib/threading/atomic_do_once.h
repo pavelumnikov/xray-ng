@@ -5,7 +5,7 @@
 
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/threading/atomic_backoff_helpers.h"
-#include "corlib/etl/function_pointer.h"
+#include "corlib/utils/function_pointer.h"
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::threading
@@ -28,9 +28,9 @@ namespace internal
 {
 
 //! Initialization from function that do not returns anything, e.g. initializes on demand
-void run_initializer(etl::action_func f, atomic_do_once_state& state);
+void run_initializer(utils::action_func f, atomic_do_once_state& state);
 //! Initialization from function that returns result and may need re-initialization on false result
-void run_initializer(etl::prediction_func f, atomic_do_once_state& state);
+void run_initializer(utils::prediction_func f, atomic_do_once_state& state);
 
 }
 

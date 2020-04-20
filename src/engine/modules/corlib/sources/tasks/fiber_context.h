@@ -4,7 +4,7 @@
 #pragma once
 
 #include "corlib/tasks/task_system.h"
-#include "corlib/etl/array_view.h"
+#include "corlib/utils/array_view.h"
 #include "thread_context.h"
 #include "fiber.h"
 
@@ -47,11 +47,11 @@ private:
     virtual pvoid current_effective_buffer() override;
 
     virtual void run_subtasks_on_scheduler(
-        etl::array_view<details::task_bucket>& buckets,
+        utils::array_view<details::task_bucket>& buckets,
         bool restored_from_awaiting) override;
 
     virtual void run_subtasks_and_yield_impl(
-        etl::array_view<details::task_bucket>& buckets);
+        utils::array_view<details::task_bucket>& buckets);
 
     // Active thread context (null if fiber context is not executing now)
     details::thread_context* m_thread_context;
