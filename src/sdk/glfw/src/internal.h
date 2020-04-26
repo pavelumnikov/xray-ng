@@ -58,6 +58,16 @@
 
 #define _GLFW_MESSAGE_SIZE      1024
 
+#if defined(_CRT_SECURE_NO_WARNINGS)
+#   define _CRT_STRCPY(result, len, src) strcpy(result, src)
+#   define _CRT_STRNCPY(result, len, src, count) strncpy((result), (src), (count))
+#   define _CRT_SPRINTF(buf, len, fmt, ...) sprintf((buf), fmt, __VA_ARGS__)
+#else
+#   define _CRT_STRCPY(result, len, src) strcpy_s((result), (len), (src))
+#   define _CRT_STRNCPY(result, len, src, count) strncpy_s((result), (len), (src), (count))
+#   define _CRT_SPRINTF(buf, len, fmt, ...) sprintf_s((buf), (len), fmt, __VA_ARGS__)
+#endif
+
 typedef int GLFWbool;
 
 typedef struct _GLFWerror       _GLFWerror;

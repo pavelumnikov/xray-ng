@@ -98,7 +98,7 @@ static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter,
     if (adapter->StateFlags & DISPLAY_DEVICE_MODESPRUNED)
         monitor->win32.modesPruned = GLFW_TRUE;
 
-    wcscpy(monitor->win32.adapterName, adapter->DeviceName);
+    wcscpy_s(monitor->win32.adapterName, 32, adapter->DeviceName);
     WideCharToMultiByte(CP_UTF8, 0,
                         adapter->DeviceName, -1,
                         monitor->win32.publicAdapterName,
@@ -107,7 +107,7 @@ static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter,
 
     if (display)
     {
-        wcscpy(monitor->win32.displayName, display->DeviceName);
+        wcscpy_s(monitor->win32.displayName, 32, display->DeviceName);
         WideCharToMultiByte(CP_UTF8, 0,
                             display->DeviceName, -1,
                             monitor->win32.publicDisplayName,

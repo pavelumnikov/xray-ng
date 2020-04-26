@@ -436,7 +436,7 @@ _GLFWjoystick* _glfwAllocJoystick(const char* name,
     js->buttonCount = buttonCount;
     js->hatCount    = hatCount;
 
-    strncpy(js->guid, guid, sizeof(js->guid) - 1);
+    _CRT_STRNCPY(js->guid, 33, guid, sizeof(js->guid) - 1);
     js->mapping = findValidMapping(js);
 
     return js;

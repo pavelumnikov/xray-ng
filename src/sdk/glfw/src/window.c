@@ -420,15 +420,15 @@ GLFWAPI void glfwWindowHintString(int hint, const char* value)
     switch (hint)
     {
         case GLFW_COCOA_FRAME_NAME:
-            strncpy(_glfw.hints.window.ns.frameName, value,
+            _CRT_STRNCPY(_glfw.hints.window.ns.frameName, 256, value,
                     sizeof(_glfw.hints.window.ns.frameName) - 1);
             return;
         case GLFW_X11_CLASS_NAME:
-            strncpy(_glfw.hints.window.x11.className, value,
+            _CRT_STRNCPY(_glfw.hints.window.x11.className, 256, value,
                     sizeof(_glfw.hints.window.x11.className) - 1);
             return;
         case GLFW_X11_INSTANCE_NAME:
-            strncpy(_glfw.hints.window.x11.instanceName, value,
+            _CRT_STRNCPY(_glfw.hints.window.x11.instanceName, 256, value,
                     sizeof(_glfw.hints.window.x11.instanceName) - 1);
             return;
     }
