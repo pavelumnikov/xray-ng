@@ -204,18 +204,17 @@ namespace eastl
 		using base_type::internalAllocator;
 
 	public:
-		vector() EA_NOEXCEPT_IF(EA_NOEXCEPT_EXPR(EASTL_VECTOR_DEFAULT_ALLOCATOR));
 		explicit vector(const allocator_type& allocator) EA_NOEXCEPT;
-		explicit vector(size_type n, const allocator_type& allocator = EASTL_VECTOR_DEFAULT_ALLOCATOR);
-		vector(size_type n, const value_type& value, const allocator_type& allocator = EASTL_VECTOR_DEFAULT_ALLOCATOR);
+		explicit vector(size_type n, const allocator_type& allocator);
+		vector(size_type n, const value_type& value, const allocator_type& allocator);
 		vector(const this_type& x);
 		vector(const this_type& x, const allocator_type& allocator);
 		vector(this_type&& x) EA_NOEXCEPT;
 		vector(this_type&& x, const allocator_type& allocator);
-		vector(std::initializer_list<value_type> ilist, const allocator_type& allocator = EASTL_VECTOR_DEFAULT_ALLOCATOR);
+		vector(std::initializer_list<value_type> ilist, const allocator_type& allocator);
 
 		template <typename InputIterator>
-		vector(InputIterator first, InputIterator last, const allocator_type& allocator = EASTL_VECTOR_DEFAULT_ALLOCATOR);
+		vector(InputIterator first, InputIterator last, const allocator_type& allocator);
 
 	   ~vector();
 
@@ -232,23 +231,23 @@ namespace eastl
 
 		void assign(std::initializer_list<value_type> ilist);
 
-		iterator       begin() EA_NOEXCEPT;
+		iterator begin() EA_NOEXCEPT;
 		const_iterator begin() const EA_NOEXCEPT;
 		const_iterator cbegin() const EA_NOEXCEPT;
 
-		iterator       end() EA_NOEXCEPT;
+		iterator end() EA_NOEXCEPT;
 		const_iterator end() const EA_NOEXCEPT;
 		const_iterator cend() const EA_NOEXCEPT;
 
-		reverse_iterator       rbegin() EA_NOEXCEPT;
+		reverse_iterator rbegin() EA_NOEXCEPT;
 		const_reverse_iterator rbegin() const EA_NOEXCEPT;
 		const_reverse_iterator crbegin() const EA_NOEXCEPT;
 
-		reverse_iterator       rend() EA_NOEXCEPT;
+		reverse_iterator rend() EA_NOEXCEPT;
 		const_reverse_iterator rend() const EA_NOEXCEPT;
 		const_reverse_iterator crend() const EA_NOEXCEPT;
 
-		bool      empty() const EA_NOEXCEPT;
+		bool empty() const EA_NOEXCEPT;
 		size_type size() const EA_NOEXCEPT;
 		size_type capacity() const EA_NOEXCEPT;
 
@@ -258,26 +257,26 @@ namespace eastl
 		void set_capacity(size_type n = base_type::npos);   // Revises the capacity to the user-specified value. Resizes the container to match the capacity if the requested capacity n is less than the current size. If n == npos then the capacity is reallocated (if necessary) such that capacity == size.
 		void shrink_to_fit();                               // C++11 function which is the same as set_capacity().
 
-		pointer       data() EA_NOEXCEPT;
+		pointer data() EA_NOEXCEPT;
 		const_pointer data() const EA_NOEXCEPT;
 
-		reference       operator[](size_type n);
+		reference operator[](size_type n);
 		const_reference operator[](size_type n) const;
 
-		reference       at(size_type n);
+		reference at(size_type n);
 		const_reference at(size_type n) const;
 
-		reference       front();
+		reference front();
 		const_reference front() const;
 
-		reference       back();
+		reference back();
 		const_reference back() const;
 
-		void      push_back(const value_type& value);
+		void push_back(const value_type& value);
 		reference push_back();
-		void*     push_back_uninitialized();
-		void      push_back(value_type&& value);
-		void      pop_back();
+		void* push_back_uninitialized();
+		void push_back(value_type&& value);
+		void pop_back();
 
 		template<class... Args>
 		iterator emplace(const_iterator position, Args&&... args);
@@ -498,14 +497,6 @@ namespace eastl
 	///////////////////////////////////////////////////////////////////////
 	// vector
 	///////////////////////////////////////////////////////////////////////
-
-	template <typename T, typename Allocator>
-	inline vector<T, Allocator>::vector() EA_NOEXCEPT_IF(EA_NOEXCEPT_EXPR(EASTL_VECTOR_DEFAULT_ALLOCATOR))
-		: base_type()
-	{
-		// Empty
-	}
-
 
 	template <typename T, typename Allocator>
 	inline vector<T, Allocator>::vector(const allocator_type& allocator) EA_NOEXCEPT

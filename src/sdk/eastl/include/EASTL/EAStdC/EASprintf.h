@@ -26,21 +26,21 @@ EASTDC_API int Vsnprintf(wchar_t* EA_RESTRICT pDestination, size_t n, const wcha
 
 EASTDC_API int Sprintf(char* EA_RESTRICT pDestination, size_t pDestSize, const char* EA_RESTRICT pFormat, ...)
 {
-	va_list arguments;
-	va_start(arguments, pFormat);
+    va_list arguments;
+    va_start(arguments, pFormat);
 
 #if _MSC_VER
-	auto result = vsprintf_s(pDestination, pDestSize, pFormat, arguments);
+    auto result = vsprintf_s(pDestination, pDestSize, pFormat, arguments);
 
 #else
-	UNREFERENCED_PARAMETER(pDestSize);
-	auto result = vsprintf_s(pDestination, pFormat, arguments);
+    UNREFERENCED_PARAMETER(pDestSize);
+    auto result = vsprintf_s(pDestination, pFormat, arguments);
 
 #endif
 
-	va_end(arguments);
+    va_end(arguments);
 
-	return result;
+    return result;
 }
 
 }} // namespace EA::StdC
