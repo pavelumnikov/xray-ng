@@ -6,99 +6,105 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 // forward declarations
 class execution_context;
 
 //-----------------------------------------------------------------------------------------------------------
-enum class task_priority : uint8_t
+struct task_priority_enum
 {
-    default_prority
-}; // enum class task_priority
+    enum list : uint8_t
+    {
+        default_prority
+    };
+}; // struct task_priority_enum
+typedef task_priority_enum::list task_priority;
 
 //-----------------------------------------------------------------------------------------------------------
-enum class task_stack_request : uint8_t
+struct task_stack_request_enum
 {
-    unknown,
-    small_stack,
-    huge_stack
-}; // enum class task_stack_request
+    enum list : uint8_t
+    {
+        unknown,
+        small_stack,
+        huge_stack
+    };
+}; // struct task_stack_request_enum
+typedef task_stack_request_enum::list task_stack_request;
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 typedef void (*task_entry_function)(execution_context& context, pvoid user_data);
-typedef void (*pool_task_destroy)(pvoid user_data);
 
 struct task_desc
 {
-    //! task entry point
-    task_entry_function task_func { nullptr };
+    XR_CONSTEXPR_CPP14_OR_INLINE task_desc() XR_NOEXCEPT;
 
-    //! task destory entry pointe
-    pool_task_destroy destroy_func { nullptr };
+    XR_CONSTEXPR_CPP14_OR_INLINE task_desc(task_entry_function exec, pvoid user_data,
+        task_stack_request stack_requirements, task_priority priority);
+
+    XR_CONSTEXPR_CPP14_OR_INLINE bool is_valid() const;
+
+    //! task entry point
+    task_entry_function task_func;
 
     //! task user data (task data context)
-    pvoid user_data { nullptr };
+    pvoid user_data;
 
     //! stack requirements for task
-    task_stack_request required_stack { task_stack_request::unknown };
+    task_stack_request required_stack;
 
     //! priority for task
-    task_priority priority { task_priority::default_prority };
+    task_priority priority;
 
 #ifdef MT_INSTRUMENTED_BUILD
     pstr debug_id { nullptr };
     math::color_table debug_color { math::color_table::blue };
 #endif
+}; // struct task_desc
 
-    constexpr task_desc() noexcept = default;
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE task_desc::task_desc() XR_NOEXCEPT
+    : task_func(nullptr)
+    , user_data(nullptr)
+    , required_stack(task_stack_request_enum::unknown)
+    , priority(task_priority_enum::default_prority)
+#ifdef MT_INSTRUMENTED_BUILD
+    , debug_id(nullptr)
+    , debug_color(Color::Blue)
+#endif
+{}
 
-    constexpr task_desc(task_entry_function exec, pvoid user_data,
-        task_stack_request stack_requirements, task_priority priority);
-
-    constexpr task_desc(task_entry_function exec, pool_task_destroy destroy,
-        pvoid user_data, task_stack_request stack_requirements, task_priority priority);
-
-    constexpr bool is_valid() const;
-};
-
-constexpr task_desc::task_desc(task_entry_function func, pvoid ptr,
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE task_desc::task_desc(task_entry_function func, pvoid ptr,
     task_stack_request stack_req, task_priority priority)
-    : task_func { func }
-    , user_data { ptr }
-    , required_stack { stack_req }
-    , priority { priority }
+    : task_func(func)
+    , user_data(ptr)
+    , required_stack(stack_req)
+    , priority(priority)
 #ifdef MT_INSTRUMENTED_BUILD
-    , debug_id { nullptr }
-    , debug_color { Color::Blue }
+    , debug_id(nullptr)
+    , debug_color(Color::Blue)
 #endif
 {}
 
-constexpr task_desc::task_desc(task_entry_function func, pool_task_destroy destroy,
-    pvoid ptr, task_stack_request stack_req, task_priority priority)
-    : task_func { func }
-    , destroy_func { destroy }
-    , user_data { ptr }
-    , required_stack { stack_req }
-    , priority { priority }
-#ifdef MT_INSTRUMENTED_BUILD
-    , debug_id { nullptr }
-    , debug_color { Color::Blue }
-#endif
-{}
-
-constexpr bool
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE bool
 task_desc::is_valid() const
 {
     return (task_func != nullptr);
 }
 
-} // namespace xr::tasks::details
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

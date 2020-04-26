@@ -5,20 +5,22 @@
 
 #include "corlib/types.h"
 
-namespace xr::math::details
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, math, details)
 
+//-----------------------------------------------------------------------------------------------------------
 //! A base random generator.
 class base_random
 {
 protected:
     size_t get_prime(size_t seed);
-};
+}; // class base_random
 
-} // namespace xr::math::details
+XR_NAMESPACE_END(xr, math, details)
+//-----------------------------------------------------------------------------------------------------------
 
-namespace xr::math
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, math)
 
 //! A fast random number generator.
 /** Uses linear congruential method. */
@@ -40,26 +42,38 @@ private:
     IntType get(size_t& seed);
     size_t x;
     size_t a;
-};
+}; // class fast_random<IntType>
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 template<typename IntType>
 fast_random<IntType>::fast_random(size_t seed)
-    : x { seed * get_prime(seed) }
-    , a { get_prime(x) }
+    : x(seed * get_prime(seed))
+    , a(get_prime(x))
 {}
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 template<typename IntType>
 IntType fast_random<IntType>::operator()()
 {
     return get();
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 template<typename IntType>
 IntType fast_random<IntType>::get()
 {
     return get(x);
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 inline uint8_t
 fast_random<uint8_t>::get(size_t& seed)
 {
@@ -68,6 +82,9 @@ fast_random<uint8_t>::get(size_t& seed)
     return r;
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 inline uint16_t
 fast_random<uint16_t>::get(size_t& seed)
 {
@@ -76,6 +93,9 @@ fast_random<uint16_t>::get(size_t& seed)
     return r;
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 inline uint32_t
 fast_random<uint32_t>::get(size_t& seed)
 {
@@ -84,6 +104,9 @@ fast_random<uint32_t>::get(size_t& seed)
     return r;
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 inline uint64_t
 fast_random<uint64_t>::get(size_t& seed)
 {
@@ -92,4 +115,5 @@ fast_random<uint64_t>::get(size_t& seed)
     return r;
 }
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
+//-----------------------------------------------------------------------------------------------------------

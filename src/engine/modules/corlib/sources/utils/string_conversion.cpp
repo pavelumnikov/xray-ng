@@ -6,13 +6,12 @@
 #include <errno.h> // for errno
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<int32_t> as_int(char const* str) noexcept
+eastl::optional<int32_t> as_int(char const* str) XR_NOEXCEPT
 {
     auto const r = strtol(str, nullptr, 10);
     if(errno == ERANGE)
@@ -24,7 +23,7 @@ eastl::optional<int32_t> as_int(char const* str) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<int64_t> as_int64(string_view s) noexcept
+eastl::optional<int64_t> as_int64(string_view s) XR_NOEXCEPT
 {
     auto const r = strtoll(s.data(), nullptr, 10);
     if(errno == ERANGE)
@@ -36,7 +35,7 @@ eastl::optional<int64_t> as_int64(string_view s) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<uint32_t> as_uint(string_view s) noexcept
+eastl::optional<uint32_t> as_uint(string_view s) XR_NOEXCEPT
 {
     auto const r = strtoul(s.data(), nullptr, 10);
     if(errno == ERANGE)
@@ -48,7 +47,7 @@ eastl::optional<uint32_t> as_uint(string_view s) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<uint64_t> as_uint64(string_view s) noexcept
+eastl::optional<uint64_t> as_uint64(string_view s) XR_NOEXCEPT
 {
     auto const r = strtoull(s.data(), nullptr, 10);
     if(errno == ERANGE)
@@ -60,7 +59,7 @@ eastl::optional<uint64_t> as_uint64(string_view s) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<float> as_float(string_view s) noexcept
+eastl::optional<float> as_float(string_view s) XR_NOEXCEPT
 {
     auto const r = strtof(s.data(), nullptr);
     if(errno == ERANGE)
@@ -72,7 +71,7 @@ eastl::optional<float> as_float(string_view s) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-eastl::optional<double> as_double(string_view s) noexcept
+eastl::optional<double> as_double(string_view s) XR_NOEXCEPT
 {
     auto const r = strtod(s.data(), nullptr);
     if(errno == ERANGE)
@@ -81,5 +80,5 @@ eastl::optional<double> as_double(string_view s) noexcept
     return r;
 }
 
-} // namespace xr::strings
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

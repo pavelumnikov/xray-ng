@@ -8,28 +8,26 @@
 #include "corlib/threading/spin_wait_strategy_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 // This particular locking scheme performs well  when lock contention is low, as 
 // the while loop overhead is small and locks are acquired very quickly, but degrades 
 // as many callers want the lock and most threads are doing a lot of interlocked 
 // spinning. There are also no guarantees that a caller will ever acquire the lock
-struct spin_wait_fairness_strategy final
-    : spin_wait_strategy_traits<uint8_t, false>
+struct spin_wait_fairness_strategy final : spin_wait_strategy_traits<uint8_t, false>
 {
-    void reset(volatile locking_value& value) const noexcept;
-    signalling_bool try_lock(volatile locking_value& value) const noexcept;
-    void lock(volatile locking_value& value) noexcept;
-    void unlock(volatile locking_value& value) const noexcept;
+    void reset(volatile locking_value& value) const XR_NOEXCEPT;
+    signalling_bool try_lock(volatile locking_value& value) const XR_NOEXCEPT;
+    void lock(volatile locking_value& value) XR_NOEXCEPT;
+    void unlock(volatile locking_value& value) const XR_NOEXCEPT;
 }; // struct spin_wait_fairness_strategy
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void
-spin_wait_fairness_strategy::reset(volatile locking_value& value) const noexcept
+spin_wait_fairness_strategy::reset(volatile locking_value& value) const XR_NOEXCEPT
 {
     value = 0;
 }
@@ -38,7 +36,7 @@ spin_wait_fairness_strategy::reset(volatile locking_value& value) const noexcept
 /**
 */
 inline void
-spin_wait_fairness_strategy::lock(volatile locking_value& value) noexcept
+spin_wait_fairness_strategy::lock(volatile locking_value& value) XR_NOEXCEPT
 {
     if(!this->try_lock(value))
     {
@@ -53,7 +51,7 @@ spin_wait_fairness_strategy::lock(volatile locking_value& value) noexcept
 /**
 */
 inline signalling_bool
-spin_wait_fairness_strategy::try_lock(volatile locking_value& value) const noexcept
+spin_wait_fairness_strategy::try_lock(volatile locking_value& value) const XR_NOEXCEPT
 {
     return atomic_bcas<memory_order::sequential, locking_value>(value, 1, 0);
 }
@@ -62,10 +60,10 @@ spin_wait_fairness_strategy::try_lock(volatile locking_value& value) const noexc
 /**
 */
 inline void
-spin_wait_fairness_strategy::unlock(volatile locking_value& value) const noexcept
+spin_wait_fairness_strategy::unlock(volatile locking_value& value) const XR_NOEXCEPT
 {
     atomic_store<memory_order::release, locking_value>(value, 0);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

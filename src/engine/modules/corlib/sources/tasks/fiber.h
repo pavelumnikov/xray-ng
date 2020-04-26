@@ -6,8 +6,7 @@
 #include "corlib/threading/interlocked.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 using fiber_handle_t = pvoid;
 using fiber_proc_t = void(__stdcall*)(pvoid);
@@ -30,7 +29,7 @@ public:
     bool is_constructed() const;
 
 private:
-    void cleanup() noexcept;
+    void cleanup() XR_NOEXCEPT;
     static void __stdcall fiber_func_internal(void* arg);
 
     pvoid m_func_data { nullptr };
@@ -80,5 +79,5 @@ fiber::fiber_func_internal(void* arg)
     self->m_func(self->m_func_data);
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

@@ -4,8 +4,8 @@
 #include "corlib/math/random.h"
 #include "EASTL/iterator.h"
 
-namespace xr::math::details
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, math, details)
 
 static const uint32_t primes[] = 
 {
@@ -32,4 +32,5 @@ size_t base_random::get_prime(size_t seed)
     return primes[seed % eastl::size(primes)];
 }
 
-} // namespace xr::math::details
+XR_NAMESPACE_END(xr, math, details)
+//-----------------------------------------------------------------------------------------------------------

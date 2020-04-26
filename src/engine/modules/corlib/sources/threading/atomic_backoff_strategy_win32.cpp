@@ -9,8 +9,7 @@
 #include "../os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 namespace
@@ -19,7 +18,7 @@ namespace
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-__forceinline void backoff_strategy_yield_impl() noexcept
+__forceinline void backoff_strategy_yield_impl() XR_NOEXCEPT
 {
     ::SwitchToThread();
 }
@@ -29,7 +28,7 @@ __forceinline void backoff_strategy_yield_impl() noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void backoff_strategy_yield::operator()() const noexcept
+void backoff_strategy_yield::operator()() const XR_NOEXCEPT
 {
     backoff_strategy_yield_impl();
 }
@@ -37,10 +36,10 @@ void backoff_strategy_yield::operator()() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void backoff_strategy_pause::operator()() const noexcept
+void backoff_strategy_pause::operator()() const XR_NOEXCEPT
 {
     ::_mm_pause();
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

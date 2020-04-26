@@ -5,11 +5,9 @@
 
 #include "corlib/threading/interlocked.h"
 #include "corlib/threading/atomic_backoff_strategy.h"
-#include "corlib/signalling_bool.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 /// <summary>
 /// Class that implements exponential backoff with selected strategies.
@@ -18,38 +16,30 @@ template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount = 16
 class atomic_backoff final
 {
 public:
-    using spin_strategy = SpinStrategy;
-    using fail_strategy = FailStrategy;
+    typedef SpinStrategy spin_strategy;
+    typedef FailStrategy fail_strategy;
 
     /// <summary cref="atomic_backoff::atomic_backoff">
     /// </summary>
-    constexpr atomic_backoff() noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE atomic_backoff() XR_NOEXCEPT;
 
-    /// <summary cref="atomic_backoff::atomic_backoff">
-    /// </summary>
-    constexpr atomic_backoff(atomic_backoff&& mov) noexcept;
-
-    /// <summary cref="atomic_backoff::atomic_backoff">
-    /// </summary>
-    atomic_backoff& operator=(atomic_backoff&& mov) noexcept;
-
-    atomic_backoff(const atomic_backoff&) = delete;
-    atomic_backoff& operator=(const atomic_backoff&) = delete;
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(atomic_backoff);
+    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(atomic_backoff);
 
     /// <summary cref="atomic_backoff::pause">
     /// Pause for a while.
     /// </summary>
-    void pause() noexcept;
+    void pause() XR_NOEXCEPT;
 
     /// <summary cref="atomic_backoff::bounded_pause">
     /// Pause for a few times and then return false immediately.
     /// </summary>
-    signalling_bool bounded_pause() noexcept;
+    signalling_bool bounded_pause() XR_NOEXCEPT;
 
     /// <summary cref="atomic_backoff::reset">
     /// Reset backoff counter.
     /// </summary>
-    constexpr void reset() noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void reset() XR_NOEXCEPT;
 
 private:
     /// My backoff counter
@@ -71,8 +61,8 @@ using default_atomic_backoff_timeout = atomic_backoff<backoff_strategy_pause, ba
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
-constexpr
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::atomic_backoff() noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE
+atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::atomic_backoff() XR_NOEXCEPT
     : m_backoff_counter(1)
 {}
 
@@ -80,37 +70,8 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::at
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
-constexpr 
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::atomic_backoff(atomic_backoff&& mov) noexcept
-    : m_backoff_counter(move(mov.m_backoff_counter))
-    , m_spin_strategy(move(mov.m_spin_strategy))
-    , m_fail_strategy(move(mov.m_fail_strategy))
-{
-    mov.m_backoff_counter = 0;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >&
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::operator=(atomic_backoff&& mov) noexcept
-{
-    m_backoff_counter = move(mov.m_backoff_counter);
-    mov.m_backoff_counter = 0;
-
-    m_spin_strategy = move(mov.m_spin_strategy);
-    m_fail_strategy = move(mov.m_fail_strategy);
-
-    return *this;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
 void 
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::pause() noexcept
+atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::pause() XR_NOEXCEPT
 {
     if(m_backoff_counter <= BackoffCount)
     {
@@ -130,7 +91,7 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::pa
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
 signalling_bool
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::bounded_pause() noexcept
+atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::bounded_pause() XR_NOEXCEPT
 {
     if(m_backoff_counter <= BackoffCount)
     {
@@ -147,11 +108,11 @@ atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::bo
 /**
 */
 template< typename SpinStrategy, typename FailStrategy, size_t BackoffCount, size_t BackoffThreshold >
-constexpr void
-atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::reset() noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void
+atomic_backoff< SpinStrategy, FailStrategy, BackoffCount, BackoffThreshold >::reset() XR_NOEXCEPT
 {
     atomic_store_relax<size_t>(m_backoff_counter, 1);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

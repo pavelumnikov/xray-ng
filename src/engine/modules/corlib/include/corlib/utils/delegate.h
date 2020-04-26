@@ -3,119 +3,108 @@
 
 #pragma once
 
-//-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+#include "corlib/types.h"
+#include "EASTL/utility.h"
 
 //-----------------------------------------------------------------------------------------------------------
-template< typename RetType, typename... Args >
-class delegated_function
+XR_NAMESPACE_BEGIN(xr, utils)
+
+//-----------------------------------------------------------------------------------------------------------
+template <typename R, typename... Params>
+class delegate_def final
 {
 public:
-    using return_type = RetType;
+    XR_CONSTEXPR_CPP14_OR_INLINE delegate_def() XR_NOEXCEPT;
 
-    template< typename FuncType >
-    static delegated_function< RetType, Args... > bind(FuncType&& function);
+    XR_DECLARE_DEFAULT_DESTRUCTOR(delegate_def);
+    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(delegate_def);
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(delegate_def);
 
-    delegated_function();
-    bool operator==(delegated_function const& rhs) const;
-    bool operator!=(delegated_function const& rhs) const;
-    return_type operator()(Args&&... arguments) const;
+    template <class C, R(C:: * func)(Params...) >
+    void bind(C* instance);
 
-private:
-    typedef return_type(*stubbed_type)(Args...); //!< Method pointer typedef
-    stubbed_type m_function;
-}; // class delegated_function
+    template <R(* func)(Params...) >
+    void bind();
 
-template< typename RetType, typename... Args >
-inline delegated_function<RetType, Args...>::delegated_function()
-    : m_function { nullptr }
-{}
-
-template< typename RetType, typename... Args >
-bool delegated_function<RetType, Args...>::operator==(delegated_function const& rhs) const
-{
-    return m_function == rhs.m_function;
-}
-
-template< typename RetType, typename... Args >
-bool delegated_function<RetType, Args...>::operator!=(delegated_function const& rhs) const
-{
-    return m_function != rhs.m_function;
-}
-
-template< typename RetType, typename... Args >
-template< typename FuncType >
-inline delegated_function< RetType, Args... > 
-delegated_function< RetType, Args... >::bind(FuncType&& function)
-{
-    delegated_function< RetType, Args... > delegate;
-    delegate.m_function = function;
-    return delegate;
-}
-
-template< typename RetType, typename... Args >
-inline typename delegated_function< RetType, Args... >::return_type
-delegated_function< RetType, Args... >::operator()(Args&&... argument) const
-{
-    return this->m_function(argument...);
-}
-
-
-template< typename Return, typename Class, typename... Args >
-class delegated_method
-{
-public:
-    using return_type = Return;
-    using class_type = Class;
-
-    template< typename FuncType >
-    static delegated_method<return_type, class_type, Args...> bind(FuncType&& function);
-
-    delegated_method();
-    bool operator==(delegated_method const& rhs) const;
-    bool operator!=(delegated_method const& rhs) const;
-    return_type operator()(class_type* ptr, Args&&... arguments) const;
+    R invoke(Params... args) const;
 
 private:
-    typedef return_type(class_type::* stubbed_type)(Args...); //!< Method pointer typedef
-    stubbed_type m_function;
-};
+    using instance_pointer = pvoid;
+    typedef R(*internal_function) (pvoid instance, Params...);
+    typedef eastl::pair<pvoid, internal_function> method_stub;
 
-template< typename Return, typename Class, typename... Args >
-inline delegated_method< Return, Class, Args... >::delegated_method()
-    : myFunction(nullptr)
+    template<typename C, R(C:: * func)(Params...) >
+    static R class_method_stub(pvoid instance, Params... args);
+
+    template<R(*func)(Params...) >
+    static R function_stub(pvoid instance, Params... args);
+
+    method_stub m_stub;
+}; // class delegate_def<R(Args...)>
+
+//-----------------------------------------------------------------------------------------------------------
+// Declare delegate as a class template. It will be specialized
+// later for all number of arguments like for boost::function.
+template <typename R, typename ... Args>
+using delegate = delegate_def<R(Args...)>;
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+constexpr delegate_def<R, Params...>::delegate_def()
+    : m_stub(nullptr, nullptr)
 {}
 
-template< typename Return, typename Class, typename... Args >
-bool delegated_method<Return, Class, Args...>::operator==(delegated_method const& rhs) const
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+template <class C, R(C:: * func)(Params...) >
+inline void delegate_def<R, Params...>::bind(C* instance)
 {
-    return m_function == rhs.m_function;
+    m_stub.first = instance;
+    m_stub.second = &class_method_stub< C, func >;
 }
 
-template< typename Return, typename Class, typename... Args >
-bool delegated_method<Return, Class, Args...>::operator!=(delegated_method const& rhs) const
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+template <R(*func)(Params...) >
+inline void delegate_def<R, Params...>::bind()
 {
-    return m_function != rhs.m_function;
+    m_stub.second = &function_stub< func >;
 }
 
-template< typename Return, typename Class, typename... Args >
-template< typename FuncType >
-inline delegated_method< Return, Class, Args... > 
-delegated_method< Return, Class, Args... >::bind(FuncType&& function)
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+inline R delegate_def<R, Params...>::invoke(Params... args) const
 {
-    delegated_method< Return, Class, Args... > delegate;
-    delegate.m_function = function;
-    return delegate;
+    return m_stub.second(m_stub.first, args...);
 }
 
-template< typename Return, typename Class, typename... Args >
-inline typename delegated_method< Return, Class, Args... >::return_type
-delegated_method< Return, Class, Args... >::operator()(class_type* ptr, Args&&... argument) const
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+template<typename C, R(C:: * func)(Params...) >
+R delegate_def<R, Params...>::class_method_stub(pvoid instance, Params... args)
 {
-    class_type* class_ptr = static_cast<class_type*>(ptr);
-    return (class_ptr->*m_function)(argument...);
+    return (static_cast<C*>(instance)->*func)(args...);
 }
 
-} // namespace xr::utils
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template <typename R, typename... Params>
+template<R(*func)(Params...) >
+R delegate_def<R, Params...>::function_stub(pvoid instance, Params... args)
+{
+    return (*func)(args...);
+}
+
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

@@ -3,19 +3,18 @@
 
 #pragma once
 
-#include "EASTL/numeric_limits.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 /// the time datatype
-using time = double;
+typedef double time;
 /// the tick datatype (one tick == 1 millisecond)
-using tick = uint64_t;
+typedef uint64_t tick;
 
-constexpr tick infinite = (eastl::numeric_limits<tick>::max)();
-constexpr tick min = (eastl::numeric_limits<tick>::min)();
+XR_CONSTEXPR_CPP14_OR_CONST tick infinite = UINT64_MAX;
+XR_CONSTEXPR_CPP14_OR_CONST tick min = 0;
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -50,5 +49,5 @@ seconds_to_ticks(time t)
     return static_cast<tick>((t * 1000.0) + 0.5);
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

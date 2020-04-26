@@ -7,21 +7,20 @@
 #include "corlib/sys/thread.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 class st_arena_allocator : public base_allocator
 {
 public:
-    st_arena_allocator() = default;
+    st_arena_allocator();
     virtual ~st_arena_allocator();
 
     void initialize(size_t size, size_t initial, uint32_t const user_thread_id);
 
-    virtual bool can_allocate_block(size_t const size) const noexcept;
-    virtual size_t total_size() const noexcept override;
-    virtual size_t allocated_size() const noexcept override;
+    virtual bool can_allocate_block(size_t const size) const XR_NOEXCEPT;
+    virtual size_t total_size() const XR_NOEXCEPT override;
+    virtual size_t allocated_size() const XR_NOEXCEPT override;
 
 private:
     virtual pvoid call_malloc(size_t size
@@ -37,9 +36,9 @@ private:
 
     void finalize();
 
-    pvoid m_arena { nullptr };
-    sys::thread_id m_user_thread_id { 0 };
+    pvoid m_arena;
+    sys::thread_id m_user_thread_id;
 }; // class st_arena_allocator
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

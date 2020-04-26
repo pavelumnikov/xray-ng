@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 // A template to select either 32-bit or 64-bit constant as compile time, 
@@ -28,5 +27,5 @@ struct select_size_t_constant final
 template< uint32_t U, uint64_t ULL >
 constexpr auto select_size_t_constant_v = select_size_t_constant<U, ULL>::value;
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

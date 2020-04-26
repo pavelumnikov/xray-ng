@@ -13,14 +13,13 @@ extern "C" int8_t _TSXTryLockTransactive( volatile void* ptr );
 extern "C" void _TSXUnlockTransactive( volatile void* ptr );
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 void 
-spin_wait_speculative_strategy::lock(volatile locking_value& locking_value) const noexcept
+spin_wait_speculative_strategy::lock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     for(;;)
     {
@@ -39,7 +38,7 @@ spin_wait_speculative_strategy::lock(volatile locking_value& locking_value) cons
 /**
 */
 signalling_bool
-spin_wait_speculative_strategy::try_lock(volatile locking_value& locking_value) const noexcept
+spin_wait_speculative_strategy::try_lock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     auto const result = ::_TSXTryLockTransactive(&locking_value) != 0;
 
@@ -56,10 +55,10 @@ spin_wait_speculative_strategy::try_lock(volatile locking_value& locking_value) 
 /**
 */
 void
-spin_wait_speculative_strategy::unlock(volatile locking_value& locking_value) const noexcept
+spin_wait_speculative_strategy::unlock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     ::_TSXUnlockTransactive(&locking_value);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

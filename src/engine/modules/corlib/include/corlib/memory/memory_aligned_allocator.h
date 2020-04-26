@@ -6,8 +6,7 @@
 #include "corlib/memory/memory_allocator_base.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 template<size_t kAlignment>
@@ -17,11 +16,11 @@ class aligned_allocator final : public base_allocator
 
 public:
     aligned_allocator(memory::base_allocator& alloc);
-    constexpr size_t alignment() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE size_t alignment() const;
 
-    virtual bool can_allocate_block(size_t const size) const noexcept override;
-    virtual size_t allocated_size() const noexcept override;
-    virtual size_t total_size() const noexcept override;
+    virtual bool can_allocate_block(size_t const size) const XR_NOEXCEPT override;
+    virtual size_t allocated_size() const XR_NOEXCEPT override;
+    virtual size_t total_size() const XR_NOEXCEPT override;
 
 protected:
     pvoid call_malloc(size_t size
@@ -53,7 +52,7 @@ inline aligned_allocator<kAlignment>::aligned_allocator(memory::base_allocator& 
  */
 template<size_t kAlignment>
 inline bool
-aligned_allocator<kAlignment>::can_allocate_block(size_t const size) const noexcept
+aligned_allocator<kAlignment>::can_allocate_block(size_t const size) const XR_NOEXCEPT
 {
     return m_allocator.can_allocate_block(size + kAlignment);
 }
@@ -63,7 +62,7 @@ aligned_allocator<kAlignment>::can_allocate_block(size_t const size) const noexc
  */
 template<size_t kAlignment>
 inline size_t
-aligned_allocator<kAlignment>::allocated_size() const noexcept
+aligned_allocator<kAlignment>::allocated_size() const XR_NOEXCEPT
 {
     return m_allocator.allocated_size();
 }
@@ -73,7 +72,7 @@ aligned_allocator<kAlignment>::allocated_size() const noexcept
  */
 template<size_t kAlignment>
 inline size_t
-aligned_allocator<kAlignment>::total_size() const noexcept
+aligned_allocator<kAlignment>::total_size() const XR_NOEXCEPT
 {
     return m_allocator.total_size();
 }
@@ -82,7 +81,7 @@ aligned_allocator<kAlignment>::total_size() const noexcept
 /**
  */
 template<size_t kAlignment>
-constexpr size_t 
+XR_CONSTEXPR_CPP14_OR_INLINE size_t 
 aligned_allocator<kAlignment>::alignment() const
 {
     return kAlignment;
@@ -154,5 +153,5 @@ inline size_t aligned_allocator<kAlignment>::calculate_size(size_t size)
     return size + (kAlignment - 1) + sizeof(pvoid);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

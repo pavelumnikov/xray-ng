@@ -4,18 +4,16 @@
 #pragma once
 
 #include "corlib/threading/spin_wait_strategy_traits.h"
-#include "corlib/signalling_bool.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 struct spin_wait_noop_strategy final : spin_wait_strategy_traits<uint8_t, false>
 {
-    void reset(volatile locking_value& locking_value) const noexcept;
-    signalling_bool try_lock(volatile locking_value& locking_value) const noexcept;
-    void lock(volatile locking_value& locking_value) const noexcept;
-    void unlock(volatile locking_value& locking_value) const noexcept;
+    void reset(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    signalling_bool try_lock(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    void lock(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    void unlock(volatile locking_value& locking_value) const XR_NOEXCEPT;
 };
 
 #pragma optimize( "", off )
@@ -24,7 +22,7 @@ struct spin_wait_noop_strategy final : spin_wait_strategy_traits<uint8_t, false>
 /**
 */
 inline void 
-spin_wait_noop_strategy::reset(volatile locking_value& locking_value) const noexcept
+spin_wait_noop_strategy::reset(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     XR_UNREFERENCED_PARAMETER(locking_value);
 }
@@ -33,7 +31,7 @@ spin_wait_noop_strategy::reset(volatile locking_value& locking_value) const noex
 /**
 */
 inline signalling_bool
-spin_wait_noop_strategy::try_lock(volatile locking_value& locking_value) const noexcept
+spin_wait_noop_strategy::try_lock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     XR_UNREFERENCED_PARAMETER(locking_value);
     return true;
@@ -43,7 +41,7 @@ spin_wait_noop_strategy::try_lock(volatile locking_value& locking_value) const n
 /**
 */
 inline void
-spin_wait_noop_strategy::lock(volatile locking_value& locking_value) const noexcept
+spin_wait_noop_strategy::lock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     XR_UNREFERENCED_PARAMETER(locking_value);
 }
@@ -52,12 +50,12 @@ spin_wait_noop_strategy::lock(volatile locking_value& locking_value) const noexc
 /**
 */
 inline void
-spin_wait_noop_strategy::unlock(volatile locking_value& locking_value) const noexcept
+spin_wait_noop_strategy::unlock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     XR_UNREFERENCED_PARAMETER(locking_value);
 }
 
 #pragma optimize( "", on ) 
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

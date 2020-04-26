@@ -12,22 +12,15 @@
 #include "corlib/sys/thread.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
-class base_allocator;
-} // namespace xr::memory
-//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
-//-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
 struct thread_context;
-} // namespace xr::tasks::details
+
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 // Application can assign task group to task and later wait until group was finished.
@@ -223,5 +216,5 @@ task_scheduler::get_profiler_event_listener()
 
 #endif // XR_INSTRUMENTED_BUILD
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

@@ -12,8 +12,7 @@
 #include <cassert>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 static constexpr uint32_t yield_iteration = 30; // yeild after 30 iterations
 static constexpr uint32_t max_sleep_iteration = 40;
@@ -23,7 +22,7 @@ static constexpr uint32_t seed_value = 100;
 /**
 */
 void 
-spin_wait_precise_strategy::reset(volatile locking_value& locking_value) const noexcept
+spin_wait_precise_strategy::reset(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     locking_value.dest = 0;
     locking_value.exchange = seed_value;
@@ -34,7 +33,7 @@ spin_wait_precise_strategy::reset(volatile locking_value& locking_value) const n
 /**
 */
 signalling_bool
-spin_wait_precise_strategy::try_lock(volatile locking_value& lockingValue) const noexcept
+spin_wait_precise_strategy::try_lock(volatile locking_value& lockingValue) const XR_NOEXCEPT
 {
     return atomic_cas_seq(
         lockingValue.dest, lockingValue.exchange, lockingValue.compare) == 0;
@@ -44,7 +43,7 @@ spin_wait_precise_strategy::try_lock(volatile locking_value& lockingValue) const
 /**
 */
 void 
-spin_wait_precise_strategy::lock(volatile locking_value& locking_value) const noexcept
+spin_wait_precise_strategy::lock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     uint32_t iterations { 0 };
 
@@ -98,7 +97,7 @@ spin_wait_precise_strategy::lock(volatile locking_value& locking_value) const no
 /**
 */
 void 
-spin_wait_precise_strategy::unlock(volatile locking_value& locking_value) const noexcept
+spin_wait_precise_strategy::unlock(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     assert((locking_value.dest == GetCurrentThreadId()) && 
         "Unexpected thread-id in release");
@@ -107,5 +106,5 @@ spin_wait_precise_strategy::unlock(volatile locking_value& locking_value) const 
     (void)atomic_cas_seq(locking_value.dest, locking_value.compare, thread_id);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

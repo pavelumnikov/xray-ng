@@ -6,8 +6,7 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::math
-{
+XR_NAMESPACE_BEGIN(xr, math)
 
 struct vec2f;
 struct vec3d;
@@ -15,75 +14,83 @@ struct vec3d;
 //-----------------------------------------------------------------------------------------------------------
 struct vec2i
 {
-    constexpr vec2i() noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i() XR_NOEXCEPT;
 
-    constexpr explicit vec2i(int32_t i) noexcept;
-    constexpr explicit vec2i(vec2f const& rhs) noexcept;
-    constexpr vec2i(int32_t x, int32_t y) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec2i(int32_t i) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec2i(vec2f const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i(int32_t x, int32_t y) XR_NOEXCEPT;
 
-    constexpr vec2i operator +(vec2i const& v) const noexcept;
-    constexpr vec2i operator -(vec2i const& v) const noexcept;
-    constexpr vec2i operator *(int32_t i) const noexcept;
-    constexpr vec2i operator / (int32_t rhs) noexcept;
-    constexpr vec2f operator / (vec2f const& rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i operator +(vec2i const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i operator -(vec2i const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i operator *(int32_t i) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2i operator / (int32_t rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator / (vec2f const& rhs) XR_NOEXCEPT;
 
-    constexpr bool operator !=(vec2i const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator !=(vec2i const& rhs) const XR_NOEXCEPT;
 
-    int32_t x {}, y {};
+    int32_t x, y;
 }; // struct vec2i
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i::vec2i(int32_t i) noexcept
-    : x { i }
-    , y { i }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i::vec2i() XR_NOEXCEPT
+    : x(0)
+    , y(0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i::vec2i(int32_t x, int32_t y) noexcept
-    : x { x }
-    , y { y }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i::vec2i(int32_t i) XR_NOEXCEPT
+    : x(i)
+    , y(i)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i vec2i::operator +(vec2i const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i::vec2i(int32_t x, int32_t y) XR_NOEXCEPT
+    : x(x)
+    , y(y)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i vec2i::operator +(vec2i const& v) const XR_NOEXCEPT
 {
-    return vec2i { x + v.x, y + v.y };
+    return vec2i(x + v.x, y + v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i vec2i::operator -(vec2i const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i vec2i::operator -(vec2i const& v) const XR_NOEXCEPT
 {
-    return vec2i { x - v.x, y - v.y };
+    return vec2i(-v.x, y - v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i vec2i::operator *(int32_t i) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i vec2i::operator *(int32_t i) const XR_NOEXCEPT
 {
-    return vec2i { x * i, y * i };
+    return vec2i(x * i, y * i);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i vec2i::operator / (int32_t rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i vec2i::operator / (int32_t rhs) XR_NOEXCEPT
 {
-    return vec2i { x / rhs, y / rhs };
+    return vec2i(x / rhs, y / rhs);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec2i::operator !=(vec2i const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec2i::operator !=(vec2i const& rhs) const XR_NOEXCEPT
 {
     return rhs.x != x || rhs.y != y;
 }
@@ -92,29 +99,38 @@ constexpr bool vec2i::operator !=(vec2i const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 struct vec3i
 {
-    constexpr vec3i() noexcept = default;
-    constexpr vec3i(int32_t x, int32_t y, int32_t z) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3i() XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3i(int32_t x, int32_t y, int32_t z) XR_NOEXCEPT;
 
-    constexpr explicit vec3i(vec3d const& rhs) noexcept;
-    constexpr bool operator==(vec3i const& rhs) const noexcept;
-    constexpr vec3d operator *(double i) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec3i(vec3d const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator==(vec3i const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator *(double i) const XR_NOEXCEPT;
 
-    int32_t x {}, y {}, z {};
+    int32_t x, y, z;
 }; // struct vec3i
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3i::vec3i(int32_t x, int32_t y, int32_t z) noexcept
-    : x { x }
-    , y { y }
-    , z { z }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3i::vec3i() XR_NOEXCEPT
+    : x(0)
+    , y(0)
+    , z(0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec3i::operator==(vec3i const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3i::vec3i(int32_t x, int32_t y, int32_t z) XR_NOEXCEPT
+    : x(x)
+    , y(y)
+    , z(z)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec3i::operator==(vec3i const& rhs) const XR_NOEXCEPT
 {
     return x == rhs.x && y == rhs.y && z == rhs.z;
 }
@@ -123,33 +139,43 @@ constexpr bool vec3i::operator==(vec3i const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 struct vec4i
 {
-    constexpr vec4i() noexcept = default;
-    constexpr vec4i(vec2i const& a, vec2i const& b) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4i() XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4i(vec2i const& a, vec2i const& b) XR_NOEXCEPT;
 
-    int32_t x {}, y {}, z {}, w {};
+    int32_t x, y, z, w;
 }; // struct vec4i
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4i::vec4i(vec2i const& a, vec2i const& b) noexcept
-    : x { a.x }
-    , y { a.y }
-    , z { b.x }
-    , w { b.y }
+XR_CONSTEXPR_CPP14_OR_INLINE vec4i::vec4i() XR_NOEXCEPT
+    : x(0)
+    , y(0)
+    , z(0)
+    , w(0)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE vec4i::vec4i(vec2i const& a, vec2i const& b) XR_NOEXCEPT
+    : x(a.x)
+    , y(a.y)
+    , z(b.x)
+    , w(b.y)
 {}
 
 
 //-----------------------------------------------------------------------------------------------------------
 struct vec2f
 {
-    constexpr vec2f() noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f() XR_NOEXCEPT;
 
-    constexpr explicit vec2f(vec2i const& rhs) noexcept;
-    constexpr explicit vec2f(float a) noexcept;
-    constexpr vec2f(float a, float b) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec2f(vec2i const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec2f(float a) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f(float a, float b) XR_NOEXCEPT;
 
-    constexpr void set(float a, float b) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set(float a, float b) XR_NOEXCEPT;
 
     template<typename L>
     float& operator[](L i);
@@ -157,28 +183,28 @@ struct vec2f
     template<typename L>
     float operator[](L i) const;
 
-    constexpr bool operator==(vec2f const& rhs) const noexcept;
-    constexpr bool operator!=(vec2f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator==(vec2f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator!=(vec2f const& rhs) const XR_NOEXCEPT;
 
-    constexpr void operator +=(vec2f const& v) noexcept;
-    constexpr void operator/=(float rhs) noexcept;
-    constexpr void operator*=(float f) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator +=(vec2f const& v) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator/=(float rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator*=(float f) XR_NOEXCEPT;
 
-    constexpr vec2f operator *(vec2f const& v) const noexcept;
-    constexpr vec2f operator /(vec2f const& v) const noexcept;
-    constexpr vec2f operator *(float f) const noexcept;
-    constexpr vec2f operator /(float f) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator *(vec2f const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator /(vec2f const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator *(float f) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator /(float f) const XR_NOEXCEPT;
 
-    constexpr vec2f operator +(vec2f const& v) const noexcept;
-    constexpr vec2f operator -(vec2f const& v) const noexcept;
-    constexpr vec2f operator -(float f) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator +(vec2f const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator -(vec2f const& v) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f operator -(float f) const XR_NOEXCEPT;
 
-    void normalize() noexcept;
-    vec2f normalized() const noexcept;
-    float length() const noexcept;
-    float squared_length() const noexcept;
+    void normalize() XR_NOEXCEPT;
+    vec2f normalized() const XR_NOEXCEPT;
+    float length() const XR_NOEXCEPT;
+    float squared_length() const XR_NOEXCEPT;
 
-    float x {}, y {};
+    float x, y;
 
     static const vec2f MAX;
     static const vec2f MIN;
@@ -188,31 +214,39 @@ struct vec2f
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f::vec2f(vec2i const& rhs) noexcept
-    : x { float(rhs.x) }
-    , y { float(rhs.y) }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f::vec2f() XR_NOEXCEPT
+    : x(0.0f)
+    , y(0.0f)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f::vec2f(float a) noexcept
-    : x { a }
-    , y { a }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f::vec2f(vec2i const& rhs) XR_NOEXCEPT
+    : x(float(rhs.x))
+    , y(float(rhs.y))
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f::vec2f(float a, float b) noexcept
-    : x { a }
-    , y { b }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f::vec2f(float a) XR_NOEXCEPT
+    : x(a)
+    , y(a)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec2f::set(float a, float b) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f::vec2f(float a, float b) XR_NOEXCEPT
+    : x(a)
+    , y(b)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE void vec2f::set(float a, float b) XR_NOEXCEPT
 {
     x = a;
     y = b;
@@ -241,7 +275,7 @@ inline float vec2f::operator[](L i) const
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec2f::operator==(vec2f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec2f::operator==(vec2f const& rhs) const XR_NOEXCEPT
 {
     return x == rhs.x && y == rhs.y;
 }
@@ -249,7 +283,7 @@ constexpr bool vec2f::operator==(vec2f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec2f::operator!=(vec2f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec2f::operator!=(vec2f const& rhs) const XR_NOEXCEPT
 {
     return x != rhs.x || y != rhs.y;
 }
@@ -257,7 +291,7 @@ constexpr bool vec2f::operator!=(vec2f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec2f::operator +=(vec2f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec2f::operator +=(vec2f const& v) XR_NOEXCEPT
 {
     x += v.x; y += v.y;
 }
@@ -265,7 +299,7 @@ constexpr void vec2f::operator +=(vec2f const& v) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec2f::operator/=(float rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec2f::operator/=(float rhs) XR_NOEXCEPT
 {
     *this *= 1.0f / rhs;
 }
@@ -273,7 +307,7 @@ constexpr void vec2f::operator/=(float rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec2f::operator*=(float f) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec2f::operator*=(float f) XR_NOEXCEPT
 {
     x *= f;
     y *= f;
@@ -282,67 +316,67 @@ constexpr void vec2f::operator*=(float f) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator *(vec2f const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator *(vec2f const& v) const XR_NOEXCEPT
 {
-    return vec2f { x * v.x, y * v.y };
+    return vec2f(x * v.x, y * v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator /(vec2f const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator /(vec2f const& v) const XR_NOEXCEPT
 {
-    return vec2f { x / v.x, y / v.y };
+    return vec2f(x / v.x, y / v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator *(float f) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator *(float f) const XR_NOEXCEPT
 {
-    return vec2f { x * f, y * f };
+    return vec2f(x * f, y * f);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator /(float f) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator /(float f) const XR_NOEXCEPT
 {
-    return vec2f { x / f, y / f };
+    return vec2f(x / f, y / f);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator +(vec2f const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator +(vec2f const& v) const XR_NOEXCEPT
 {
-    return vec2f { x + v.x, y + v.y };
+    return vec2f(x + v.x, y + v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator -(vec2f const& v) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator -(vec2f const& v) const XR_NOEXCEPT
 {
-    return vec2f { x - v.x, y - v.y };
+    return vec2f(x - v.x, y - v.y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2f::operator -(float f) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2f::operator -(float f) const XR_NOEXCEPT
 {
-    return vec2f { x - f, y - f };
+    return vec2f(x - f, y - f);
 }
 
 
 //-----------------------------------------------------------------------------------------------------------
 struct vec3f
 {
-    constexpr vec3f() noexcept;
-    constexpr vec3f(vec2f const& v, float c) noexcept;
-    constexpr explicit vec3f(float a) noexcept;
-    constexpr vec3f(float a, float b, float c) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f() XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f(vec2f const& v, float c) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec3f(float a) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f(float a, float b, float c) XR_NOEXCEPT;
 
     template<typename L>
     float& operator[](L i);
@@ -350,33 +384,33 @@ struct vec3f
     template<typename L>
     float operator[](L i) const;
 
-    constexpr bool operator==(vec3f const& rhs) const noexcept;
-    constexpr bool operator!=(vec3f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator==(vec3f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator!=(vec3f const& rhs) const XR_NOEXCEPT;
 
-    constexpr vec3f operator+(vec3f const& rhs) const noexcept;
-    constexpr vec3f operator-() const noexcept;
-    constexpr vec3f operator-(vec3f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator+(vec3f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator-() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator-(vec3f const& rhs) const XR_NOEXCEPT;
 
-    constexpr void operator+=(vec3f const& rhs) noexcept;
-    constexpr void operator-=(vec3f const& rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator+=(vec3f const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator-=(vec3f const& rhs) XR_NOEXCEPT;
 
-    constexpr vec3f operator*(float s) const noexcept;
-    constexpr vec3f operator*(vec3f const& rhs) const noexcept;
-    constexpr vec3f operator*(vec3i const& rhs) const noexcept;
-    constexpr vec3f operator/(vec3i const& rhs) const noexcept;
-    constexpr vec3f operator/(float s) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator*(float s) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator*(vec3f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator*(vec3i const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator/(vec3i const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator/(float s) const XR_NOEXCEPT;
 
-    constexpr void operator/=(float rhs) noexcept;
-    constexpr void operator*=(float rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator/=(float rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator*=(float rhs) XR_NOEXCEPT;
 
-    vec3f normalized() const noexcept;
-    void normalize() noexcept;
+    vec3f normalized() const XR_NOEXCEPT;
+    void normalize() XR_NOEXCEPT;
 
-    constexpr void set(float x, float y, float z) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set(float x, float y, float z) XR_NOEXCEPT;
 
-    float length() const noexcept;
-    constexpr float squared_length() const noexcept;
-    constexpr vec2f xz() const noexcept;
+    float length() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE float squared_length() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f xz() const XR_NOEXCEPT;
 
     union
     {
@@ -398,37 +432,37 @@ struct vec3f
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f::vec3f() noexcept
-    : x { 0.0f }
-    , y { 0.0f }
-    , z { 0.0f }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f::vec3f() XR_NOEXCEPT
+    : x(0.0f)
+    , y(0.0f)
+    , z(0.0f)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f::vec3f(vec2f const& v, float c) noexcept
-    : x { v.x }
-    , y { v.y }
-    , z { c }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f::vec3f(vec2f const& v, float c) XR_NOEXCEPT
+    : x(v.x)
+    , y(v.y)
+    , z(c)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f::vec3f(float a) noexcept
-    : x { a }
-    , y { a }
-    , z { a }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f::vec3f(float a) XR_NOEXCEPT
+    : x(a)
+    , y(a)
+    , z(a)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f::vec3f(float a, float b, float c) noexcept
-    : x { a }
-    , y { b }
-    , z { c }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f::vec3f(float a, float b, float c) XR_NOEXCEPT
+    : x(a)
+    , y(b)
+    , z(c)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -454,7 +488,7 @@ inline float vec3f::operator[](L i) const
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec3f::operator==(vec3f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec3f::operator==(vec3f const& rhs) const XR_NOEXCEPT
 {
     return x == rhs.x && y == rhs.y && z == rhs.z;
 }
@@ -462,7 +496,7 @@ constexpr bool vec3f::operator==(vec3f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec3f::operator!=(vec3f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec3f::operator!=(vec3f const& rhs) const XR_NOEXCEPT
 {
     return x != rhs.x || y != rhs.y || z != rhs.z;
 }
@@ -470,7 +504,7 @@ constexpr bool vec3f::operator!=(vec3f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator+(vec3f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator+(vec3f const& rhs) const XR_NOEXCEPT
 {
     return vec3f { x + rhs.x, y + rhs.y, z + rhs.z };
 }
@@ -478,7 +512,7 @@ constexpr vec3f vec3f::operator+(vec3f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator-() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator-() const XR_NOEXCEPT
 {
     return vec3f { -x, -y, -z };
 }
@@ -486,7 +520,7 @@ constexpr vec3f vec3f::operator-() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator-(vec3f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator-(vec3f const& rhs) const XR_NOEXCEPT
 {
     return vec3f { x - rhs.x, y - rhs.y, z - rhs.z };
 }
@@ -494,7 +528,7 @@ constexpr vec3f vec3f::operator-(vec3f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3f::operator+=(vec3f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3f::operator+=(vec3f const& rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -510,7 +544,7 @@ constexpr void vec3f::operator+=(vec3f const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3f::operator-=(vec3f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3f::operator-=(vec3f const& rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -526,48 +560,48 @@ constexpr void vec3f::operator-=(vec3f const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator*(float s) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator*(float s) const XR_NOEXCEPT
 {
-    return vec3f { x * s, y * s, z * s };
+    return vec3f(x * s, y * s, z * s);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator*(vec3f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator*(vec3f const& rhs) const XR_NOEXCEPT
 {
-    return vec3f { x * rhs.x, y * rhs.y, z * rhs.z };
+    return vec3f(x * rhs.x, y * rhs.y, z * rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator*(vec3i const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator*(vec3i const& rhs) const XR_NOEXCEPT
 {
-    return vec3f { x * rhs.x, y * rhs.y, z * rhs.z };
+    return vec3f(x * rhs.x, y * rhs.y, z * rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator/(vec3i const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator/(vec3i const& rhs) const XR_NOEXCEPT
 {
-    return vec3f { x / rhs.x, y / rhs.y, z / rhs.z };
+    return vec3f(x / rhs.x, y / rhs.y, z / rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3f::operator/(float s) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3f::operator/(float s) const XR_NOEXCEPT
 {
     float const tmp = 1 / s;
-    return vec3f { x * tmp, y * tmp, z * tmp };
+    return vec3f(x * tmp, y * tmp, z * tmp);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3f::operator/=(float rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3f::operator/=(float rhs) XR_NOEXCEPT
 {
     *this *= 1.0f / rhs;
 }
@@ -575,7 +609,7 @@ constexpr void vec3f::operator/=(float rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3f::operator*=(float rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3f::operator*=(float rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -591,7 +625,7 @@ constexpr void vec3f::operator*=(float rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3f::set(float x, float y, float z) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3f::set(float x, float y, float z) XR_NOEXCEPT
 {
     this->x = x;
     this->y = y;
@@ -601,7 +635,7 @@ constexpr void vec3f::set(float x, float y, float z) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr float vec3f::squared_length() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE float vec3f::squared_length() const XR_NOEXCEPT
 {
     return x * x + y * y + z * z;
 }
@@ -609,7 +643,7 @@ constexpr float vec3f::squared_length() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec3f::xz() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec3f::xz() const XR_NOEXCEPT
 {
     return { x, z };
 }
@@ -618,32 +652,32 @@ constexpr vec2f vec3f::xz() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 struct vec3d
 {
-    constexpr vec3d() noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d() XR_NOEXCEPT;
 
-    constexpr vec3d(float a) noexcept;
-    constexpr vec3d(double x, double y, double z) noexcept;
-    constexpr explicit vec3d(vec3f const& rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d(float a) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d(double x, double y, double z) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec3d(vec3f const& rhs) XR_NOEXCEPT;
 
-    vec3d(vec3d const& rhs) noexcept = default;
+    vec3d(vec3d const& rhs) XR_NOEXCEPT = default;
 
-    constexpr vec3d operator-() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator-() const XR_NOEXCEPT;
 
-    constexpr vec3d operator*(float rhs) const noexcept;
-    constexpr vec3d operator/(float rhs) const noexcept;
-    constexpr vec3d operator-(vec3d const& rhs) const noexcept;
-    constexpr vec3d operator+(vec3d const& rhs) const noexcept;
-    constexpr vec3d operator-(vec3f const& rhs) const noexcept;
-    constexpr vec3d operator+(vec3f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator*(float rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator/(float rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator-(vec3d const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator+(vec3d const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator-(vec3f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3d operator+(vec3f const& rhs) const XR_NOEXCEPT;
 
-    double length() const noexcept;
-    constexpr double squared_length() const noexcept;
+    double length() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE double squared_length() const XR_NOEXCEPT;
 
-    constexpr void operator*=(const double& rhs) noexcept;
-    constexpr void operator+=(vec3f const& rhs) noexcept;
-    constexpr void operator-=(vec3f const& rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator*=(const double& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator+=(vec3f const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator-=(vec3f const& rhs) XR_NOEXCEPT;
 
-    constexpr vec3f to_float() const noexcept;
-    constexpr void from_float(vec3f const& v) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f to_float() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void from_float(vec3f const& v) XR_NOEXCEPT;
 
     double x { 0.0 }, y { 0.0 }, z { 0.0 };
 }; // struct vec3d
@@ -651,42 +685,51 @@ struct vec3d
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d::vec3d(float a) noexcept
-    : x { a }
-    , y { a }
-    , z { a }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d::vec3d() XR_NOEXCEPT
+    : x(0.0)
+    , y(0.0)
+    , z(0.0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d::vec3d(double x, double y, double z) noexcept
-    : x { x }
-    , y { y }
-    , z { z }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d::vec3d(float a) XR_NOEXCEPT
+    : x(a)
+    , y(a)
+    , z(a)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d::vec3d(const vec3f & rhs) noexcept
-    : x { rhs.x }
-    , y { rhs.y }
-    , z { rhs.z }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d::vec3d(double x, double y, double z) XR_NOEXCEPT
+    : x(x)
+    , y(y)
+    , z(z)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator-() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d::vec3d(const vec3f & rhs) XR_NOEXCEPT
+    : x(rhs.x)
+    , y(rhs.y)
+    , z(rhs.z)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator-() const XR_NOEXCEPT
 {
-    return { -x, -y, -z };
+    return vec3d(-x, -y, -z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator*(float rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator*(float rhs) const XR_NOEXCEPT
 {
     return { x * rhs, y * rhs, z * rhs };
 }
@@ -694,47 +737,47 @@ constexpr vec3d vec3d::operator*(float rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator/(float rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator/(float rhs) const XR_NOEXCEPT
 {
-    return { x / rhs, y / rhs, z / rhs };
+    return vec3d(x / rhs, y / rhs, z / rhs);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator-(const vec3d & rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator-(const vec3d & rhs) const XR_NOEXCEPT
 {
-    return { x - rhs.x, y - rhs.y, z - rhs.z };
+    return vec3d(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator+(const vec3d & rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator+(const vec3d & rhs) const XR_NOEXCEPT
 {
-    return { x + rhs.x, y + rhs.y, z + rhs.z };
+    return vec3d(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator-(const vec3f & rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator-(const vec3f & rhs) const XR_NOEXCEPT
 {
-    return { x - rhs.x, y - rhs.y, z - rhs.z };
+    return vec3d(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3d::operator+(const vec3f & rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3d::operator+(const vec3f & rhs) const XR_NOEXCEPT
 {
-    return { x + rhs.x, y + rhs.y, z + rhs.z };
+    return vec3d(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr double vec3d::squared_length() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE double vec3d::squared_length() const XR_NOEXCEPT
 {
     return x * x + y * y + z * z;
 }
@@ -742,7 +785,7 @@ constexpr double vec3d::squared_length() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3d::operator*=(const double& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3d::operator*=(const double& rhs) XR_NOEXCEPT
 {
     x *= rhs; y *= rhs; z *= rhs;
 }
@@ -750,7 +793,7 @@ constexpr void vec3d::operator*=(const double& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3d::operator+=(const vec3f & rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3d::operator+=(const vec3f & rhs) XR_NOEXCEPT
 {
     x += rhs.x; y += rhs.y; z += rhs.z;
 }
@@ -758,7 +801,7 @@ constexpr void vec3d::operator+=(const vec3f & rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3d::operator-=(const vec3f & rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3d::operator-=(const vec3f & rhs) XR_NOEXCEPT
 {
     x -= rhs.x; y -= rhs.y; z -= rhs.z;
 }
@@ -766,15 +809,15 @@ constexpr void vec3d::operator-=(const vec3f & rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec3d::to_float() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec3d::to_float() const XR_NOEXCEPT
 {
-    return { static_cast<float>(x), static_cast<float>(y), static_cast<float>(z) };
+    return vec3f(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec3d::from_float(const vec3f & v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec3d::from_float(const vec3f & v) XR_NOEXCEPT
 {
     x = v.x; y = v.y; z = v.z;
 }
@@ -782,60 +825,60 @@ constexpr void vec3d::from_float(const vec3f & v) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2i::vec2i(vec2f const& rhs) noexcept
-    : x { int32_t(rhs.x) }
-    , y { int32_t(rhs.y) }
+XR_CONSTEXPR_CPP14_OR_INLINE vec2i::vec2i(vec2f const& rhs) XR_NOEXCEPT
+    : x(int32_t(rhs.x))
+    , y(int32_t(rhs.y))
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec2i::operator/(vec2f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec2i::operator/(vec2f const& rhs) XR_NOEXCEPT
 {
-    return { x / rhs.x, y / rhs.y };
+    return vec2f(x / rhs.x, y / rhs.y);
 }
 
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3i::vec3i(vec3d const& rhs) noexcept
-    : x { int32_t(rhs.x) }
-    , y { int32_t(rhs.y) }
-    , z { int32_t(rhs.z) }
+XR_CONSTEXPR_CPP14_OR_INLINE vec3i::vec3i(vec3d const& rhs) XR_NOEXCEPT
+    : x(int32_t(rhs.x))
+    , y(int32_t(rhs.y))
+    , z(int32_t(rhs.z))
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d vec3i::operator *(double i) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d vec3i::operator *(double i) const XR_NOEXCEPT
 {
-    return { i * x, i * y, i * z };
+    return vec3d(i * x, i * y, i * z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f operator *(float f, vec3f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f operator *(float f, vec3f const& v) XR_NOEXCEPT
 {
-    return vec3f { f * v.x, f * v.y, f * v.z };
+    return vec3f(f * v.x, f * v.y, f * v.z);
 }
 
 
 //-----------------------------------------------------------------------------------------------------------
 struct vec4f
 {
-    constexpr vec4f() noexcept;
-    constexpr explicit vec4f(float a) noexcept;
-    constexpr vec4f(float a, float b, float c, float d) noexcept;
-    constexpr vec4f(vec2f const& v1, vec2f const& v2) noexcept;
-    constexpr vec4f(vec3f const& v, float d) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f() XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit vec4f(float a) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f(float a, float b, float c, float d) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f(vec2f const& v1, vec2f const& v2) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f(vec3f const& v, float d) XR_NOEXCEPT;
 
-    constexpr vec2f xz() const noexcept;
-    constexpr vec2f xy() const noexcept;
-    constexpr vec3f xyz() const noexcept;
-    constexpr vec2f yz() const noexcept;
-    constexpr vec3f rgb() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f xz() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f xy() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f xyz() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec2f yz() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f rgb() const XR_NOEXCEPT;
 
     template<typename L>
     float& operator[](L i);
@@ -843,29 +886,29 @@ struct vec4f
     template<typename L>
     float operator[](L i) const;
 
-    constexpr bool operator==(vec4f const& rhs) const noexcept;
-    constexpr bool operator!=(vec4f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator==(vec4f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool operator!=(vec4f const& rhs) const XR_NOEXCEPT;
 
-    constexpr vec4f operator+(vec4f const& rhs) const noexcept;
-    constexpr vec4f operator-() const noexcept;
-    constexpr vec4f operator-(vec4f const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator+(vec4f const& rhs) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator-() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator-(vec4f const& rhs) const XR_NOEXCEPT;
 
-    constexpr void operator+=(vec4f const& rhs) noexcept;
-    constexpr void operator-=(vec4f const& rhs) noexcept;
-    constexpr void operator/=(float rhs) noexcept;
-    constexpr void operator*=(float rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator+=(vec4f const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator-=(vec4f const& rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator/=(float rhs) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void operator*=(float rhs) XR_NOEXCEPT;
 
-    constexpr vec4f operator*(float s) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator*(float s) XR_NOEXCEPT;
 
-    void normalize() noexcept;
-    vec4f normalized() const noexcept;
+    void normalize() XR_NOEXCEPT;
+    vec4f normalized() const XR_NOEXCEPT;
 
-    constexpr void set(vec3f const& v, float w) noexcept;
-    constexpr void set(float x, float y, float z, float w) noexcept;
-    constexpr void set(vec4f const& rhs) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set(vec3f const& v, float w) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set(float x, float y, float z, float w) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set(vec4f const& rhs) XR_NOEXCEPT;
 
-    float length() const noexcept;
-    constexpr float squared_length() const noexcept;
+    float length() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE float squared_length() const XR_NOEXCEPT;
 
     union
     {
@@ -887,81 +930,91 @@ struct vec4f
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f::vec4f(float a) noexcept
-    : x { a }
-    , y { a }
-    , z { a }
-    , w { a }
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f::vec4f() XR_NOEXCEPT
+    : x(0.0f)
+    , y(0.0f)
+    , z(0.0f)
+    , w(0.0f)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f::vec4f(float a, float b, float c, float d) noexcept
-    : x { a }
-    , y { b }
-    , z { c }
-    , w { d }
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f::vec4f(float a) XR_NOEXCEPT
+    : x(a)
+    , y(a)
+    , z(a)
+    , w(a)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f::vec4f(vec2f const& v1, vec2f const& v2) noexcept
-    : x { v1.x }
-    , y { v1.y }
-    , z { v2.x }
-    , w { v2.y }
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f::vec4f(float a, float b, float c, float d) XR_NOEXCEPT
+    : x(a)
+    , y(b)
+    , z(c)
+    , w(d)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f::vec4f(vec3f const& v, float d) noexcept
-    : x { v.x }
-    , y { v.y }
-    , z { v.z }
-    , w { d }
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f::vec4f(vec2f const& v1, vec2f const& v2) XR_NOEXCEPT
+    : x(v1.x)
+    , y(v1.y)
+    , z(v2.x)
+    , w(v2.y)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec4f::xz() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f::vec4f(vec3f const& v, float d) XR_NOEXCEPT
+    : x(v.x)
+    , y(v.y)
+    , z(v.z)
+    , w(d)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec4f::xz() const XR_NOEXCEPT
 {
-    return vec2f { x, z };
+    return vec2f(x, z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec4f::xy() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec4f::xy() const XR_NOEXCEPT
 {
-    return vec2f { x, y };
+    return vec2f(x, y);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec4f::xyz() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec4f::xyz() const XR_NOEXCEPT
 {
-    return vec3f { x, y, z };
+    return vec3f(x, y, z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f vec4f::yz() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f vec4f::yz() const XR_NOEXCEPT
 {
-    return vec2f { y, z };
+    return vec2f(y, z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f vec4f::rgb() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f vec4f::rgb() const XR_NOEXCEPT
 {
-    return vec3f { x, y, z };
+    return vec3f(x, y, z);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -987,7 +1040,7 @@ inline float vec4f::operator[](L i) const
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec4f::operator==(vec4f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec4f::operator==(vec4f const& rhs) const XR_NOEXCEPT
 {
     return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
 }
@@ -995,7 +1048,7 @@ constexpr bool vec4f::operator==(vec4f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr bool vec4f::operator!=(vec4f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE bool vec4f::operator!=(vec4f const& rhs) const XR_NOEXCEPT
 {
     return x != rhs.x || y != rhs.y || z != rhs.z || w != rhs.w;
 }
@@ -1003,31 +1056,31 @@ constexpr bool vec4f::operator!=(vec4f const& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f vec4f::operator+(vec4f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f vec4f::operator+(vec4f const& rhs) const XR_NOEXCEPT
 {
-    return vec4f { x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w };
+    return vec4f(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f vec4f::operator-() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f vec4f::operator-() const XR_NOEXCEPT
 {
-    return vec4f { -x, -y, -z, -w };
+    return vec4f(-x, -y, -z, -w);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f vec4f::operator-(vec4f const& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f vec4f::operator-(vec4f const& rhs) const XR_NOEXCEPT
 {
-    return vec4f { x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w };
+    return vec4f(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::operator+=(vec4f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::operator+=(vec4f const& rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -1046,7 +1099,7 @@ constexpr void vec4f::operator+=(vec4f const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::operator-=(vec4f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::operator-=(vec4f const& rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -1065,7 +1118,7 @@ constexpr void vec4f::operator-=(vec4f const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::operator/=(float rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::operator/=(float rhs) XR_NOEXCEPT
 {
     *this *= 1.0f / rhs;
 }
@@ -1073,15 +1126,15 @@ constexpr void vec4f::operator/=(float rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f vec4f::operator*(float s) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f vec4f::operator*(float s) XR_NOEXCEPT
 {
-    return vec4f { x * s, y * s, z * s, w * s };
+    return vec4f(x * s, y * s, z * s, w * s);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::operator*=(float rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::operator*=(float rhs) XR_NOEXCEPT
 {
     float x = this->x;
     float y = this->y;
@@ -1100,7 +1153,7 @@ constexpr void vec4f::operator*=(float rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::set(vec3f const& v, float w) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::set(vec3f const& v, float w) XR_NOEXCEPT
 {
     this->x = v.x;
     this->y = v.y;
@@ -1111,7 +1164,7 @@ constexpr void vec4f::set(vec3f const& v, float w) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::set(float x, float y, float z, float w) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::set(float x, float y, float z, float w) XR_NOEXCEPT
 {
     this->x = x;
     this->y = y;
@@ -1122,7 +1175,7 @@ constexpr void vec4f::set(float x, float y, float z, float w) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void vec4f::set(vec4f const& rhs) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void vec4f::set(vec4f const& rhs) XR_NOEXCEPT
 {
     x = rhs.x;
     y = rhs.y;
@@ -1133,7 +1186,7 @@ constexpr void vec4f::set(vec4f const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr float vec4f::squared_length() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE float vec4f::squared_length() const XR_NOEXCEPT
 {
     float const x = this->x;
     float const y = this->y;
@@ -1146,23 +1199,23 @@ constexpr float vec4f::squared_length() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f operator *(float f, vec4f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator *(float f, vec4f const& v) XR_NOEXCEPT
 {
-    return vec4f { f * v.x, f * v.y, f * v.z, f * v.w };
+    return vec4f(f * v.x, f * v.y, f * v.z, f * v.w);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f operator*(vec4f const& v, float s) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator*(vec4f const& v, float s) XR_NOEXCEPT
 {
-    return vec4f { v.x * s, v.y * s, v.z * s, v.w * s };
+    return vec4f(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr float dot_product(vec4f const& op1, vec4f const& op2) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE float dot_product(vec4f const& op1, vec4f const& op2) XR_NOEXCEPT
 {
     return op1.x * op2.x + op1.y * op2.y + op1.z * op2.z + op1.w * op2.w;
 }
@@ -1170,7 +1223,7 @@ constexpr float dot_product(vec4f const& op1, vec4f const& op2) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void lerp(vec4f const& op1, vec4f const& op2, vec4f* out, float t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void lerp(vec4f const& op1, vec4f const& op2, vec4f* out, float t) XR_NOEXCEPT
 {
     float const invt = 1.0f - t;
     out->x = op1.x * invt + op2.x * t;
@@ -1182,7 +1235,7 @@ constexpr void lerp(vec4f const& op1, vec4f const& op2, vec4f* out, float t) noe
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr float dot_product(vec3f const& op1, vec3f const& op2) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE float dot_product(vec3f const& op1, vec3f const& op2) XR_NOEXCEPT
 {
     return op1.x * op2.x + op1.y * op2.y + op1.z * op2.z;
 }
@@ -1190,33 +1243,31 @@ constexpr float dot_product(vec3f const& op1, vec3f const& op2) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f cross_product(vec3f const& op1, vec3f const& op2) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f cross_product(vec3f const& op1, vec3f const& op2) XR_NOEXCEPT
 {
-    return vec3f 
-    { 
+    return vec3f(
         op1.y * op2.z - op1.z * op2.y,
         op1.z * op2.x - op1.x * op2.z,
         op1.x * op2.y - op1.y * op2.x
-    };
+    );
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d cross_product(vec3d const& op1, vec3d const& op2) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d cross_product(vec3d const& op1, vec3d const& op2) XR_NOEXCEPT
 {
-    return vec3d 
-    { 
+    return vec3d(
         op1.y * op2.z - op1.z * op2.y,
         op1.z * op2.x - op1.x * op2.z,
         op1.x * op2.y - op1.y * op2.x
-    };
+    );
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f lerp(vec3f const& op1, vec3f const& op2, float t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f lerp(vec3f const& op1, vec3f const& op2, float t) XR_NOEXCEPT
 {
     vec3f res;
     const float invt = 1.0f - t;
@@ -1229,7 +1280,7 @@ constexpr vec3f lerp(vec3f const& op1, vec3f const& op2, float t) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3d lerp(vec3d const& op1, vec3d const& op2, float t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3d lerp(vec3d const& op1, vec3d const& op2, float t) XR_NOEXCEPT
 {
     vec3d res;
     float const invt = 1.0f - t;
@@ -1242,7 +1293,7 @@ constexpr vec3d lerp(vec3d const& op1, vec3d const& op2, float t) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec2f lerp(vec2f const& op1, vec2f const& op2, float t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec2f lerp(vec2f const& op1, vec2f const& op2, float t) XR_NOEXCEPT
 {
     vec2f res;
     float const invt = 1.0f - t;
@@ -1251,5 +1302,5 @@ constexpr vec2f lerp(vec2f const& op1, vec2f const& op2, float t) noexcept
     return res;
 }
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
 //-----------------------------------------------------------------------------------------------------------

@@ -7,8 +7,7 @@
 #include "corlib/threading/scoped_lock.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 class multi_threaded_traits final
@@ -35,5 +34,5 @@ public:
     using raii = scoped_lock<locker>;
 }; // class custom_threaded_traits
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

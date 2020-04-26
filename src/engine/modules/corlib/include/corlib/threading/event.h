@@ -3,52 +3,48 @@
 
 #pragma once
 
-#include "corlib/signalling_bool.h"
 #include "corlib/threading/atomic_types.h"
 #include "corlib/sys/chrono.h"
 #include "corlib/sys/win/min_windows.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
-enum class event_wait_result : uint8_t
+enum class event_wait_result
 {
     failed,
     signaled,
     still_non_signaled,
     timed_out
-}; // enum class event_wait_result
-
+};
 
 //-----------------------------------------------------------------------------------------------------------
 class event
 {
 public:
-    explicit event(bool initial_state = false) noexcept;
+    explicit event(bool initial_state = false) XR_NOEXCEPT;
     ~event();
 
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(event);
-    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(event);
 
     // Signal the event.
-    void set(bool value) noexcept;
+    void set(bool value) XR_NOEXCEPT;
 
     // Wait for the event to become signaled.
-    event_wait_result wait() noexcept;
+    event_wait_result wait() XR_NOEXCEPT;
 
     // Waits for the event to become signaled with a specified timeout
     // in milliseconds.
     // If the method times out it will return false,
     // if the event becomes signaled within the timeout it will return true.
-    event_wait_result wait_timeout(sys::tick timeout) noexcept;
+    event_wait_result wait_timeout(sys::tick timeout) XR_NOEXCEPT;
 
     // This checks if the event is signaled and returns immediately.
-    signalling_bool peek() const noexcept;
+    signalling_bool peek() const XR_NOEXCEPT;
 
 private:
-    using handle = sys::win::RTL_CONDITION_VARIABLE;
+    typedef sys::win::RTL_CONDITION_VARIABLE handle;
 
     void set_event();
     void reset_event();
@@ -68,10 +64,10 @@ private:
 /**
 */
 inline event_wait_result 
-event::wait() noexcept
+event::wait() XR_NOEXCEPT
 {
     return wait_timeout(sys::infinite);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

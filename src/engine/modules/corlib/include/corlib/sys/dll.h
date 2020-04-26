@@ -6,8 +6,7 @@
 #include "corlib/utils/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -33,5 +32,5 @@ Type dll_require_typed_symbol(pvoid library, utils::string_view str)
     return reinterpret_cast<Type>(dll_require_symbol(library, str));
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

@@ -2,11 +2,9 @@
 //
 
 #include "corlib/memory/memory_crt_allocator.h"
-#include <cassert>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -20,10 +18,10 @@ pvoid crt_allocator::call_malloc(size_t size
     XR_UNREFERENCED_PARAMETER(description);
 #endif // #ifdef DEBUG
 
-    assert(this->m_malloc_ptr);
+    XR_DEBUG_ASSERTION(m_malloc_ptr);
 
     auto const real_size = size;
-    pvoid const result = (*this->m_malloc_ptr)(real_size);
+    pvoid const result = (*m_malloc_ptr)(real_size);
 
     return result;
 }
@@ -40,13 +38,13 @@ pvoid crt_allocator::call_realloc(pvoid pointer, size_t new_size
 
     if(!new_size)
     {
-        this->free_impl(pointer XR_DEBUG_PARAMETERS);
+        free_impl(pointer XR_DEBUG_PARAMETERS);
         return (0);
     }
 
-    assert(this->m_realloc_ptr);
+    XR_DEBUG_ASSERTION(m_realloc_ptr);
     auto const real_size = new_size;
-    pvoid const result = (*this->m_realloc_ptr)(pointer, real_size);
+    pvoid const result = (*m_realloc_ptr)(pointer, real_size);
 
     return result;
 }
@@ -58,12 +56,10 @@ void crt_allocator::call_free(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION)
 {
     XR_DEBUG_PARAMETERS_UNREFERENCED_GUARD;
 
-    if(!pointer)
-        return;
-
-    assert(this->m_free_ptr);
-    (*this->m_free_ptr)(pointer);
+    if(!pointer) return;
+    XR_DEBUG_ASSERTION(m_free_ptr);
+    (*m_free_ptr)(pointer);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

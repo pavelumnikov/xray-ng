@@ -6,8 +6,7 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 // Simple wrapper to work with raw memory as an array. Includes array bounds checking.
@@ -15,12 +14,12 @@ template<typename T>
 class array_view
 {
 public:
-    using value_type = T;
-    using pointer = T*;
-    using const_pointer = T const*;
-    using reference = T&;
-    using const_reference = T const&;
-    using size_type = size_t;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T const* const_pointer;
+    typedef T& reference;
+    typedef T const& const_reference;
+    typedef size_t size_type;
 
     array_view();
     array_view(pvoid memory_chunk, size_type instances_count);
@@ -48,8 +47,8 @@ private:
  */
 template<typename T>
 inline array_view<T>::array_view()
-    : m_data { nullptr }
-    , m_count { 0 }
+    : m_data(nullptr)
+    , m_count(0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -57,8 +56,8 @@ inline array_view<T>::array_view()
  */
 template<typename T>
 inline array_view<T>::array_view(pvoid memory_chunk, size_type instances_count)
-    : m_data { reinterpret_cast<T*>(memory_chunk) }
-    , m_count { instances_count }
+    : m_data(reinterpret_cast<T*>(memory_chunk))
+    , m_count(instances_count)
 {
     XR_DEBUG_ASSERTION_MSG(m_count == 0 || m_data, "Invalid data array");
 }
@@ -119,5 +118,5 @@ inline typename array_view<T>::const_pointer array_view<T>::get_raw_data() const
     return m_data;
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

@@ -9,8 +9,7 @@
 #include "../os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -51,5 +50,5 @@ pvoid dll_require_symbol(pvoid library, utils::string_view str)
     return reinterpret_cast<pvoid>(::GetProcAddress(handle, str.data()));
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

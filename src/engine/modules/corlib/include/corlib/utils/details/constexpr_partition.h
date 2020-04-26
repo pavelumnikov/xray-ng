@@ -6,14 +6,13 @@
 #include "corlib/utils/details/constexpr_swap.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Iterator, class Compare>
-constexpr Iterator
+XR_CONSTEXPR_CPP14_OR_INLINE Iterator
 partition(Iterator left, Iterator right, Compare const &compare)
 {
     auto pivot = left + (right - left) / 2;
@@ -33,5 +32,5 @@ partition(Iterator left, Iterator right, Compare const &compare)
     return left;
 }
 
-} // namespace xr::utils::details
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

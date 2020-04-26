@@ -7,8 +7,7 @@
 #include "scheduler.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 static memory::uninitialized_reference<task_scheduler> main_scheduler;
@@ -44,5 +43,5 @@ scheduler& current_scheduler()
     return main_scheduler.ref();
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

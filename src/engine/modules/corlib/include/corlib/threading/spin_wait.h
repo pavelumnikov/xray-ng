@@ -7,11 +7,11 @@
 #include "corlib/threading/spin_wait_speculative_locking_strategy.h"
 #include "corlib/threading/spin_wait_precise_locking_streategy.h"
 #include "corlib/threading/spin_wait_noop_locking_strategy.h"
+#include "corlib/macro/aligning.h"
 #include "corlib/utils/padded.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 namespace details
@@ -24,12 +24,12 @@ struct spin_wait_cache_line
     template< typename Strategy >
     struct cache_line_selector final
     {
-        static constexpr size_t value = Strategy::cache_line_size;
+        static XR_CONSTEXPR_CPP14_OR_CONST size_t value = Strategy::cache_line_size;
     };
 
     struct default_cache_line_selector final
     {
-        static constexpr size_t value = XR_MAX_CACHE_LINE_SIZE;
+        static XR_CONSTEXPR_CPP14_OR_CONST size_t value = XR_MAX_CACHE_LINE_SIZE;
     };
 
     using locking_value = typename LockingStrategy::locking_value;
@@ -37,7 +37,7 @@ struct spin_wait_cache_line
     using cache_line_selector_t = std::conditional_t<LockingStrategy::has_cache_line_size,
         cache_line_selector<LockingStrategy>, default_cache_line_selector>;
 
-    static constexpr size_t cache_line_size = cache_line_selector_t::value;
+    static XR_CONSTEXPR_CPP14_OR_CONST size_t cache_line_size = cache_line_selector_t::value;
 
     volatile locking_value m_lock;
     LockingStrategy m_locking_strategy;
@@ -66,16 +66,16 @@ class spin_wait final
     : protected utils::padded_with_cache_line_size<details::spin_wait_cache_line<LockingStrategy>>
 {
 public:
-    spin_wait() noexcept;
+    spin_wait() XR_NOEXCEPT;
 
     // Start spin waiting.
-    void lock() noexcept;
+    void lock() XR_NOEXCEPT;
 
     // Try acquiring lock (non-blocking) and return immediate.
-    signalling_bool try_lock() noexcept;
+    signalling_bool try_lock() XR_NOEXCEPT;
 
     // Stop spin waiting.
-    void unlock() noexcept;
+    void unlock() XR_NOEXCEPT;
 }; // class spin_wait
 
 using spin_wait_fairness = spin_wait<spin_wait_fairness_strategy>;
@@ -87,37 +87,37 @@ using spin_wait_noop = spin_wait<spin_wait_noop_strategy>;
 /**
 */
 template< typename LockingStrategy >
-spin_wait<LockingStrategy>::spin_wait() noexcept
+spin_wait<LockingStrategy>::spin_wait() XR_NOEXCEPT
 {
-    this->m_locking_strategy.reset(this->m_lock);
+    m_locking_strategy.reset(m_lock);
 };
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename LockingStrategy >
-void spin_wait<LockingStrategy>::lock() noexcept
+void spin_wait<LockingStrategy>::lock() XR_NOEXCEPT
 {
-    this->m_locking_strategy.lock(this->m_lock);
+    m_locking_strategy.lock(m_lock);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename LockingStrategy >
-signalling_bool spin_wait<LockingStrategy>::try_lock() noexcept
+signalling_bool spin_wait<LockingStrategy>::try_lock() XR_NOEXCEPT
 {
-    return this->m_locking_strategy.try_lock(this->m_lock);
+    return m_locking_strategy.try_lock(m_lock);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename LockingStrategy >
-void spin_wait<LockingStrategy>::unlock() noexcept
+void spin_wait<LockingStrategy>::unlock() XR_NOEXCEPT
 {
-    this->m_locking_strategy.unlock(this->m_lock);
+    m_locking_strategy.unlock(m_lock);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

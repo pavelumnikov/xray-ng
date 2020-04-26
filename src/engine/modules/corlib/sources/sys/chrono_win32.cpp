@@ -2,12 +2,10 @@
 //
 
 #include "corlib/sys/chrono.h"
-#include "corlib/platform.h"
 #include "../os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -41,5 +39,5 @@ tick now_microseconds()
     return (qpcnt.QuadPart * uint64_t(1000000)) / get_frequency();
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

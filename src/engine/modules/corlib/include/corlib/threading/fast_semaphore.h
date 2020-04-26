@@ -4,11 +4,9 @@
 #pragma once
 
 #include "corlib/threading/atomic_backoff.h"
-#include "corlib/signalling_bool.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 // Fast semaphore object that only tracks count of threads that could access 
 // some critical section, but it's vital that programmer knows what he does: 
@@ -18,13 +16,13 @@ template<size_t MaxThreads, typename BackoffType = default_atomic_backoff>
 class fast_semaphore
 {
 public:
-    constexpr fast_semaphore() noexcept;
+    constexpr fast_semaphore() XR_NOEXCEPT;
 
     // Wait for semaphore object monitor.
-    signalling_bool wait() noexcept;
+    signalling_bool wait() XR_NOEXCEPT;
 
     // Signal semaphore object to stop fencing.
-    void signal() noexcept;
+    void signal() XR_NOEXCEPT;
 
 private:
     auto constexpr c_max_simultaneous_accessing_threads = MaxThreads;
@@ -36,8 +34,8 @@ private:
 */
 template< size_t MaxThreads, typename BackoffType >
 constexpr
-fast_semaphore<MaxThreads, BackoffType>::fast_semaphore() noexcept
-    : m_active { 0 }
+fast_semaphore<MaxThreads, BackoffType>::fast_semaphore() XR_NOEXCEPT
+    : m_active(0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -45,18 +43,18 @@ fast_semaphore<MaxThreads, BackoffType>::fast_semaphore() noexcept
 */
 template< size_t MaxThreads, typename BackoffType >
 inline signalling_bool
-fast_semaphore<MaxThreads, BackoffType>::wait() noexcept
+fast_semaphore<MaxThreads, BackoffType>::wait() XR_NOEXCEPT
 {
-    auto rescan_bins = false;
+    bool rescan_bins = false;
 
     for(;;)
     {
-        auto const prev_accessing_count = atomic_fetch_acq(m_active);
+        size_t const prev_accessing_count = atomic_fetch_acq(m_active);
 
         if(prev_accessing_count < c_max_simultaneous_accessing_threads)
         {
-            auto const next_thread_index = (prev_accessing_count + 1);
-            auto const accessing_count = atomic_cas_seq(
+            size_t const next_thread_index = (prev_accessing_count + 1);
+            size_t const accessing_count = atomic_cas_seq(
                 m_active, next_thread_index, prev_accessing_count);
 
             if(accessing_count == prev_accessing_count)
@@ -83,10 +81,10 @@ fast_semaphore<MaxThreads, BackoffType>::wait() noexcept
 */
 template< size_t MaxThreads, typename BackoffType >
 inline void
-fast_semaphore<MaxThreads, BackoffType>::signal() noexcept
+fast_semaphore<MaxThreads, BackoffType>::signal() XR_NOEXCEPT
 {
     (void)atomic_fetch_sub_seq(m_active, 1);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

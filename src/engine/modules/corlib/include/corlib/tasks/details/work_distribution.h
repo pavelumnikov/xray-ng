@@ -8,8 +8,7 @@
 #include "corlib/utils/array_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename TTask>
@@ -50,14 +49,14 @@ inline bool distibute_descriptions(task_group group, const TTask* tasks,
     {
         size_t bucketStartIndex = index;
         for(size_t i = bucket_index; i < descriptions.size(); i += buckets.size())
-            descriptions[index++] = eastl::move(helper.get_grouped_task(group, &tasks[i]));
+            descriptions[index++] = helper.get_grouped_task(group, &tasks[i]);
 
-        buckets[bucket_index] = eastl::move(task_bucket(&descriptions[bucketStartIndex], index - bucketStartIndex));
+        buckets[bucket_index] = task_bucket(&descriptions[bucketStartIndex], index - bucketStartIndex);
     }
 
     XR_DEBUG_ASSERTION_MSG(index == descriptions.size(), "Sanity check");
     return index > 0;
 }
 
-} // namespace xr::tasks::details
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

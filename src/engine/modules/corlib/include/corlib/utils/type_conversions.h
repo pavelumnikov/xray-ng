@@ -3,11 +3,12 @@
 
 #pragma once
 
+#include "corlib/macro/namespaces.h"
+#include "corlib/macro/noexcept.h"
 #include "EASTL/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 template< typename Type >
 struct default_value;
@@ -15,13 +16,13 @@ struct default_value;
 template<>
 struct default_value<int8_t> final
 {
-	static constexpr auto value = static_cast<int8_t>(0);
+    static constexpr auto value = static_cast<int8_t>(0);
 };
 
 template<>
 struct default_value<uint8_t> final
 {
-	static constexpr auto value = static_cast<uint8_t>(0);
+    static constexpr auto value = static_cast<uint8_t>(0);
 };
 
 template< typename Type >
@@ -31,13 +32,13 @@ constexpr auto default_value_v = default_value< Type >::value;
 template< typename Type, Type Input >
 struct as_uint32 final
 {
-	static constexpr auto value = static_cast<uint32_t>(Input);
+    static constexpr auto value = static_cast<uint32_t>(Input);
 };
 
 template< typename Type, Type Input >
 struct as_int32 final
 {
-	static constexpr auto value = static_cast<int32_t>(Input);
+    static constexpr auto value = static_cast<int32_t>(Input);
 };
 
 template< typename Type, Type Input >
@@ -49,7 +50,7 @@ constexpr auto as_int32_v = as_int32<Type, Input>::value;
 template <typename U, typename T>
 struct is_explicitly_convertible final
 {
-	static constexpr auto value = eastl::is_constructible<T, U>::value && 
+    static constexpr auto value = eastl::is_constructible<T, U>::value &&
         eastl::is_convertible<U, T>::value;
 };
 
@@ -95,10 +96,10 @@ OutputClass unsafe_type_cast(InputClass const input)
 }
 
 template <typename E>
-constexpr typename eastl::underlying_type<E>::type to_underlying(E e) noexcept
+constexpr typename eastl::underlying_type<E>::type to_underlying(E e) XR_NOEXCEPT
 {
     return static_cast<typename eastl::underlying_type<E>::type>(e);
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

@@ -15,8 +15,7 @@
 // #define XR_EXPERIMENTAL_WAIT (1)
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -40,17 +39,16 @@ struct grouped_task_selector<fiber_context*>
     }
 };
 
-} // namespace xr::tasks::details
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
-constexpr size_t scheduler_stack_size = 1_mb; // 1Mb
-constexpr size_t standard_fiber_stack_size = 128_kb; // 128Kb
+constexpr size_t scheduler_stack_size = XR_MEGABYTES_TO_BYTES(1); // 1Mb
+constexpr size_t standard_fiber_stack_size = XR_KILOBYTES_TO_BYTES(128); // 128Kb
 constexpr size_t reserve_standard_fiber_stack_size = standard_fiber_stack_size / 2;
-constexpr size_t extended_fiber_stack_size = 1_mb; // 1Mb
+constexpr size_t extended_fiber_stack_size = XR_MEGABYTES_TO_BYTES(1); // 1Mb
 constexpr size_t reserve_extended_fiber_stack_size = extended_fiber_stack_size / 2;
 
 //-----------------------------------------------------------------------------------------------------------
@@ -144,7 +142,7 @@ task_scheduler::task_scheduler(memory::base_allocator& alloc, uint32_t workerThr
         auto priority = sys::thread_priority::medium;
 
         wchar_t worker_name[16];
-        _snwprintf(worker_name, sizeof(worker_name), L"task_worker %u", i);
+        _snwprintf_s(worker_name, eastl::size(worker_name), L"task_worker %u", i);
         context.current_thread = sys::spawn_thread(worker_thread_main, &context,
             worker_name, priority, scheduler_stack_size, thread_index);
     }
@@ -975,5 +973,5 @@ void task_scheduler::run_subtasks_on_scheduler(
     run_tasks_internal(buckets, nullptr, restored_from_awaiting);
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

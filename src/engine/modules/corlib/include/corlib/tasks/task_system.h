@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "corlib/signalling_bool.h"
 #include "corlib/math/color_table.h"
 #include "corlib/tasks/details/grouped_task.h"
 #include "corlib/tasks/details/task_desc.h"
@@ -41,15 +40,7 @@
 #endif // XR_INSTRUMENTED_BUILD
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
-class base_allocator;
-} // namespace xr::memory
-//-----------------------------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL execution_context
@@ -130,13 +121,6 @@ void shutdown_tasks();
 /**
  */
 scheduler& current_scheduler();
-
-} // namespace xr::tasks
-//-----------------------------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -258,5 +242,5 @@ scheduler::run_async(task_group group, utils::static_vector<TTask, N>& tasks)
     run_async(group, tasks.begin(), tasks.size());
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

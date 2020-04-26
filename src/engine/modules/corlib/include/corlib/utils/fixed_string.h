@@ -4,12 +4,10 @@
 #pragma once
 
 #include "corlib/utils/hash_string.h"
-#include "corlib/utils/string_view.h"
 #include "EASTL/fixed_string.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::stdext
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template<int Count>
@@ -43,7 +41,7 @@ using fixed_wstring512 = fixed_wstring<512>;
 /**
 */
 template<int Count>
-utils::string_view to_string_view(fixed_string<Count> const& s) noexcept
+eastl::string_view to_string_view(fixed_string<Count> const& s) noexcept
 {
     return { eastl::begin(s), eastl::size(s) };
 }
@@ -52,12 +50,12 @@ utils::string_view to_string_view(fixed_string<Count> const& s) noexcept
 /**
 */
 template<int Count>
-utils::wstring_view to_wstring_view(fixed_wstring<Count> const& s) noexcept
+eastl::wstring_view to_wstring_view(fixed_wstring<Count> const& s) noexcept
 {
     return { eastl::begin(s), eastl::size(s) };
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
@@ -66,16 +64,16 @@ namespace eastl
 
 //-----------------------------------------------------------------------------------------------------------
 template<int N>
-struct hash<xr::utils::stdext::fixed_string<N>>
+struct hash<xr::utils::fixed_string<N>>
 {
-    size_t operator()(xr::utils::stdext::fixed_string<N> const& s) const;
-}; // struct hash<xr::utils::stdext::fixed_string<N>>
+    size_t operator()(xr::utils::fixed_string<N> const& s) const;
+}; // struct hash<xr::utils::fixed_string<N>>
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<int N>
-size_t hash<xr::utils::stdext::fixed_string<N>>::operator()(xr::utils::stdext::fixed_string<N> const& s) const
+size_t hash<xr::utils::fixed_string<N>>::operator()(xr::utils::fixed_string<N> const& s) const
 {
     return xr::utils::hash_string_func(s);
 }
@@ -83,19 +81,19 @@ size_t hash<xr::utils::stdext::fixed_string<N>>::operator()(xr::utils::stdext::f
 
 //-----------------------------------------------------------------------------------------------------------
 template<size_t N>
-struct hash<xr::utils::stdext::fixed_wstring<N>>
+struct hash<xr::utils::fixed_wstring<N>>
 {
-    size_t operator()(xr::utils::stdext::fixed_wstring<N> const& s) const;
-}; // struct hash<xr::utils::stdext::fixed_wstring<N>>
+    size_t operator()(xr::utils::fixed_wstring<N> const& s) const;
+}; // struct hash<xr::utils::fixed_wstring<N>>
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<size_t N>
-size_t hash<xr::utils::stdext::fixed_wstring<N>>::operator()(xr::utils::stdext::fixed_wstring<N> const& s) const
+size_t hash<xr::utils::fixed_wstring<N>>::operator()(xr::utils::fixed_wstring<N> const& s) const
 {
     return xr::utils::hash_string_func(s);
 }
 
-} // namespace eastl
+} // namespace xr::etl::string
 //-----------------------------------------------------------------------------------------------------------

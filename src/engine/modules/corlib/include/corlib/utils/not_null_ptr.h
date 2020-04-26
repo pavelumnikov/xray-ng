@@ -3,12 +3,11 @@
 
 #pragma once
 
-#include "corlib/platform.h"
-#include "corlib/utils/algorithms/utility.h"
+#include "corlib/types.h"
+#include "corlib/utils/utility.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //
 // not_null
@@ -32,13 +31,13 @@ public:
     using pointer = eastl::add_pointer_t<value_type>;
 
     template <typename U, typename = eastl::enable_if_t<eastl::is_convertible<U, Type>::value>>
-    constexpr explicit not_null(U&& u) noexcept;
+    constexpr explicit not_null(U&& u) XR_NOEXCEPT;
 
     template <typename = typename eastl::enable_if<!eastl::is_same<std::nullptr_t, Type>::value>::type>
-    constexpr explicit not_null(value_type u) noexcept;
+    constexpr explicit not_null(value_type u) XR_NOEXCEPT;
 
     template <typename U, typename = typename eastl::enable_if<eastl::is_convertible<U, Type>::value>::type>
-    explicit constexpr not_null(const not_null<U>& other) noexcept;
+    explicit constexpr not_null(const not_null<U>& other) XR_NOEXCEPT;
 
     not_null(not_null&& other) = default;
     not_null(const not_null& other) = default;
@@ -72,7 +71,7 @@ private:
 */
 template <typename Type>
 template <typename U, typename>
-constexpr not_null<Type>::not_null(U&& u) noexcept
+constexpr not_null<Type>::not_null(U&& u) XR_NOEXCEPT
     : m_ptr(eastl::forward<U>(u))
 {
     XR_DEBUG_ASSERTION(m_ptr != nullptr);
@@ -83,7 +82,7 @@ constexpr not_null<Type>::not_null(U&& u) noexcept
 */
 template <typename Type>
 template <typename>
-constexpr not_null<Type>::not_null(value_type u) noexcept
+constexpr not_null<Type>::not_null(value_type u) XR_NOEXCEPT
     : m_ptr(u)
 {
     XR_DEBUG_ASSERTION(m_ptr != nullptr);
@@ -94,7 +93,7 @@ constexpr not_null<Type>::not_null(value_type u) noexcept
 */
 template <typename Type>
 template <typename U, typename>
-constexpr not_null<Type>::not_null(const not_null<U>& other) noexcept
+constexpr not_null<Type>::not_null(const not_null<U>& other) XR_NOEXCEPT
     : not_null(other.get())
 {}
 

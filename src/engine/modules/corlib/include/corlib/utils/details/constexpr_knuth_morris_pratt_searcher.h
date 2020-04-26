@@ -3,12 +3,11 @@
 
 #pragma once
 
-#include "corlib/utils/constexpr_array.h"
 #include "corlib/utils/type_traits.h"
+#include "EASTL/array.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 // text book implementation from
 // https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm
@@ -16,17 +15,15 @@ namespace xr::utils::details
 template<typename Type, size_t size> 
 class constexpr_knuth_morris_pratt_searcher
 {
-    static_assert(std::is_string_v<Type>, 
-        "Input type must be a string-compatible type");
+    XR_STATIC_ASSERT(std::is_string_v<Type>, "Input type must be a string-compatible type");
 
-    containers::constexpr_array<ptrdiff_t, size> step_;
-    containers::constexpr_array<Type, size> needle_;
+    eastl::array<ptrdiff_t, size> step_;
+    eastl::array<Type, size> needle_;
 
-    static constexpr containers::constexpr_array<ptrdiff_t, size>
-        build_kmp_cache(Type const (&needle)[size + 1])
+    static XR_CONSTEXPR_CPP14_OR_INLINE eastl::array<ptrdiff_t, size> build_kmp_cache(Type const (&needle)[size + 1])
     {
         ptrdiff_t cnd = 0;
-        containers::constexpr_array<ptrdiff_t, size> cache;
+        eastl::array<ptrdiff_t, size> cache;
 
         cache.fill(-1);
         for(size_t pos = 1; pos < size; ++pos)
@@ -42,9 +39,7 @@ class constexpr_knuth_morris_pratt_searcher
                 cnd = cache[cnd];
 
                 while(cnd >= 0 && needle[pos] != needle[cnd])
-                {
                     cnd = cache[cnd];
-                }
 
                 cnd += 1;
             }
@@ -53,11 +48,13 @@ class constexpr_knuth_morris_pratt_searcher
     }
 
 public:
-    constexpr constexpr_knuth_morris_pratt_searcher(Type const (&needle)[size + 1])
-        : step_ { build_kmp_cache(needle) }, needle_(needle) {}
+    XR_CONSTEXPR_CPP14_OR_INLINE constexpr_knuth_morris_pratt_searcher(Type const (&needle)[size + 1])
+        : step_(build_kmp_cache(needle))
+        , needle_(needle)
+    {}
 
     template <class ForwardIterator>
-    constexpr ::eastl::pair<ForwardIterator, ForwardIterator> operator()
+    XR_CONSTEXPR_CPP14_OR_INLINE eastl::pair<ForwardIterator, ForwardIterator> operator()
         (ForwardIterator first, ForwardIterator last) const
     {
         size_t i = 0;
@@ -92,10 +89,11 @@ public:
 };
 
 template<typename Type, size_t N>
-constexpr constexpr_knuth_morris_pratt_searcher<Type, N - 1> make_knuth_morris_pratt_searcher(Type const (&needle)[N])
+XR_CONSTEXPR_CPP14_OR_INLINE constexpr_knuth_morris_pratt_searcher<Type, N - 1>
+make_knuth_morris_pratt_searcher(Type const (&needle)[N])
 {
-    return { needle };
+    return constexpr_knuth_morris_pratt_searcher<Type, N - 1>(needle);
 }
 
-} // namespace xr::utils::searchers
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

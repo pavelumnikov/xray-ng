@@ -6,8 +6,7 @@
 #include "corlib/utils/intrusive_list_node.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL exit_handler : public utils::intrusive_list_node<exit_handler>
@@ -29,5 +28,5 @@ void register_exit_handler(exit_handler& handler);
  */
 bool call_exit_handlers();
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

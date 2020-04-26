@@ -9,8 +9,7 @@
 #include "memory_utility_for_arena_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -37,7 +36,7 @@ void mt_arena_allocator::initialize(size_t size, size_t initial)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool mt_arena_allocator::can_allocate_block(size_t const size) const noexcept
+bool mt_arena_allocator::can_allocate_block(size_t const size) const XR_NOEXCEPT
 {
     if(!m_arena) return false;
     // TODO: check if allocating from one block
@@ -47,7 +46,7 @@ bool mt_arena_allocator::can_allocate_block(size_t const size) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t mt_arena_allocator::total_size() const noexcept
+size_t mt_arena_allocator::total_size() const XR_NOEXCEPT
 {
     HANDLE const heap = static_cast<HANDLE>(m_arena);
     return (mem_usage(heap, nullptr, nullptr));
@@ -56,7 +55,7 @@ size_t mt_arena_allocator::total_size() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t mt_arena_allocator::allocated_size() const noexcept
+size_t mt_arena_allocator::allocated_size() const XR_NOEXCEPT
 {
     HANDLE const heap = static_cast<HANDLE>(m_arena);
     return (mem_usage(heap, nullptr, nullptr));
@@ -113,5 +112,5 @@ void mt_arena_allocator::finalize()
     HeapDestroy(m_arena);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

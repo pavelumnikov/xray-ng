@@ -10,8 +10,7 @@
 #define XR_TASK_ALLOCATOR_GRANULARITY 16
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename Node, size_t MaxCount>
@@ -215,5 +214,5 @@ bool allocator<Node, MaxCount>::check_all_free()
     return (free_count == max_count);
 }
 
-} // namespace az::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

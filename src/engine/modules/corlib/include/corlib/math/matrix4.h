@@ -4,95 +4,97 @@
 #pragma once
 
 #include "corlib/math/quaternion.h"
+#include "corlib/macro/aligning.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::math
-{
+XR_NAMESPACE_BEGIN(xr, math)
 
 //-----------------------------------------------------------------------------------------------------------
 struct XR_ALIGNAS(16) matrix4
 {
-    constexpr matrix4() noexcept = default;
-    constexpr matrix4(vec3f const& x, vec3f const& y, vec3f const& z) noexcept;
-    matrix4(vec3f const& pos, const quaternion & rot) noexcept;
-    explicit matrix4(const float* m) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE matrix4() XR_NOEXCEPT;
 
-    constexpr matrix4(
-        float r11, float r12, float r13, float r14,
-        float r21, float r22, float r23, float r24,
-        float r31, float r32, float r33, float r34,
-        float r41, float r42, float r43, float r44) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE matrix4(vec3f const& x, vec3f const& y, vec3f const& z) XR_NOEXCEPT;
+    matrix4(vec3f const& pos, const quaternion & rot) XR_NOEXCEPT;
+    matrix4(float const* m, size_t count) XR_NOEXCEPT;
+    explicit XR_CONSTEXPR_CPP14_OR_INLINE matrix4(float const m[16]) XR_NOEXCEPT;
 
-    void decompose(vec3f & position, quaternion & rotation, float& scale) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE matrix4(
+        float const r11, float const r12, float const r13, float const r14,
+        float const r21, float const r22, float const r23, float const r24,
+        float const r31, float const r32, float const r33, float const r34,
+        float const r41, float const r42, float const r43, float const r44) XR_NOEXCEPT;
 
-    float operator [](int index) const noexcept;
-    float& operator [](int index) noexcept;
+    void decompose(vec3f & position, quaternion & rotation, float& scale) const XR_NOEXCEPT;
 
-    constexpr vec4f operator *(vec4f const& rhs) const noexcept;
+    float operator [](int index) const XR_NOEXCEPT;
+    float& operator [](int index) XR_NOEXCEPT;
 
-    matrix4 operator *(float rhs) const noexcept;
-    matrix4 operator *(matrix4 const& rhs) const noexcept;
-    matrix4 operator +(matrix4 const& rhs) const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec4f operator *(vec4f const& rhs) const XR_NOEXCEPT;
 
-    static matrix4 rotationX(float angle) noexcept;
-    static matrix4 rotationY(float angle) noexcept;
-    static matrix4 rotationZ(float angle) noexcept;
-    static matrix4 from_quaternion(quaternion const& rhs) noexcept;
+    matrix4 operator *(float rhs) const XR_NOEXCEPT;
+    matrix4 operator *(matrix4 const& rhs) const XR_NOEXCEPT;
+    matrix4 operator +(matrix4 const& rhs) const XR_NOEXCEPT;
 
-    constexpr vec3f getXVector() const noexcept;
-    constexpr vec3f getYVector() const noexcept;
-    constexpr vec3f getZVector() const noexcept;
+    static matrix4 rotationX(float angle) XR_NOEXCEPT;
+    static matrix4 rotationY(float angle) XR_NOEXCEPT;
+    static matrix4 rotationZ(float angle) XR_NOEXCEPT;
+    static matrix4 from_quaternion(quaternion const& rhs) XR_NOEXCEPT;
 
-    constexpr void set_xvec(vec3f const& v) noexcept;
-    constexpr void set_yvec(vec3f const& v) noexcept;
-    constexpr void set_zvec(vec3f const& v) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f getXVector() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f getYVector() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f getZVector() const XR_NOEXCEPT;
 
-    constexpr float determinant() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_xvec(vec3f const& v) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_yvec(vec3f const& v) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_zvec(vec3f const& v) XR_NOEXCEPT;
 
-    matrix4 inverted() const noexcept;
-    constexpr void inverse() noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE float determinant() const XR_NOEXCEPT;
+
+    matrix4 inverted() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void inverse() XR_NOEXCEPT;
 
     // orthonormal
-    constexpr void fast_inverse() noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void fast_inverse() XR_NOEXCEPT;
 
     // orthonormal
-    constexpr matrix4 fast_inverted() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE matrix4 fast_inverted() const XR_NOEXCEPT;
 
-    constexpr void copy3x3(matrix4 const& mtx) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void copy3x3(matrix4 const& mtx) XR_NOEXCEPT;
 
-    constexpr void translate(vec3f const& t) noexcept;
-    constexpr void translate(float x, float y, float z) noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void translate(vec3f const& t) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void translate(float x, float y, float z) XR_NOEXCEPT;
 
     static matrix4 ortho(float left, float right, float bottom, float top, float z_near, 
-        float z_far, bool is_homogenous_depth, bool reversed_z) noexcept;
+        float z_far, bool is_homogenous_depth, bool reversed_z) XR_NOEXCEPT;
 
     static matrix4 from_perspective(float fov, float ratio, float near_plane, float far_plane,
-        bool is_homogenous_depth, bool invert_z) noexcept;
+        bool is_homogenous_depth, bool invert_z) XR_NOEXCEPT;
 
-    static matrix4 from_euler(float yaw, float pitch, float roll) noexcept;
+    static matrix4 from_euler(float yaw, float pitch, float roll) XR_NOEXCEPT;
 
-    static matrix4 look_at(vec3f const& eye, vec3f const& at, vec3f const& up) noexcept;
+    static matrix4 look_at(vec3f const& eye, vec3f const& at, vec3f const& up) XR_NOEXCEPT;
 
-    void normalize_scale() noexcept;
+    void normalize_scale() XR_NOEXCEPT;
 
-    constexpr void set_translation(vec3f const& t) noexcept;
-    constexpr void get_translation(vec3f& pos) const noexcept;
-    constexpr vec3f get_translation() const noexcept;
-    quaternion get_rotation() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_translation(vec3f const& t) XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE void get_translation(vec3f& pos) const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE vec3f get_translation() const XR_NOEXCEPT;
+    quaternion get_rotation() const XR_NOEXCEPT;
 
-    void transpose() noexcept;
-    vec3f transform_point(vec3f const& pos) const noexcept;
-    vec3f transform_vector(vec3f const& pos) const noexcept;
+    void transpose() XR_NOEXCEPT;
+    vec3f transform_point(vec3f const& pos) const XR_NOEXCEPT;
+    vec3f transform_vector(vec3f const& pos) const XR_NOEXCEPT;
 
-    void multiply_3x3(float scale) noexcept;
-    void set_identity() noexcept;
+    void multiply_3x3(float scale) XR_NOEXCEPT;
+    void set_identity() XR_NOEXCEPT;
 
-    float* to_float_ptr() noexcept;
+    float* to_float_ptr() XR_NOEXCEPT;
 
-    float m11 { 0.0f }, m12 { 0.0f }, m13 { 0.0f }, m14 { 0.0f };
-    float m21 { 0.0f }, m22 { 0.0f }, m23 { 0.0f }, m24 { 0.0f };
-    float m31 { 0.0f }, m32 { 0.0f }, m33 { 0.0f }, m34 { 0.0f };
-    float m41 { 0.0f }, m42 { 0.0f }, m43 { 0.0f }, m44 { 0.0f };
+    float m11, m12, m13, m14;
+    float m21, m22, m23, m24;
+    float m31, m32, m33, m34;
+    float m41, m42, m43, m44;
 
     static const matrix4 IDENTITY;
 };
@@ -100,18 +102,29 @@ struct XR_ALIGNAS(16) matrix4
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr matrix4::matrix4(vec3f const& x, vec3f const& y, vec3f const& z) noexcept
-{
-    set_xvec(x);
-    set_yvec(y);
-    set_zvec(z);
-}
+XR_CONSTEXPR_CPP14_OR_INLINE matrix4::matrix4() XR_NOEXCEPT
+    : m11(1.0f), m12(0.0f), m13(0.0f), m14(0.0f)
+    , m21(0.0f), m22(1.0f), m23(0.0f), m24(0.0f)
+    , m31(0.0f), m32(0.0f), m33(1.0f), m34(0.0f)
+    , m41(0.0f), m42(0.0f), m43(0.0f), m44(1.0f)
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline matrix4::matrix4(float const* m) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE matrix4::matrix4(vec3f const& x, vec3f const& y, vec3f const& z) XR_NOEXCEPT
+    : m11(x.x), m12(x.y), m13(x.z), m14(0.0f)
+    , m21(y.x), m22(y.y), m23(y.z), m24(0.0f)
+    , m31(z.x), m32(z.y), m33(z.z), m34(0.0f)
+    , m41(0.0f), m42(0.0f), m43(0.0f), m44(1.0f)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline matrix4::matrix4(float const* m, size_t count) XR_NOEXCEPT
 {
+    XR_DEBUG_ASSERTION_MSG(count >= 16, "Invalid matrix length");
     m11 = m[0]; m12 = m[1]; m13 = m[2]; m14 = m[3];
     m21 = m[4]; m22 = m[5]; m23 = m[6]; m24 = m[7];
     m31 = m[8]; m32 = m[9]; m33 = m[10]; m34 = m[11];
@@ -121,22 +134,31 @@ inline matrix4::matrix4(float const* m) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr matrix4::matrix4(
-    float r11, float r12, float r13, float r14,
-    float r21, float r22, float r23, float r24,
-    float r31, float r32, float r33, float r34,
-    float r41, float r42, float r43, float r44) noexcept
-{
-    m11 = r11; m12 = r12; m13 = r13; m14 = r14;
-    m21 = r21; m22 = r22; m23 = r23; m24 = r24;
-    m31 = r31; m32 = r32; m33 = r33; m34 = r34;
-    m41 = r41; m42 = r42; m43 = r43; m44 = r44;
-}
+XR_CONSTEXPR_CPP14_OR_INLINE matrix4::matrix4(float const m[16]) XR_NOEXCEPT
+    : m11(m[0]), m12(m[1]), m13(m[2]), m14(m[3])
+    , m21(m[4]), m22(m[5]), m23(m[6]), m24(m[7])
+    , m31(m[8]), m32(m[9]), m33(m[10]), m34(m[11])
+    , m41(m[12]), m42(m[13]), m43(m[14]), m44(m[15])
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline float matrix4::operator [](int index) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE matrix4::matrix4(
+    float const r11, float const r12, float const r13, float const r14,
+    float const r21, float const r22, float const r23, float const r24,
+    float const r31, float const r32, float const r33, float const r34,
+    float const r41, float const r42, float const r43, float const r44) XR_NOEXCEPT
+    : m11(r11), m12(r12), m13(r13), m14(r14)
+    , m21(r21), m22(r22), m23(r23), m24(r24)
+    , m31(r31), m32(r32), m33(r33), m34(r34)
+    , m41(r41), m42(r42), m43(r43), m44(r44)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline float matrix4::operator [](int index) const XR_NOEXCEPT
 {
     return (&m11)[index];
 }
@@ -144,7 +166,7 @@ inline float matrix4::operator [](int index) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline float& matrix4::operator [](int index) noexcept
+inline float& matrix4::operator [](int index) XR_NOEXCEPT
 {
     return (&m11)[index];
 }
@@ -152,45 +174,44 @@ inline float& matrix4::operator [](int index) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec4f matrix4::operator *(const vec4f& rhs) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec4f matrix4::operator *(const vec4f& rhs) const XR_NOEXCEPT
 {
-    return vec4f
-    {
+    return vec4f(
         m11 * rhs.x + m21 * rhs.y + m31 * rhs.z + m41 * rhs.w,
         m12 * rhs.x + m22 * rhs.y + m32 * rhs.z + m42 * rhs.w,
         m13 * rhs.x + m23 * rhs.y + m33 * rhs.z + m43 * rhs.w,
         m14 * rhs.x + m24 * rhs.y + m34 * rhs.z + m44 * rhs.w
-    };
+    );
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f matrix4::getZVector() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f matrix4::getZVector() const XR_NOEXCEPT
 {
-    return vec3f { m31, m32, m33 };
+    return vec3f(m31, m32, m33);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f matrix4::getYVector() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f matrix4::getYVector() const XR_NOEXCEPT
 {
-    return vec3f { m21, m22, m23 };
+    return vec3f(m21, m22, m23);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f matrix4::getXVector() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f matrix4::getXVector() const XR_NOEXCEPT
 {
-    return vec3f { m11, m12, m13 };
+    return vec3f(m11, m12, m13);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::set_xvec(vec3f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::set_xvec(vec3f const& v) XR_NOEXCEPT
 {
     m11 = v.x; m12 = v.y; m13 = v.z;
 }
@@ -198,7 +219,7 @@ constexpr void matrix4::set_xvec(vec3f const& v) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::set_yvec(vec3f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::set_yvec(vec3f const& v) XR_NOEXCEPT
 {
     m21 = v.x; m22 = v.y; m23 = v.z;
 }
@@ -206,7 +227,7 @@ constexpr void matrix4::set_yvec(vec3f const& v) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::set_zvec(vec3f const& v) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::set_zvec(vec3f const& v) XR_NOEXCEPT
 {
     m31 = v.x; m32 = v.y; m33 = v.z;
 }
@@ -214,7 +235,7 @@ constexpr void matrix4::set_zvec(vec3f const& v) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr float matrix4::determinant() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE float matrix4::determinant() const XR_NOEXCEPT
 {
     return
         m14 * m23 * m32 * m41 - m13 * m24 * m32 * m41 - m14 * m22 * m33 * m41 + m12 * m24 * m33 * m41 +
@@ -228,7 +249,7 @@ constexpr float matrix4::determinant() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline matrix4 matrix4::inverted() const noexcept
+inline matrix4 matrix4::inverted() const XR_NOEXCEPT
 {
     matrix4 tmp = *this;
     tmp.inverse();
@@ -238,7 +259,7 @@ inline matrix4 matrix4::inverted() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::inverse() noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::inverse() XR_NOEXCEPT
 {
     matrix4 mtx;
     float d = determinant();
@@ -268,7 +289,7 @@ constexpr void matrix4::inverse() noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::fast_inverse() noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::fast_inverse() XR_NOEXCEPT
 {
     float tmp = m21;
     m21 = m12;
@@ -293,9 +314,9 @@ constexpr void matrix4::fast_inverse() noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr matrix4 matrix4::fast_inverted() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE matrix4 matrix4::fast_inverted() const XR_NOEXCEPT
 {
-    matrix4 ret {};
+    matrix4 ret;
 
     ret.m11 = m11;
     ret.m22 = m22;
@@ -328,7 +349,7 @@ constexpr matrix4 matrix4::fast_inverted() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::copy3x3(const matrix4& mtx) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::copy3x3(const matrix4& mtx) XR_NOEXCEPT
 {
     m11 = mtx.m11;
     m12 = mtx.m12;
@@ -346,7 +367,7 @@ constexpr void matrix4::copy3x3(const matrix4& mtx) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::translate(vec3f const& t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::translate(vec3f const& t) XR_NOEXCEPT
 {
     m41 += t.x;
     m42 += t.y;
@@ -356,7 +377,7 @@ constexpr void matrix4::translate(vec3f const& t) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::translate(float x, float y, float z) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::translate(float x, float y, float z) XR_NOEXCEPT
 {
     m41 += x;
     m42 += y;
@@ -366,7 +387,7 @@ constexpr void matrix4::translate(float x, float y, float z) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::set_translation(vec3f const& t) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::set_translation(vec3f const& t) XR_NOEXCEPT
 {
     m41 = t.x;
     m42 = t.y;
@@ -376,7 +397,7 @@ constexpr void matrix4::set_translation(vec3f const& t) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr void matrix4::get_translation(vec3f& pos) const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE void matrix4::get_translation(vec3f& pos) const XR_NOEXCEPT
 {
     pos.set(m41, m42, m43);
 }
@@ -384,7 +405,7 @@ constexpr void matrix4::get_translation(vec3f& pos) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr vec3f matrix4::get_translation() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE vec3f matrix4::get_translation() const XR_NOEXCEPT
 {
     return vec3f(m41, m42, m43);
 }
@@ -392,9 +413,10 @@ constexpr vec3f matrix4::get_translation() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline float* matrix4::to_float_ptr() noexcept
+inline float* matrix4::to_float_ptr() XR_NOEXCEPT
 {
     return &m11;
 }
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
+//-----------------------------------------------------------------------------------------------------------

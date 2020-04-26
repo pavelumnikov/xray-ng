@@ -5,8 +5,7 @@
 
 #include "corlib/types.h"
 
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 template<typename F>
 class scoped_exit
@@ -39,4 +38,4 @@ inline scoped_exit<F>::~scoped_exit()
     m_fn();
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)

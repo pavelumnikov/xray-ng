@@ -10,13 +10,12 @@
 #include "../os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-lightweight_event::lightweight_event(bool const initial_state) noexcept
+lightweight_event::lightweight_event(bool const initial_state) XR_NOEXCEPT
     : m_signaled { initial_state }
     , m_handle {}
 {
@@ -26,7 +25,7 @@ lightweight_event::lightweight_event(bool const initial_state) noexcept
 /**
 */
 void
-lightweight_event::set(bool const value) noexcept
+lightweight_event::set(bool const value) XR_NOEXCEPT
 {
     XR_DEBUG_ASSERTION(m_handle);
 
@@ -40,7 +39,7 @@ lightweight_event::set(bool const value) noexcept
 /**
 */
 event_wait_result
-lightweight_event::wait_timeout(sys::tick timeout) noexcept
+lightweight_event::wait_timeout(sys::tick timeout) XR_NOEXCEPT
 {
     XR_DEBUG_ASSERTION(this->m_handle);
 
@@ -59,11 +58,11 @@ lightweight_event::wait_timeout(sys::tick timeout) noexcept
 /**
 */
 signalling_bool
-lightweight_event::peek() const noexcept
+lightweight_event::peek() const XR_NOEXCEPT
 {
     XR_DEBUG_ASSERTION(m_handle);
     return threading::atomic_fetch_acq(m_signaled);
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

@@ -4,8 +4,7 @@
 #include "corlib/sys/exit_handler.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 using exit_handlers_container = utils::intrusive_list_node<exit_handler>;
 static exit_handlers_container s_exit_handlers {};
@@ -45,5 +44,5 @@ bool call_exit_handlers()
     return (handlers_done > 0);
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

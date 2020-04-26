@@ -4,11 +4,10 @@
 #pragma once
 
 #include "corlib/utils/details/char_traits.h"
-#include "corlib/utils/details/basic_string_view.h"
+#include "EASTL/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename T>
@@ -17,27 +16,27 @@ class basic_buffer_string
     static_assert(is_string_v<T>, "input type must be string");
 
 public:
-    using this_type = basic_buffer_string<T>;
-    using view_type = basic_string_view<T>;
-    using value_type = typename char_traits<T>::char_type;
-    using pointer = typename char_traits<T>::pointer;
-    using const_pointer = typename char_traits<T>::const_pointer;
-    using difference_type = typename char_traits<T>::off_type;
-    using size_type = typename char_traits<T>::size_type;
-    using iterator = pointer;
-    using const_iterator = const_pointer;
-    using reverse_iterator = eastl::reverse_iterator<pointer>;
-    using const_reverse_iterator = eastl::reverse_iterator<const_pointer>;
+    typedef basic_buffer_string<T> this_type;
+    typedef eastl::basic_string_view<T> view_type;
+    typedef typename char_traits<T>::value_type value_type;
+    typedef typename char_traits<T>::pointer pointer;
+    typedef typename char_traits<T>::const_pointer const_pointer;
+    typedef typename char_traits<T>::off_type difference_type;
+    typedef typename char_traits<T>::size_type size_type;
+    typedef pointer iterator;
+    typedef const_pointer const_iterator;
+    typedef eastl::reverse_iterator<pointer> reverse_iterator;
+    typedef eastl::reverse_iterator<const_pointer> const_reverse_iterator;
 
-    static constexpr size_type npos = size_type(-1);
+    XR_CONSTEXPR_OR_ENUM(size_type, npos, -1);
 
-    constexpr basic_buffer_string(pointer buffer, size_type size);
-    constexpr basic_buffer_string(pointer buffer, size_type size, size_type max_size);
-    constexpr basic_buffer_string(iterator begin, iterator end);
-    constexpr basic_buffer_string(iterator begin, iterator max_end, iterator current_end);
-    template<size_t N> constexpr basic_buffer_string(value_type(&arr)[N]);
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(pointer buffer, size_type size);
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(pointer buffer, size_type size, size_type max_size);
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(iterator begin, iterator end);
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(iterator begin, iterator max_end, iterator current_end);
+    template<size_t N> XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(value_type(&arr)[N]);
 
-    constexpr basic_buffer_string(basic_buffer_string&& ref);
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string(basic_buffer_string&& ref);
     basic_buffer_string& operator=(basic_buffer_string&& ref);
 
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(basic_buffer_string);
@@ -46,29 +45,29 @@ public:
 
     // Iterators.
 
-    iterator begin() noexcept;
-    const_iterator begin() const noexcept;
-    const_iterator cbegin() const noexcept;
+    iterator begin() XR_NOEXCEPT;
+    const_iterator begin() const XR_NOEXCEPT;
+    const_iterator cbegin() const XR_NOEXCEPT;
 
-    iterator end() noexcept;
-    const_iterator end() const noexcept;
-    const_iterator cend() const noexcept;
+    iterator end() XR_NOEXCEPT;
+    const_iterator end() const XR_NOEXCEPT;
+    const_iterator cend() const XR_NOEXCEPT;
 
-    reverse_iterator rbegin() noexcept;
-    const_reverse_iterator rbegin() const noexcept;
-    const_reverse_iterator crbegin() const noexcept;
+    reverse_iterator rbegin() XR_NOEXCEPT;
+    const_reverse_iterator rbegin() const XR_NOEXCEPT;
+    const_reverse_iterator crbegin() const XR_NOEXCEPT;
 
-    reverse_iterator rend() noexcept;
-    const_reverse_iterator rend() const noexcept;
-    const_reverse_iterator crend() const noexcept;
+    reverse_iterator rend() XR_NOEXCEPT;
+    const_reverse_iterator rend() const XR_NOEXCEPT;
+    const_reverse_iterator crend() const XR_NOEXCEPT;
 
     // Size-related functionality
 
-    bool empty() const noexcept;
-    size_type size() const noexcept;
-    size_type length() const noexcept;
-    size_type max_size() const noexcept;
-    size_type capacity() const noexcept;
+    bool empty() const XR_NOEXCEPT;
+    size_type size() const XR_NOEXCEPT;
+    size_type length() const XR_NOEXCEPT;
+    size_type max_size() const XR_NOEXCEPT;
+    size_type capacity() const XR_NOEXCEPT;
 
     // Append operations
 
@@ -89,7 +88,7 @@ private:
 /**
 */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type max_size)
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type max_size)
     : m_begin { buffer }
     , m_current { buffer }
     , m_end { buffer + max_size }
@@ -99,7 +98,7 @@ constexpr basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type 
 /**
 */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type size, size_type max_size)
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type size, size_type max_size)
     : m_begin { buffer }
     , m_current { buffer + size }
     , m_end { buffer + max_size }
@@ -109,7 +108,7 @@ constexpr basic_buffer_string<T>::basic_buffer_string(pointer buffer, size_type 
 /**
 */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator end)
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator end)
     : m_begin { begin }
     , m_current { begin }
     , m_end { end }
@@ -119,7 +118,7 @@ constexpr basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator e
 /**
 */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator max_end, iterator current_end)
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator max_end, iterator current_end)
     : m_begin { begin }
     , m_current { current_end }
     , m_end { max_end }
@@ -130,7 +129,7 @@ constexpr basic_buffer_string<T>::basic_buffer_string(iterator begin, iterator m
 */
 template<typename T>
 template<size_t N>
-constexpr basic_buffer_string<T>::basic_buffer_string(value_type(&arr)[N])
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(value_type(&arr)[N])
     : m_begin { arr }
     , m_current { arr }
     , m_end { arr + strlen<T>(arr) }
@@ -138,9 +137,9 @@ constexpr basic_buffer_string<T>::basic_buffer_string(value_type(&arr)[N])
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T>
-constexpr basic_buffer_string<T>::basic_buffer_string(basic_buffer_string&& ref)
+XR_CONSTEXPR_CPP14_OR_INLINE basic_buffer_string<T>::basic_buffer_string(basic_buffer_string&& ref)
     : m_begin { ref.m_begin }
     , m_current { ref.m_current }
     , m_end { ref.m_end }
@@ -150,7 +149,7 @@ constexpr basic_buffer_string<T>::basic_buffer_string(basic_buffer_string&& ref)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T>
 inline basic_buffer_string<T>&
 basic_buffer_string<T>::operator=(basic_buffer_string&& ref)
@@ -165,7 +164,7 @@ basic_buffer_string<T>::operator=(basic_buffer_string&& ref)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T>
 inline basic_buffer_string<T>::operator view_type() const
 {
@@ -174,10 +173,10 @@ inline basic_buffer_string<T>::operator view_type() const
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T>
 inline typename basic_buffer_string<T>::iterator 
-basic_buffer_string<T>::begin() noexcept
+basic_buffer_string<T>::begin() XR_NOEXCEPT
 {
     return m_begin;
 }
@@ -187,7 +186,7 @@ basic_buffer_string<T>::begin() noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_iterator 
-basic_buffer_string<T>::begin() const noexcept
+basic_buffer_string<T>::begin() const XR_NOEXCEPT
 {
     return m_begin;
 }
@@ -197,7 +196,7 @@ basic_buffer_string<T>::begin() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_iterator 
-basic_buffer_string<T>::cbegin() const noexcept
+basic_buffer_string<T>::cbegin() const XR_NOEXCEPT
 {
     return m_begin;
 }
@@ -207,7 +206,7 @@ basic_buffer_string<T>::cbegin() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::iterator 
-basic_buffer_string<T>::end() noexcept
+basic_buffer_string<T>::end() XR_NOEXCEPT
 {
     return m_end;
 }
@@ -217,7 +216,7 @@ basic_buffer_string<T>::end() noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_iterator
-basic_buffer_string<T>::end() const noexcept
+basic_buffer_string<T>::end() const XR_NOEXCEPT
 {
     return m_end;
 }
@@ -227,7 +226,7 @@ basic_buffer_string<T>::end() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_iterator 
-basic_buffer_string<T>::cend() const noexcept
+basic_buffer_string<T>::cend() const XR_NOEXCEPT
 {
     return m_end;
 }
@@ -237,7 +236,7 @@ basic_buffer_string<T>::cend() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::reverse_iterator 
-basic_buffer_string<T>::rbegin() noexcept
+basic_buffer_string<T>::rbegin() XR_NOEXCEPT
 {
     return reverse_iterator(m_end);
 }
@@ -247,7 +246,7 @@ basic_buffer_string<T>::rbegin() noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_reverse_iterator 
-basic_buffer_string<T>::rbegin() const noexcept
+basic_buffer_string<T>::rbegin() const XR_NOEXCEPT
 {
     return const_reverse_iterator(m_end);
 }
@@ -257,7 +256,7 @@ basic_buffer_string<T>::rbegin() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_reverse_iterator
-basic_buffer_string<T>::crbegin() const noexcept
+basic_buffer_string<T>::crbegin() const XR_NOEXCEPT
 {
     return const_reverse_iterator(m_end);
 }
@@ -267,7 +266,7 @@ basic_buffer_string<T>::crbegin() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::reverse_iterator 
-basic_buffer_string<T>::rend() noexcept
+basic_buffer_string<T>::rend() XR_NOEXCEPT
 {
     return reverse_iterator(m_begin);
 }
@@ -277,7 +276,7 @@ basic_buffer_string<T>::rend() noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_reverse_iterator
-basic_buffer_string<T>::rend() const noexcept
+basic_buffer_string<T>::rend() const XR_NOEXCEPT
 {
     return const_reverse_iterator(m_begin);
 }
@@ -287,7 +286,7 @@ basic_buffer_string<T>::rend() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::const_reverse_iterator
-basic_buffer_string<T>::crend() const noexcept
+basic_buffer_string<T>::crend() const XR_NOEXCEPT
 {
     return const_reverse_iterator(m_begin);
 }
@@ -297,7 +296,7 @@ basic_buffer_string<T>::crend() const noexcept
 */
 template<typename T>
 inline bool
-basic_buffer_string<T>::empty() const noexcept
+basic_buffer_string<T>::empty() const XR_NOEXCEPT
 {
     return m_begin == m_current;
 }
@@ -307,7 +306,7 @@ basic_buffer_string<T>::empty() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::size_type 
-basic_buffer_string<T>::size() const noexcept
+basic_buffer_string<T>::size() const XR_NOEXCEPT
 {
     return static_cast<size_t>(m_current - m_begin);
 }
@@ -317,7 +316,7 @@ basic_buffer_string<T>::size() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::size_type 
-basic_buffer_string<T>::length() const noexcept
+basic_buffer_string<T>::length() const XR_NOEXCEPT
 {
     return size();
 }
@@ -327,7 +326,7 @@ basic_buffer_string<T>::length() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::size_type 
-basic_buffer_string<T>::max_size() const noexcept
+basic_buffer_string<T>::max_size() const XR_NOEXCEPT
 {
     return static_cast<size_t>(m_end - m_begin);
 }
@@ -337,7 +336,7 @@ basic_buffer_string<T>::max_size() const noexcept
 */
 template<typename T>
 inline typename basic_buffer_string<T>::size_type 
-basic_buffer_string<T>::capacity() const noexcept
+basic_buffer_string<T>::capacity() const XR_NOEXCEPT
 {
     return max_size();
 }
@@ -408,5 +407,5 @@ basic_buffer_string<T>::reset_this()
     m_end = nullptr;
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

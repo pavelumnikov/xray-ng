@@ -7,12 +7,11 @@
 #include "EASTL/deque.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::std
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
-template<typename Type>
-using deque = eastl::deque<memory::proxy::eastl_proxy_allocator, Type>;
+template<typename T>
+using deque = ::eastl::deque<memory::proxy::eastl_proxy_allocator, T>;
 
-} // namespace xr::utils::std
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include "corlib/types.h"
 #include "EASTL/utility.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -32,6 +32,7 @@ cswap(eastl::pair<T, U> & a, eastl::pair<T, U> & b)
     cswap(a.second, b.second);
 }
 
+#if XR_COMPILER_SUPPORTS_CPP14
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
@@ -55,6 +56,7 @@ cswap(eastl::tuple<Tys...> &a, eastl::tuple<Tys...> &b)
 {
     cswap(a, b, eastl::make_index_sequence<sizeof...(Tys)>());
 }
+#endif // #if XR_COMPILER_SUPPORTS_CPP14
 
-} // namespace xr::utils::details
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

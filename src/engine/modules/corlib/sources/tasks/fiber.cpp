@@ -16,8 +16,7 @@
 #endif
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 namespace
@@ -112,7 +111,7 @@ fiber::reset(fiber_proc_t proc, pvoid arg)
 /**
  */
 void
-fiber::cleanup() noexcept
+fiber::cleanup() XR_NOEXCEPT
 {
     if(m_valid)
     {
@@ -127,5 +126,5 @@ fiber::cleanup() noexcept
     }
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

@@ -5,8 +5,7 @@
 #include "corlib/memory/allocator_macro.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -190,5 +189,5 @@ void thread_context::notify_thread_idle_finished(uint32_t threadIndex)
 
 #endif // XR_INSTRUMENTED_BUILD
 
-} // namespace xr::tasks::details
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

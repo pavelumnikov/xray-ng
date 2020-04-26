@@ -3,12 +3,11 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 #include "EASTL/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 // Helper structure to convert unsigned types for templates into signed when using
@@ -130,6 +129,81 @@ flip_sign(unsigned int const x)
     return x ^ sign_bit;
 }
 
+//-----------------------------------------------------------------------------------------------------------
+template <typename T> struct make_unsigned
+{
+    typedef T type;
+};
 
-} // namespace xr::utils
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<signed char>
+{
+    typedef unsigned char type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<const signed char>
+{
+    typedef const unsigned char type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<signed short>
+{
+    typedef unsigned short type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<const signed short>
+{
+    typedef const unsigned short type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<signed int>
+{
+    typedef unsigned int type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<const signed int>
+{
+    typedef const unsigned int type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<signed long>
+{
+    typedef unsigned long type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<const signed long>
+{
+    typedef const unsigned long type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<signed long long>
+{
+    typedef unsigned long long type;
+};
+template <> struct make_unsigned<const signed long long>
+{
+    typedef const unsigned long long type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<char>
+{
+    typedef unsigned char type;
+};
+
+//-----------------------------------------------------------------------------------------------------------
+template <> struct make_unsigned<const char>
+{
+    typedef unsigned char type;
+};
+
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

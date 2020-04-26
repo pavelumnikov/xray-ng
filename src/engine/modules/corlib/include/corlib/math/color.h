@@ -6,14 +6,15 @@
 #include "corlib/math/mathlib.h"
 #include "EASTL/algorithm.h"
 
-namespace xr::math
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, math)
+
 // maps unsigned 8 bits/channel to dword color
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
     return ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
@@ -22,7 +23,7 @@ color_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_rgba(uint32_t r, uint32_t g, uint32_t b, uint32_t a)
 {
     return color_argb(a, r, g, b);
@@ -44,7 +45,7 @@ color_argb_f(float a, float r, float g, float b)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_rgba_f(float r, float g, float b, float a)
 {
     return color_argb_f(a, r, g, b);
@@ -53,7 +54,7 @@ color_rgba_f(float r, float g, float b, float a)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_xrgb(uint32_t r, uint32_t g, uint32_t b)
 {
     return color_argb(0xff, r, g, b);
@@ -62,7 +63,7 @@ color_xrgb(uint32_t r, uint32_t g, uint32_t b)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_get_R(uint32_t rgba)
 {
     return (((rgba) >> 16) & 0xff);
@@ -71,7 +72,7 @@ color_get_R(uint32_t rgba)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_get_G(uint32_t rgba)
 {
     return (((rgba) >> 8) & 0xff);
@@ -80,7 +81,7 @@ color_get_G(uint32_t rgba)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 color_get_B(uint32_t rgba)
 {
     return ((rgba) & 0xff);
@@ -98,7 +99,7 @@ color_get_A(uint32_t rgba)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 subst_alpha(uint32_t rgba, uint32_t a)
 {
     return rgba & ~color_rgba(0, 0, 0, 0xff) | color_rgba(0, 0, 0, a);
@@ -107,7 +108,7 @@ subst_alpha(uint32_t rgba, uint32_t a)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 bgr_to_rgb(uint32_t bgr)
 {
     return color_rgba(color_get_B(bgr), color_get_G(bgr), color_get_R(bgr), 0);
@@ -116,7 +117,7 @@ bgr_to_rgb(uint32_t bgr)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-constexpr uint32_t
+XR_CONSTEXPR_CPP14_OR_INLINE uint32_t
 rgb_to_bgr(uint32_t rgb)
 {
     return bgr_to_rgb(rgb);
@@ -126,8 +127,8 @@ rgb_to_bgr(uint32_t rgb)
 template<typename T>
 struct base_color
 {
-    using value_type = T;
-    using this_type = base_color<value_type>;
+    typedef T value_type;
+    typedef base_color<value_type> this_type;
     value_type r, g, b, a;
 
     this_type& set(uint32_t dw);
@@ -179,8 +180,8 @@ struct base_color
     bool similar_rgb(this_type const& v, value_type E = EPS_L) const;
 }; // struct base_color<T>
 
-using Fcolor = base_color<float>;
-using Dcolor = base_color<double>;
+typedef base_color<float> Fcolor;
+typedef base_color<double> Dcolor;
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -586,5 +587,5 @@ base_color<T>::similar_rgb(this_type const& v,
     return _abs(r - v.r) < E && _abs(g - v.g) < E && _abs(b - v.b) < E;
 };
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
 //-----------------------------------------------------------------------------------------------------------

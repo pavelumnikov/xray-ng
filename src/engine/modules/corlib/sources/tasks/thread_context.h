@@ -24,8 +24,7 @@
 
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 // forward declarations
 class fiber_context;
@@ -41,12 +40,11 @@ enum class task_execute_state
 }; // enum class task_execute_state
 #endif
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 constexpr size_t max_priority_count = 3;
 constexpr size_t max_task_buffer_capacity = 4096;
@@ -137,5 +135,5 @@ struct thread_context
 
 }; // struct thread_context
 
-} // namespace xr::tasks::details
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

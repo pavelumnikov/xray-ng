@@ -8,14 +8,20 @@
 
 using namespace xr;
 
-constexpr size_t commit_size = 64_kb;
-constexpr size_t reserve_size = 512_kb;
+XR_CONSTEXPR_CPP14_OR_CONST size_t commit_size = XR_KILOBYTES_TO_BYTES(64);
+XR_CONSTEXPR_CPP14_OR_CONST size_t reserve_size = XR_KILOBYTES_TO_BYTES(512);
 
 struct single_fiber_arg
 {
-    threading::atomic_uint32 counter { 0 };
+    threading::atomic_uint32 counter;
     tasks::fiber main_fiber;
     tasks::fiber other_fiber;
+
+    single_fiber_arg()
+        : counter(0)
+        , main_fiber()
+        , other_fiber()
+    {}
 };
 
 void single_fiber_start(void* arg)
@@ -57,6 +63,17 @@ struct multiple_fiber_arg
     tasks::fiber fourth_fiber;
     tasks::fiber fifth_fiber;
     tasks::fiber sixth_fiber;
+
+    multiple_fiber_arg()
+        : counter(0)
+        , main_fiber()
+        , first_fiber()
+        , second_fiber()
+        , third_fiber()
+        , fourth_fiber()
+        , fifth_fiber()
+        , sixth_fiber()
+    {}
 };
 
 void first_level_fiber_start(void* arg)

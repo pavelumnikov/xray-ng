@@ -6,8 +6,7 @@
 #include "corlib/utils/type_conversions.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::math
-{
+XR_NAMESPACE_BEGIN(xr, math)
 
 // Source: http://msdn.microsoft.com/en-us/library/system.windows.media.colors(v=vs.110).aspx
 // Image:  http://i.msdn.microsoft.com/dynimg/IC24340.png
@@ -175,5 +174,5 @@ convert_to_abgr(color_table const col)
     return result;
 }
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
 //-----------------------------------------------------------------------------------------------------------

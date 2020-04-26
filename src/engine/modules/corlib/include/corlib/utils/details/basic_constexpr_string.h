@@ -7,101 +7,109 @@
 #include "EASTL/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename T, size_t N>
 class basic_constexpr_string final
 {
 public:
-    using this_type = basic_constexpr_string;
-    using value_type = T;
-    using pointer = eastl::add_pointer_t<T>;
-    using const_pointer = eastl::add_pointer_t<eastl::add_const_t<T>>;
-    using reference = eastl::add_lvalue_reference_t<T>;
-    using const_reference = eastl::add_lvalue_reference_t<eastl::add_const_t<T>>;
-    using iterator = pointer;
-    using const_iterator = const_pointer;
-    using size_type = size_t;
-    using difference_type = eastl::make_signed<size_type>::type;
+    typedef basic_constexpr_string this_type;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T const* const_pointer;
+    typedef T& reference;
+    typedef T const& const_reference;
+    typedef pointer iterator;
+    typedef const_pointer const_iterator;
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
 
-    static constexpr size_type npos = size_type(-1);
+    XR_CONSTEXPR_OR_ENUM(size_type, npos, -1);
 
-    constexpr basic_constexpr_string() = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string() XR_NOEXCEPT;
 
     template<size_t M>
-    explicit constexpr basic_constexpr_string(value_type const(&str)[M]) noexcept;
+    explicit XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(value_type const(&str)[M]) XR_NOEXCEPT;
 
-    constexpr basic_constexpr_string(this_type const& rhs) noexcept = default;
-    constexpr basic_constexpr_string(this_type&& rhs) noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(this_type const& rhs) XR_NOEXCEPT = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(this_type&& rhs) XR_NOEXCEPT = default;
 
-    constexpr this_type& operator=(this_type const& rhs) noexcept = default;
-    constexpr this_type& operator=(this_type&& rhs) noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE this_type& operator=(this_type const& rhs) XR_NOEXCEPT = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE this_type& operator=(this_type&& rhs) XR_NOEXCEPT = default;
 
-    constexpr size_type size() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE size_type size() const XR_NOEXCEPT;
 
-    constexpr const_iterator begin() const noexcept;
-    constexpr const_iterator end() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator begin() const XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator end() const XR_NOEXCEPT;
 
-    constexpr const_pointer c_str() const noexcept;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_pointer c_str() const XR_NOEXCEPT;
 
 private:
-    value_type m_str[N] {};
+    value_type m_str[N];
 }; // class basic_constexpr_string
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
+template<typename T, size_t N>
+XR_CONSTEXPR_CPP14_OR_INLINE
+basic_constexpr_string<T, N>::basic_constexpr_string() XR_NOEXCEPT
+    : m_str()
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 template<typename T, size_t N>
 template<size_t M>
-constexpr 
-basic_constexpr_string<T, N>::basic_constexpr_string(value_type const(&str)[M]) noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE 
+basic_constexpr_string<T, N>::basic_constexpr_string(value_type const(&str)[M]) XR_NOEXCEPT
 {
-    static_assert(M <= N, "input string");
+    XR_STATIC_ASSERT(M <= N, "input string");
     for(size_t i = 0; i < M; ++i)
         m_str[i] = str[i];
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T, size_t N>
-constexpr typename basic_constexpr_string<T, N>::const_pointer
-basic_constexpr_string<T, N>::c_str() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_pointer
+basic_constexpr_string<T, N>::c_str() const XR_NOEXCEPT
 {
     return m_str;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T, size_t N>
-constexpr typename basic_constexpr_string<T, N>::size_type
-basic_constexpr_string<T, N>::size() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::size_type
+basic_constexpr_string<T, N>::size() const XR_NOEXCEPT
 {
     return N;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T, size_t N>
-constexpr typename basic_constexpr_string<T, N>::const_iterator 
-basic_constexpr_string<T, N>::begin() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_iterator 
+basic_constexpr_string<T, N>::begin() const XR_NOEXCEPT
 {
     return m_str;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T, size_t N>
-constexpr typename basic_constexpr_string<T, N>::const_iterator 
-basic_constexpr_string<T, N>::end() const noexcept
+XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_iterator 
+basic_constexpr_string<T, N>::end() const XR_NOEXCEPT
 {
     return (m_str + N);
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

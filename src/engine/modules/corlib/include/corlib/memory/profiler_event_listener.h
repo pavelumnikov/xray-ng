@@ -6,8 +6,7 @@
 #include "corlib/utils/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL base_profiler_event_listener
@@ -24,4 +23,5 @@ public:
     virtual void on_free_done(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) = 0;
 }; // class base_profiler_event_listener
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
+//-----------------------------------------------------------------------------------------------------------

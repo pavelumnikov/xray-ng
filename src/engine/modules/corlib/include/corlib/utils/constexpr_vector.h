@@ -6,8 +6,7 @@
 #include "corlib/utils/utility.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename T, size_t N>
@@ -38,19 +37,19 @@ public:
 
     // Iterators
 
-    constexpr iterator begin() noexcept;
-    constexpr const_iterator begin() const noexcept;
-    constexpr const_iterator cbegin() const noexcept;
-    constexpr iterator end() noexcept;
-    constexpr const_iterator end() const noexcept;
-    constexpr const_iterator cend() const noexcept;
+    constexpr iterator begin() XR_NOEXCEPT;
+    constexpr const_iterator begin() const XR_NOEXCEPT;
+    constexpr const_iterator cbegin() const XR_NOEXCEPT;
+    constexpr iterator end() XR_NOEXCEPT;
+    constexpr const_iterator end() const XR_NOEXCEPT;
+    constexpr const_iterator cend() const XR_NOEXCEPT;
 
-    constexpr reverse_iterator rbegin() noexcept;
-    constexpr const_reverse_iterator rbegin() const noexcept;
-    constexpr const_reverse_iterator crbegin() const noexcept;
-    constexpr reverse_iterator rend() noexcept;
-    constexpr const_reverse_iterator rend() const noexcept;
-    constexpr const_reverse_iterator crend() const noexcept;
+    constexpr reverse_iterator rbegin() XR_NOEXCEPT;
+    constexpr const_reverse_iterator rbegin() const XR_NOEXCEPT;
+    constexpr const_reverse_iterator crbegin() const XR_NOEXCEPT;
+    constexpr reverse_iterator rend() XR_NOEXCEPT;
+    constexpr const_reverse_iterator rend() const XR_NOEXCEPT;
+    constexpr const_reverse_iterator crend() const XR_NOEXCEPT;
 
     // Capacity
 
@@ -99,7 +98,7 @@ constexpr_vector<T, N>::constexpr_vector(size_type count, const_reference value)
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::iterator
-constexpr_vector<T, N>::begin() noexcept
+constexpr_vector<T, N>::begin() XR_NOEXCEPT
 {
     return this->m_data;
 }
@@ -109,7 +108,7 @@ constexpr_vector<T, N>::begin() noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_iterator
-constexpr_vector<T, N>::begin() const noexcept
+constexpr_vector<T, N>::begin() const XR_NOEXCEPT
 {
     return this->m_data;
 }
@@ -119,7 +118,7 @@ constexpr_vector<T, N>::begin() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_iterator
-constexpr_vector<T, N>::cbegin() const noexcept
+constexpr_vector<T, N>::cbegin() const XR_NOEXCEPT
 {
     return this->m_data;
 }
@@ -129,7 +128,7 @@ constexpr_vector<T, N>::cbegin() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::iterator
-constexpr_vector<T, N>::end() noexcept
+constexpr_vector<T, N>::end() XR_NOEXCEPT
 {
     return this->m_data + this->m_size;
 }
@@ -139,7 +138,7 @@ constexpr_vector<T, N>::end() noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_iterator
-constexpr_vector<T, N>::end() const noexcept
+constexpr_vector<T, N>::end() const XR_NOEXCEPT
 {
     return this->m_data + this->m_size;
 }
@@ -149,7 +148,7 @@ constexpr_vector<T, N>::end() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_iterator
-constexpr_vector<T, N>::cend() const noexcept
+constexpr_vector<T, N>::cend() const XR_NOEXCEPT
 {
     return this->m_data + this->m_size;
 }
@@ -159,7 +158,7 @@ constexpr_vector<T, N>::cend() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::reverse_iterator
-constexpr_vector<T, N>::rbegin() noexcept
+constexpr_vector<T, N>::rbegin() XR_NOEXCEPT
 {
     return reverse_iterator(end());
 }
@@ -169,7 +168,7 @@ constexpr_vector<T, N>::rbegin() noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_reverse_iterator
-constexpr_vector<T, N>::rbegin() const noexcept
+constexpr_vector<T, N>::rbegin() const XR_NOEXCEPT
 {
     return const_reverse_iterator(end());
 }
@@ -179,7 +178,7 @@ constexpr_vector<T, N>::rbegin() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_reverse_iterator
-constexpr_vector<T, N>::crbegin() const noexcept
+constexpr_vector<T, N>::crbegin() const XR_NOEXCEPT
 {
     return const_reverse_iterator(end());
 }
@@ -189,7 +188,7 @@ constexpr_vector<T, N>::crbegin() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::reverse_iterator
-constexpr_vector<T, N>::rend() noexcept
+constexpr_vector<T, N>::rend() XR_NOEXCEPT
 {
     return reverse_iterator(begin());
 }
@@ -199,7 +198,7 @@ constexpr_vector<T, N>::rend() noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_reverse_iterator
-constexpr_vector<T, N>::rend() const noexcept
+constexpr_vector<T, N>::rend() const XR_NOEXCEPT
 {
     return const_reverse_iterator(begin());
 }
@@ -209,7 +208,7 @@ constexpr_vector<T, N>::rend() const noexcept
 */
 template<typename T, size_t N>
 constexpr typename constexpr_vector<T, N>::const_reverse_iterator
-constexpr_vector<T, N>::crend() const noexcept
+constexpr_vector<T, N>::crend() const XR_NOEXCEPT
 {
     return const_reverse_iterator(begin());
 }
@@ -324,5 +323,5 @@ constexpr_vector<T, N>::clear()
     this->m_size = 0;
 }
 
-} // namespace xr
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

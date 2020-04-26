@@ -6,33 +6,32 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename T>
 class intrusive_list_node
 {
 public:
-    using pointer = eastl::add_pointer_t<T>;
-    using reference = eastl::add_lvalue_reference_t<T>;
+    typedef T* pointer;
+    typedef T& reference;
 
-    intrusive_list_node() noexcept;
+    intrusive_list_node() XR_NOEXCEPT;
     ~intrusive_list_node();
 
     XR_DECLARE_DEFAULT_COPY_ASSIGNMENT(intrusive_list_node);
     XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(intrusive_list_node);
 
-    void append_before_this(reference node) noexcept;
-    void append_after_this(reference node) noexcept;
-    void remove_this() noexcept;
+    void append_before_this(reference node) XR_NOEXCEPT;
+    void append_after_this(reference node) XR_NOEXCEPT;
+    void remove_this() XR_NOEXCEPT;
 
-    bool is_head() const noexcept;
-    bool has_next() const noexcept;
-    bool has_prev() const noexcept;
+    bool is_head() const XR_NOEXCEPT;
+    bool has_next() const XR_NOEXCEPT;
+    bool has_prev() const XR_NOEXCEPT;
 
-    reference next() const noexcept;
-    reference prev() const noexcept;
+    reference next() const XR_NOEXCEPT;
+    reference prev() const XR_NOEXCEPT;
 
 private:
     pointer m_next;
@@ -43,9 +42,9 @@ private:
 /**
 */
 template<typename T>
-intrusive_list_node<T>::intrusive_list_node() noexcept
-    : m_next { nullptr }
-    , m_prev { nullptr }
+intrusive_list_node<T>::intrusive_list_node() XR_NOEXCEPT
+    : m_next(nullptr)
+    , m_prev(nullptr)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -54,23 +53,23 @@ intrusive_list_node<T>::intrusive_list_node() noexcept
 template<typename T>
 intrusive_list_node<T>::~intrusive_list_node()
 {
-    this->remove_this();
+    remove_this();
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
-void intrusive_list_node<T>::append_before_this(reference node) noexcept
+void intrusive_list_node<T>::append_before_this(reference node) XR_NOEXCEPT
 {
-    if(this->has_prev()) // change previous node if exists
+    if(has_prev()) // change previous node if exists
     {
-        auto& p = this->prev();
+        auto& p = prev();
         p.m_next = &node;
         node.m_prev = &p;
     }
 
-    this->m_prev = &node;
+    m_prev = &node;
     node.m_next = static_cast<pointer>(this);
 }
 
@@ -78,16 +77,16 @@ void intrusive_list_node<T>::append_before_this(reference node) noexcept
 /**
 */
 template<typename T>
-void intrusive_list_node<T>::append_after_this(reference node) noexcept
+void intrusive_list_node<T>::append_after_this(reference node) XR_NOEXCEPT
 {
-    if(this->has_next()) // change next node if exists
+    if(has_next()) // change next node if exists
     {
-        auto& p = this->next();
+        auto& p = next();
         p.m_prev = &node;
         node.m_next = &p;
     }
 
-    this->m_next = &node;
+    m_next = &node;
     node.m_prev = static_cast<pointer>(this);
 }
 
@@ -95,44 +94,40 @@ void intrusive_list_node<T>::append_after_this(reference node) noexcept
 /**
 */
 template<typename T>
-void intrusive_list_node<T>::remove_this() noexcept
+void intrusive_list_node<T>::remove_this() XR_NOEXCEPT
 {
-    if(this->m_prev)
-    {
-        this->m_prev->m_next = this->m_next;
-    }
+    if(m_prev)
+        m_prev->m_next = m_next;
 
-    if(this->m_next)
-    {
-        this->m_next->m_prev = this->m_prev;
-    }
+    if(m_next)
+        m_next->m_prev = m_prev;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T>
-bool intrusive_list_node<T>::is_head() const noexcept
+bool intrusive_list_node<T>::is_head() const XR_NOEXCEPT
 {
-    return this->m_prev == nullptr;
+    return m_prev == nullptr;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename T>
-bool intrusive_list_node<T>::has_next() const noexcept
+bool intrusive_list_node<T>::has_next() const XR_NOEXCEPT
 {
-    return this->m_next != nullptr;
+    return m_next != nullptr;
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename T>
-bool intrusive_list_node<T>::has_prev() const noexcept
+bool intrusive_list_node<T>::has_prev() const XR_NOEXCEPT
 {
-    return this->m_prev != nullptr;
+    return m_prev != nullptr;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -140,10 +135,10 @@ bool intrusive_list_node<T>::has_prev() const noexcept
 */
 template<typename T>
 typename intrusive_list_node<T>::reference
-intrusive_list_node<T>::next() const noexcept
+intrusive_list_node<T>::next() const XR_NOEXCEPT
 {
-    XR_DEBUG_ASSERTION(this->has_next());
-    return *this->m_next;
+    XR_DEBUG_ASSERTION(has_next());
+    return *m_next;
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -151,12 +146,11 @@ intrusive_list_node<T>::next() const noexcept
 */
 template <typename T>
 typename intrusive_list_node<T>::reference
-intrusive_list_node<T>::prev() const noexcept
+intrusive_list_node<T>::prev() const XR_NOEXCEPT
 {
-    XR_DEBUG_ASSERTION(this->has_prev());
-    return *this->m_prev;
+    XR_DEBUG_ASSERTION(has_prev());
+    return *m_prev;
 }
 
-
-} // namespace xr::utils::containers
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

@@ -6,11 +6,10 @@
 #include "corlib/utils/details/compare_key.h"
 #include "corlib/utils/details/constexpr_quicksort.h"
 #include "corlib/utils/details/constexpr_binarysearch.h"
-#include "corlib/utils/constexpr_array.h"
+#include "EASTL/array.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template <class Key, class Value, size_t N, class Compare = eastl::less<Key>>
@@ -18,8 +17,8 @@ class constexpr_map
 {
     static_assert(N > 0, "map must have at lest one element");
 
-    using container_pair = eastl::pair<Key, Value>;
-    using container_type = constexpr_array<container_pair, N>;
+    using container_pair = pair<Key, Value>;
+    using container_type = eastl::array<container_pair, N>;
     using container_comparer = details::compare_key<Compare>;
 
 public:
@@ -35,45 +34,44 @@ public:
     using pointer = const_pointer;
     using const_iterator = typename container_type::const_iterator;
     using iterator = const_iterator;
-    using const_reverse_iterator =
-        typename container_type::const_reverse_iterator;
+    using const_reverse_iterator = typename container_type::const_reverse_iterator;
     using reverse_iterator = const_reverse_iterator;
-    using equal_range_pair = eastl::pair<const_iterator, const_iterator>;
+    using equal_range_pair = pair<const_iterator, const_iterator>;
 
-    constexpr constexpr_map(container_type items, Compare const &compare);
-    explicit constexpr constexpr_map(container_type items);
-    constexpr constexpr_map(std::initializer_list<value_type> items, Compare const &compare);
-    constexpr constexpr_map(std::initializer_list<value_type> items);
+    XR_CONSTEXPR_CPP14_OR_INLINE constexpr_map(container_type items, Compare const &compare);
+    explicit XR_CONSTEXPR_CPP14_OR_INLINE constexpr_map(container_type items);
+    XR_CONSTEXPR_CPP14_OR_INLINE constexpr_map(std::initializer_list<value_type> items, Compare const &compare);
+    XR_CONSTEXPR_CPP14_OR_INLINE constexpr_map(std::initializer_list<value_type> items);
 
     // Element access
 
-    constexpr mapped_type at(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE mapped_type at(Key const &key) const;
 
     // Iterators
 
-    constexpr const_iterator begin() const;
-    constexpr const_iterator cbegin() const;
-    constexpr const_iterator end() const;
-    constexpr const_iterator cend() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator begin() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator cbegin() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator end() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator cend() const;
 
-    constexpr const_reverse_iterator rbegin() const;
-    constexpr const_reverse_iterator crbegin() const;
-    constexpr const_reverse_iterator rend() const;
-    constexpr const_reverse_iterator crend() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_reverse_iterator rbegin() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_reverse_iterator crbegin() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_reverse_iterator rend() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_reverse_iterator crend() const;
 
     // Capacity
 
-    constexpr bool empty() const;
-    constexpr size_type size() const;
-    constexpr size_type max_size() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE bool empty() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE size_type size() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE size_type max_size() const;
 
     // Lookup
 
-    constexpr size_type count(Key const &key) const;
-    constexpr const_iterator find(Key const &key) const;
-    constexpr equal_range_pair equal_range(Key const &key) const;
-    constexpr const_iterator lower_bound(Key const &key) const;
-    constexpr const_iterator upper_bound(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE size_type count(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator find(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE equal_range_pair equal_range(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator lower_bound(Key const &key) const;
+    XR_CONSTEXPR_CPP14_OR_INLINE const_iterator upper_bound(Key const &key) const;
 
 private:
     container_type m_items;
@@ -84,49 +82,51 @@ private:
 /**
 */
 template <typename T, typename U, size_t N>
-constexpr auto make_constexpr_map(eastl::pair<T, U> const (&items)[N])
+XR_CONSTEXPR_CPP14_OR_INLINE auto make_constexpr_map(pair<T, U> const (&items)[N])
 {
-    return constexpr_map<T, U, N>{ items };
+    return constexpr_map<T, U, N>(items);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename T, typename U, size_t N, typename Comp>
-constexpr auto make_constexpr_map(eastl::pair<T, U> const (&items)[N], Comp const &compare)
+XR_CONSTEXPR_CPP14_OR_INLINE auto make_constexpr_map(pair<T, U> const (&items)[N], Comp const &compare)
 {
-    return constexpr_map<T, U, N, Comp>{ items, compare };
+    return constexpr_map<T, U, N, Comp>(items, compare);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr 
+XR_CONSTEXPR_CPP14_OR_INLINE 
 constexpr_map<Key, Value, N, Compare>::constexpr_map(container_type items, Compare const &compare)
-    : m_comparer { compare }
-    , m_items { algorithms::quicksort_r(items, m_comparer) } {}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-template <typename Key, typename Value, size_t N, typename Compare>
-constexpr 
-constexpr_map<Key, Value, N, Compare>::constexpr_map(container_type items)
-    : constexpr_map { items, Compare {} }
+    : m_comparer(compare)
+    , m_items(quicksort_r(items, m_comparer))
 {}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr 
-constexpr_map<Key, Value, N, Compare>::constexpr_map(::std::initializer_list<value_type> items, 
+XR_CONSTEXPR_CPP14_OR_INLINE 
+constexpr_map<Key, Value, N, Compare>::constexpr_map(container_type items)
+    : m_comparer(Compare())
+    , m_items(quicksort_r(items, m_comparer))
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+template <typename Key, typename Value, size_t N, typename Compare>
+XR_CONSTEXPR_CPP14_OR_INLINE 
+constexpr_map<Key, Value, N, Compare>::constexpr_map(std::initializer_list<value_type> items, 
     Compare const &compare)
     : constexpr_map { container_type { items }, compare }
 {
 #if defined(_MSC_VER)
-    // clang & gcc doesn't recognize items.size() as a constexpr
+    // clang & gcc doesn't recognize items.size() as a XR_CONSTEXPR_CPP14_OR_INLINE
     static_assert(items.size() == N, "inconsistent initializer_list size and type size argument");
 #endif // defined(_MSC_VER)
 }
@@ -135,7 +135,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(::std::initializer_list<val
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr 
+XR_CONSTEXPR_CPP14_OR_INLINE 
 constexpr_map<Key, Value, N, Compare>::constexpr_map(
     std::initializer_list<value_type> items)
     : constexpr_map { items, Compare {} }
@@ -145,7 +145,7 @@ constexpr_map<Key, Value, N, Compare>::constexpr_map(
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::mapped_type 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::mapped_type 
 constexpr_map<Key, Value, N, Compare>::at(Key const &key) const
 {
     auto const where = lower_bound(key);
@@ -160,7 +160,7 @@ constexpr_map<Key, Value, N, Compare>::at(Key const &key) const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator 
 constexpr_map<Key, Value, N, Compare>::begin() const
 {
     return m_items.begin();
@@ -170,7 +170,7 @@ constexpr_map<Key, Value, N, Compare>::begin() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator 
 constexpr_map<Key, Value, N, Compare>::cbegin() const
 {
     return m_items.cbegin();
@@ -180,7 +180,7 @@ constexpr_map<Key, Value, N, Compare>::cbegin() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator 
 constexpr_map<Key, Value, N, Compare>::end() const
 {
     return m_items.end();
@@ -190,7 +190,7 @@ constexpr_map<Key, Value, N, Compare>::end() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator 
 constexpr_map<Key, Value, N, Compare>::cend() const
 {
     return m_items.cend();
@@ -200,7 +200,7 @@ constexpr_map<Key, Value, N, Compare>::cend() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
 constexpr_map<Key, Value, N, Compare>::rbegin() const
 {
     return m_items.rbegin();
@@ -210,7 +210,7 @@ constexpr_map<Key, Value, N, Compare>::rbegin() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
 constexpr_map<Key, Value, N, Compare>::crbegin() const
 {
     return m_items.crbegin();
@@ -220,7 +220,7 @@ constexpr_map<Key, Value, N, Compare>::crbegin() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
 constexpr_map<Key, Value, N, Compare>::rend() const
 {
     return m_items.rend();
@@ -230,7 +230,7 @@ constexpr_map<Key, Value, N, Compare>::rend() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_reverse_iterator 
 constexpr_map<Key, Value, N, Compare>::crend() const
 {
     return m_items.crend();
@@ -240,7 +240,7 @@ constexpr_map<Key, Value, N, Compare>::crend() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr bool 
+XR_CONSTEXPR_CPP14_OR_INLINE bool 
 constexpr_map<Key, Value, N, Compare>::empty() const
 {
     return !N;
@@ -250,7 +250,7 @@ constexpr_map<Key, Value, N, Compare>::empty() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::size_type 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::size_type 
 constexpr_map<Key, Value, N, Compare>::size() const
 {
     return N;
@@ -260,7 +260,7 @@ constexpr_map<Key, Value, N, Compare>::size() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::size_type 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::size_type 
 constexpr_map<Key, Value, N, Compare>::max_size() const
 {
     return N;
@@ -270,7 +270,7 @@ constexpr_map<Key, Value, N, Compare>::max_size() const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::size_type 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::size_type 
 constexpr_map<Key, Value, N, Compare>::count(Key const &key) const
 {
     return details::binary_search<N>(m_items.begin(), key, m_comparer);
@@ -280,7 +280,7 @@ constexpr_map<Key, Value, N, Compare>::count(Key const &key) const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator
 constexpr_map<Key, Value, N, Compare>::find(Key const &key) const
 {
     const_iterator where = lower_bound(key);
@@ -294,7 +294,7 @@ constexpr_map<Key, Value, N, Compare>::find(Key const &key) const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::equal_range_pair
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::equal_range_pair
 constexpr_map<Key, Value, N, Compare>::equal_range(Key const &key) const
 {
     auto const lower = lower_bound(key);
@@ -308,7 +308,7 @@ constexpr_map<Key, Value, N, Compare>::equal_range(Key const &key) const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator
 constexpr_map<Key, Value, N, Compare>::lower_bound(Key const &key) const
 {
     auto const where = details::lower_bound<N>(m_items.begin(), key, m_comparer);
@@ -322,7 +322,7 @@ constexpr_map<Key, Value, N, Compare>::lower_bound(Key const &key) const
 /**
 */
 template <typename Key, typename Value, size_t N, typename Compare>
-constexpr typename constexpr_map<Key, Value, N, Compare>::const_iterator
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_map<Key, Value, N, Compare>::const_iterator
 constexpr_map<Key, Value, N, Compare>::upper_bound(Key const &key) const
 {
     auto const where = details::lower_bound<N>(m_items.begin(), key, m_comparer);
@@ -332,5 +332,5 @@ constexpr_map<Key, Value, N, Compare>::upper_bound(Key const &key) const
         return end();
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

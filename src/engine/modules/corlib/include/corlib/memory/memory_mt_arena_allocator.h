@@ -5,9 +5,10 @@
 
 #include "corlib/memory/memory_allocator_base.h"
 
-namespace xr::memory
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, memory)
 
+//-----------------------------------------------------------------------------------------------------------
 class mt_arena_allocator final : public base_allocator 
 {
 public:
@@ -16,9 +17,9 @@ public:
 
     void initialize(size_t size, size_t initial);
 
-    virtual bool can_allocate_block(size_t const size) const noexcept override;
-    virtual size_t total_size() const noexcept override;
-    virtual size_t allocated_size() const noexcept override;
+    virtual bool can_allocate_block(size_t const size) const XR_NOEXCEPT override;
+    virtual size_t total_size() const XR_NOEXCEPT override;
+    virtual size_t allocated_size() const XR_NOEXCEPT override;
 
 private:
     pvoid call_malloc(size_t size 
@@ -37,4 +38,5 @@ private:
     pvoid m_arena { nullptr };
 }; // class mt_arena_allocator
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
+//-----------------------------------------------------------------------------------------------------------

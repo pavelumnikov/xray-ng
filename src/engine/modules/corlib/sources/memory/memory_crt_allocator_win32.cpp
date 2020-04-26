@@ -12,17 +12,15 @@
 #include <cassert>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 namespace
 {
 
-static volatile threading::do_once_state crt_already_initialized 
-{ 
+static volatile threading::do_once_state crt_already_initialized(
     threading::do_once_state::uninitialized
-};
+);
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -84,21 +82,20 @@ free_proxy_func(void* p)
 /**
 */
 crt_allocator::crt_allocator() 
-    : m_malloc_ptr { malloc_proxy_func }
-    , m_free_ptr { free_proxy_func }
-    , m_realloc_ptr { realloc_proxy_func }
+    : m_malloc_ptr(malloc_proxy_func)
+    , m_free_ptr(free_proxy_func)
+    , m_realloc_ptr(realloc_proxy_func)
 {
     XR_DEBUG_ASSERTION(this->m_malloc_ptr != nullptr);
     XR_DEBUG_ASSERTION(this->m_free_ptr != nullptr);
     XR_DEBUG_ASSERTION(this->m_free_ptr != nullptr);
-
     threading::atomic_do_once(initialize_crt_allocator, crt_already_initialized);
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool crt_allocator::can_allocate_block(size_t const size) const noexcept
+bool crt_allocator::can_allocate_block(size_t const size) const XR_NOEXCEPT
 {
     XR_UNREFERENCED_PARAMETER(size);
     return true;
@@ -107,7 +104,7 @@ bool crt_allocator::can_allocate_block(size_t const size) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t crt_allocator::total_size() const noexcept
+size_t crt_allocator::total_size() const XR_NOEXCEPT
 {
     HANDLE const heap = ::GetProcessHeap();
     return (mem_usage(heap, nullptr, nullptr));
@@ -116,11 +113,11 @@ size_t crt_allocator::total_size() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t crt_allocator::allocated_size() const noexcept
+size_t crt_allocator::allocated_size() const XR_NOEXCEPT
 {
     HANDLE const heap = ::GetProcessHeap();
     return (mem_usage(heap, nullptr, nullptr));
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

@@ -4,13 +4,12 @@
 #include "corlib/threading/read_write_spin_wait.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void read_write_spin_wait::writer_access::lock() const noexcept
+void read_write_spin_wait::writer_access::lock() const XR_NOEXCEPT
 {
     auto const ticket_id = 
         atomic_fetch_add_seq<uint16_t>(m_spinwaiter.m_u.split.my_tickets.data, 1);
@@ -22,7 +21,7 @@ void read_write_spin_wait::writer_access::lock() const noexcept
 /**
 */
 signalling_bool
-read_write_spin_wait::writer_access::try_lock() const noexcept
+read_write_spin_wait::writer_access::try_lock() const XR_NOEXCEPT
 {
     uint64_t value;
     auto const old = atomic_fetch_acq(m_spinwaiter.m_u.split_and_rw.data);
@@ -45,7 +44,7 @@ read_write_spin_wait::writer_access::try_lock() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void read_write_spin_wait::writer_access::unlock() const noexcept
+void read_write_spin_wait::writer_access::unlock() const XR_NOEXCEPT
 {
     // This function is implemented this way to avoid an atomic increment
     // and go for a simple load store operation instead.
@@ -63,7 +62,7 @@ void read_write_spin_wait::writer_access::unlock() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void read_write_spin_wait::reader_access::lock() const noexcept
+void read_write_spin_wait::reader_access::lock() const XR_NOEXCEPT
 {
     auto const ticket_id =
         atomic_fetch_add_seq<uint16_t>(m_spinwaiter.m_u.split.my_tickets.data, 1);
@@ -80,7 +79,7 @@ void read_write_spin_wait::reader_access::lock() const noexcept
 /**
 */
 signalling_bool
-read_write_spin_wait::reader_access::try_lock() const noexcept
+read_write_spin_wait::reader_access::try_lock() const XR_NOEXCEPT
 {
     uint64_t value;
     auto const old = atomic_fetch_acq(m_spinwaiter.m_u.split_and_rw.data);
@@ -101,5 +100,5 @@ read_write_spin_wait::reader_access::try_lock() const noexcept
     return true;
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

@@ -3,22 +3,21 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 #include "corlib/sys/chrono.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 class timer
 {
 public:
-    XR_DECLARE_DEFAULT_CONSTEXPR_CLASS(timer);
+    timer() = default;
 
     void start();
-    sys::tick get_elapsed_ms() const noexcept;
-    sys::time get_elapsed_sec() const noexcept;
+    sys::tick get_elapsed_ms() const XR_NOEXCEPT;
+    sys::time get_elapsed_sec() const XR_NOEXCEPT;
 
 private:
     uint64_t m_start_time {};
@@ -37,7 +36,7 @@ timer::start()
 /**
  */
 inline sys::tick
-timer::get_elapsed_ms() const noexcept
+timer::get_elapsed_ms() const XR_NOEXCEPT
 {
     sys::tick now = sys::now_microseconds();
     return now - m_start_time;
@@ -47,7 +46,7 @@ timer::get_elapsed_ms() const noexcept
 /**
  */
 inline sys::time
-timer::get_elapsed_sec() const noexcept
+timer::get_elapsed_sec() const XR_NOEXCEPT
 {
     return get_elapsed_ms() * 0.001; // ms to sec
 }
@@ -56,13 +55,13 @@ timer::get_elapsed_sec() const noexcept
 class inplace_timer
 {
 public:
-    inplace_timer() noexcept;
+    inplace_timer() XR_NOEXCEPT;
     XR_DECLARE_DEFAULT_DESTRUCTOR(inplace_timer);
-    XR_DECLARE_DEFAULT_CONSTEXPR_COPY_ASSIGNMENT(inplace_timer);
+    XR_DECLARE_DEFAULT_COPY_ASSIGNMENT(inplace_timer);
     XR_DECLARE_DEFAULT_CONSTEXPR_MOVE_ASSIGNMENT(inplace_timer);
 
-    sys::tick get_elapsed_ms() const noexcept;
-    sys::time get_elapsed_sec() const noexcept;
+    sys::tick get_elapsed_ms() const XR_NOEXCEPT;
+    sys::time get_elapsed_sec() const XR_NOEXCEPT;
 
 private:
     timer m_timer {};
@@ -72,7 +71,7 @@ private:
 /**
  */
 inline
-inplace_timer::inplace_timer() noexcept
+inplace_timer::inplace_timer() XR_NOEXCEPT
     : m_timer {}
 {
     m_timer.start();
@@ -82,7 +81,7 @@ inplace_timer::inplace_timer() noexcept
 /**
  */
 inline sys::tick
-inplace_timer::get_elapsed_ms() const noexcept
+inplace_timer::get_elapsed_ms() const XR_NOEXCEPT
 {
     return m_timer.get_elapsed_ms();
 }
@@ -91,7 +90,7 @@ inplace_timer::get_elapsed_ms() const noexcept
 /**
  */
 inline sys::time
-inplace_timer::get_elapsed_sec() const noexcept
+inplace_timer::get_elapsed_sec() const XR_NOEXCEPT
 {
     return m_timer.get_elapsed_sec();
 }

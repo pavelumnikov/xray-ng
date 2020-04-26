@@ -12,8 +12,7 @@
 #include "corlib/memory/profiler_event_listener.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 class base_allocator
@@ -37,12 +36,12 @@ public:
 
     void set_event_listener(base_profiler_event_listener* event_listener);
 
-    virtual bool can_allocate_block(size_t const size) const noexcept = 0;
-    virtual size_t total_size() const noexcept = 0;
-    virtual size_t allocated_size() const noexcept = 0;
+    virtual bool can_allocate_block(size_t const size) const XR_NOEXCEPT = 0;
+    virtual size_t total_size() const XR_NOEXCEPT = 0;
+    virtual size_t allocated_size() const XR_NOEXCEPT = 0;
 
 protected:
-    constexpr base_allocator() noexcept = default;
+    XR_CONSTEXPR_CPP14_OR_INLINE base_allocator() XR_NOEXCEPT;
 
     virtual pvoid call_malloc(size_t size_t 
         XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION 
@@ -61,8 +60,16 @@ protected:
     void on_free(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) const;
 
 private:
-    base_profiler_event_listener* m_event_listener { nullptr };
+    base_profiler_event_listener* m_event_listener;
 }; // class base_allocator
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+XR_CONSTEXPR_CPP14_OR_INLINE
+base_allocator::base_allocator() XR_NOEXCEPT
+    : m_event_listener(nullptr)
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -73,5 +80,5 @@ base_allocator::set_event_listener(base_profiler_event_listener* event_listener)
     m_event_listener = event_listener;
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------

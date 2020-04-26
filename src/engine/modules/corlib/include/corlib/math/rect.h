@@ -5,21 +5,35 @@
 
 #include "corlib/types.h"
 
-namespace xr::math
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, math)
 
+//-----------------------------------------------------------------------------------------------------------
 template<typename Dimension>
 struct rect final
 {
-    using type = Dimension;
+    typedef Dimension type;
     type x {}, y {};
     type width {}, height {};
+ 
+    XR_CONSTEXPR_CPP14_OR_INLINE rect() XR_NOEXCEPT;
+}; // struct rect<Dimension>
 
-    XR_DECLARE_DEFAULT_CONSTEXPR_CLASS(rect);
-}; // struct rect
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE rect<Dimension>::rect() XR_NOEXCEPT
+    : x(0)
+    , y(0)
+    , width(0)
+    , height(0)
+{}
 
-using int_rect = rect<int32_t>;
-using uint_rect = rect<uint32_t>;
-using float_rect = rect<float>;
+//-----------------------------------------------------------------------------------------------------------
+typedef rect<int32_t> int_rect;
+typedef rect<uint32_t> uint_rect;
+typedef rect<float> float_rect;
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
+//-----------------------------------------------------------------------------------------------------------

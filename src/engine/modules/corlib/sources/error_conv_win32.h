@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include "corlib/macro/namespaces.h"
 #include "os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr
-{
+XR_NAMESPACE_BEGIN(xr)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -29,5 +29,5 @@ bool convert_to_char(DWORD dwCode, char* buffer, size_t buffer_size);
 */
 bool convert_to_wchar(DWORD dwCode, wchar_t* buffer, size_t buffer_size);
 
-} // namespace xr
+XR_NAMESPACE_END(xr)
 //-----------------------------------------------------------------------------------------------------------

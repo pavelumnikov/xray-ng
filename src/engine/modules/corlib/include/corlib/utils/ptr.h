@@ -12,16 +12,14 @@
 #include <cassert>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 class base_allocator;
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename Type>
@@ -30,7 +28,7 @@ class alloc_deleter final
 public:
     using pointer = eastl::add_pointer_t<Type>;
 
-    explicit alloc_deleter(memory::proxy::eastl_proxy_allocator a) noexcept;
+    explicit alloc_deleter(memory::proxy::eastl_proxy_allocator a) XR_NOEXCEPT;
     void operator()(pointer p) const;
 
 private:
@@ -42,7 +40,7 @@ private:
 /**
 */
 template<typename Type>
-alloc_deleter<Type>::alloc_deleter(memory::proxy::eastl_proxy_allocator a) noexcept
+alloc_deleter<Type>::alloc_deleter(memory::proxy::eastl_proxy_allocator a) XR_NOEXCEPT
     : m_allocator { eastl::move(a) }
 {}
 
@@ -141,5 +139,5 @@ public:
     }
 };
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

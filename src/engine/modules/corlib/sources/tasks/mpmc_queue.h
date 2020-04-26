@@ -5,10 +5,10 @@
 
 #include "corlib/threading/interlocked.h"
 #include "corlib/utils/type_traits.h"
+#include "EASTL/array.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 template<typename T, size_t kBoundedSize>
 class mpmc_queue
@@ -125,5 +125,5 @@ mpmc_queue<T, kBoundedSize>::dequeue(T& data)
     return true;
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

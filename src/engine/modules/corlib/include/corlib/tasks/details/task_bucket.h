@@ -6,8 +6,7 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 // forward declarations
 struct grouped_task;
@@ -15,11 +14,11 @@ struct grouped_task;
 //-----------------------------------------------------------------------------------------------------------
 struct task_bucket
 {
-    grouped_task* tasks { nullptr };
-    size_t count { 0 };
+    grouped_task* tasks;
+    size_t count;
 
-    task_bucket() = default;
-    task_bucket(grouped_task* _tasks, size_t _count);
+    XR_CONSTEXPR_CPP14_OR_INLINE task_bucket() XR_NOEXCEPT;
+    task_bucket(grouped_task* _tasks, size_t _count) XR_NOEXCEPT;
 
     XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(task_bucket);
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(task_bucket);
@@ -28,10 +27,18 @@ struct task_bucket
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline task_bucket::task_bucket(grouped_task* t, size_t count)
-    : tasks { t }
-    , count { count }
+XR_CONSTEXPR_CPP14_OR_INLINE task_bucket::task_bucket() XR_NOEXCEPT
+    : tasks(nullptr)
+    , count(0)
 {}
 
-} // namespace xr::tasks::details
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline task_bucket::task_bucket(grouped_task* t, size_t count) XR_NOEXCEPT
+    : tasks(t)
+    , count(count)
+{}
+
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

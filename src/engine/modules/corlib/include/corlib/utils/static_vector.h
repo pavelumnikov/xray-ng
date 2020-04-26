@@ -6,8 +6,7 @@
 #include "corlib/utils/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 // A variable-size array container with fixed capacity.
@@ -59,7 +58,7 @@ private:
  */
 template<class T, size_t Capacity, size_t Alignment>
 inline static_vector<T, Capacity, Alignment>::static_vector()
-    : m_count { 0 }
+    : m_count(0)
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -208,5 +207,5 @@ inline void static_vector<T, Capacity, Alignment>::call_dtor(T* element)
     element->~T();
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

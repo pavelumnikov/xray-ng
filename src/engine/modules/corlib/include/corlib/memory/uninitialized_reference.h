@@ -5,12 +5,11 @@
 
 #include "corlib/utils/pointer_cast.h"
 #include "corlib/memory/memory_functions.h"
+#include "corlib/macro/aligning.h"
 #include "EASTL/memory.h"
-#include <cassert>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory::details
-{
+XR_NAMESPACE_BEGIN(xr, memory, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template <class Class, class ConstructorClass = int>
@@ -26,8 +25,8 @@ public:
     uninitialized_reference_impl();
     ~uninitialized_reference_impl() = default;
 
-    uninitialized_reference_impl(uninitialized_reference_impl&&) noexcept;
-    uninitialized_reference_impl& operator=(uninitialized_reference_impl&&) noexcept;
+    uninitialized_reference_impl(uninitialized_reference_impl&&) XR_NOEXCEPT;
+    uninitialized_reference_impl& operator=(uninitialized_reference_impl&&) XR_NOEXCEPT;
 
     uninitialized_reference_impl& operator= (uninitialized_reference_impl const&) = delete;
 
@@ -52,12 +51,6 @@ private:
     XR_ALIGNAS(16) char m_static_memory[sizeof(Class)];
     reference m_variable;
     bool m_is_constructed;
-
-    template <class T>
-    struct friend_helper final
-    {
-        using type = T;
-    };
 };
 
 //-----------------------------------------------------------------------------------------------------------
@@ -75,7 +68,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_i
 /**
 */
 template <class Class, class ConstructorClass>
-uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_impl(uninitialized_reference_impl&& rhs) noexcept
+uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_impl(uninitialized_reference_impl&& rhs) XR_NOEXCEPT
     : m_variable(static_cast<Class&>(m_static_memory))
     , m_is_constructed(false)
 {
@@ -88,7 +81,7 @@ uninitialized_reference_impl<Class, ConstructorClass>::uninitialized_reference_i
 */
 template<class Class, class ConstructorClass>
 uninitialized_reference_impl<Class, ConstructorClass>&
-uninitialized_reference_impl<Class, ConstructorClass>::operator= (uninitialized_reference_impl&& rhs) noexcept
+uninitialized_reference_impl<Class, ConstructorClass>::operator= (uninitialized_reference_impl&& rhs) XR_NOEXCEPT
 {
     ::eastl::uninitialized_move_n(::eastl::begin(rhs.m_static_memory),
         sizeof(Class), ::eastl::begin(m_static_memory));
@@ -217,12 +210,11 @@ void uninitialized_reference_impl<Class, ConstructorClass>::destruct()
     m_is_constructed = false;
 }
 
-} // namespace xr::memory::details
+XR_NAMESPACE_END(xr, memory, details)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 template <class Class, class ConstructorClass = int>
@@ -315,5 +307,5 @@ private:
     uninitialized_reference<Class>& m_uninitialized_ref;
 };
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

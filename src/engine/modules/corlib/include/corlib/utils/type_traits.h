@@ -8,8 +8,7 @@
 #include "EASTL/array.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 struct void_value
 {};
@@ -18,7 +17,7 @@ struct void_value
 struct any
 {
     template<typename T>
-    any(T&&) noexcept
+    any(T&&) XR_NOEXCEPT
     {}
 };
 
@@ -122,5 +121,5 @@ struct remove_rvalue_reference<T&&>
 template<typename T>
 using remove_rvalue_reference_t = typename remove_rvalue_reference<T>::type;
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

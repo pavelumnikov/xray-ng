@@ -4,9 +4,7 @@
 #pragma once
 
 #include "corlib/memory/memory_allocator_base.h"
-#include "corlib/signalling_bool.h"
 #include "corlib/sys/chrono.h"
-#include "corlib/utils/function_pointer.h"
 #include "EASTL/optional.h"
 
 #if defined(XRAY_PLATFORM_WINDOWS)
@@ -14,8 +12,7 @@
 #endif // defined(XRAY_PLATFORM_WINDOWS)
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 enum class thread_priority
@@ -26,12 +23,12 @@ enum class thread_priority
 }; // enum class thread_priority
 
 #if defined(XRAY_PLATFORM_WINDOWS)
-using thread_handle = win::HANDLE;
-using thread_id = uint32_t;
-using thread_function = utils::function_pointer_t<uint32_t, void*>;
-auto constexpr unknown_thread_handle = nullptr;
+typedef win::HANDLE thread_handle;
+typedef uint32_t thread_id;
+typedef uint32_t(*thread_function)(pvoid);
+XR_CONSTEXPR_CPP14_OR_CONST thread_handle unknown_thread_handle = nullptr;
 // See http://blogs.msdn.com/b/oldnewthing/archive/2004/02/23/78395.aspx
-thread_id constexpr invalid_thread_id = 0;
+XR_CONSTEXPR_CPP14_OR_CONST thread_id invalid_thread_id = 0;
 
 #else
 #error "Thread handle is not defined for this platform!"
@@ -76,5 +73,5 @@ thread_id current_thread_id();
 */
 uint32_t current_thread_affinity();
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

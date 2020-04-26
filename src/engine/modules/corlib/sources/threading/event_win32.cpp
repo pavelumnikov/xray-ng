@@ -9,8 +9,7 @@
 #include "../os_include_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading::details
-{
+XR_NAMESPACE_BEGIN(xr, threading, details)
 
 class critical_section_raii
 {
@@ -34,12 +33,11 @@ LPCRITICAL_SECTION to_critical_section(uint8_t const* buffer)
     return reinterpret_cast<LPCRITICAL_SECTION>(const_cast<uint8_t*>(buffer));
 }
 
-}
+XR_NAMESPACE_END(xr, threading, details)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 constexpr int32_t EVENT_NOT_SIGNALED = 0;
 constexpr int32_t EVENT_SIGNALED = 1;
@@ -48,7 +46,7 @@ constexpr DWORD CRIT_SPIN_COUNT_FOR_EVENT = 16;
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-event::event(bool const initial_state) noexcept
+event::event(bool const initial_state) XR_NOEXCEPT
     : m_critical_section {}
     , m_condition_variable {}
     , m_num_of_waiting_threads { 0 }
@@ -80,7 +78,7 @@ event::~event()
 /**
 */
 void
-event::set(bool const value) noexcept
+event::set(bool const value) XR_NOEXCEPT
 {
     if(value)
         set_event();
@@ -92,7 +90,7 @@ event::set(bool const value) noexcept
 /**
 */
 event_wait_result
-event::wait_timeout(sys::tick timeout) noexcept
+event::wait_timeout(sys::tick timeout) XR_NOEXCEPT
 {
     auto cs = details::to_critical_section(m_critical_section);
     auto cv = reinterpret_cast<PCONDITION_VARIABLE>(&m_condition_variable);
@@ -138,7 +136,7 @@ event::wait_timeout(sys::tick timeout) noexcept
 /**
 */
 signalling_bool 
-event::peek() const noexcept
+event::peek() const XR_NOEXCEPT
 {
     auto cs = details::to_critical_section(m_critical_section);
     details::critical_section_raii lock { cs };
@@ -171,5 +169,5 @@ inline void event::reset_event()
     m_value = EVENT_NOT_SIGNALED;
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

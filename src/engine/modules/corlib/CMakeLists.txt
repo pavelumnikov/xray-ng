@@ -16,12 +16,29 @@ project(corlib)
 ##
 
 set(CORE_MODULE_HEADERS
-	"include/corlib/platform.h"
-	"include/corlib/signalling_bool.h"
 	"include/corlib/types.h"
 )
 
 source_group("include" FILES ${CORE_MODULE_HEADERS})
+
+##
+
+set(CORE_MODULE_MACRO_HEADERS
+	"include/corlib/macro/aligning.h"
+	"include/corlib/macro/assertion.h"
+	"include/corlib/macro/callconv.h"
+	"include/corlib/macro/compiler.h"
+	"include/corlib/macro/constexpr.h"
+	"include/corlib/macro/interfacing.h"
+	"include/corlib/macro/likely.h"
+	"include/corlib/macro/namespaces.h"
+	"include/corlib/macro/string.h"
+	"include/corlib/macro/todo.h"
+	"include/corlib/macro/unreferenced_parameter.h"
+	"include/corlib/macro/variadic.h"
+)
+
+source_group("include\\macro" FILES ${CORE_MODULE_MACRO_HEADERS})
 
 ##
 
@@ -94,7 +111,6 @@ source_group("include\\memory" FILES ${CORE_MODULE_MEMORY_HEADERS})
 
 set(CORE_MODULE_MEMORY_PROXY_HEADERS
 	"include/corlib/memory/proxy/eastl_proxy_allocator.h"
-	"include/corlib/memory/proxy/stack_arena_proxy_allocator.h"
 )
 
 source_group("include\\memory\\proxy" FILES ${CORE_MODULE_MEMORY_PROXY_HEADERS})
@@ -298,16 +314,15 @@ set(CORE_MODULE_UTILS_HEADERS
 	"include/corlib/utils/aligning.h"
 	"include/corlib/utils/array_view.h"
 	"include/corlib/utils/buffer_string.h"
-	"include/corlib/utils/constexpr_array.h"
 	"include/corlib/utils/constexpr_string.h"
 	"include/corlib/utils/constexpr_map.h"
 	"include/corlib/utils/constexpr_vector.h"
 	"include/corlib/utils/check_invariants.h"
 	"include/corlib/utils/delegate.h"
+	"include/corlib/utils/deque.h"
 	"include/corlib/utils/enumeration.h"
-	"include/corlib/utils/enumerator.h"
+	"include/corlib/utils/fixed_string.h"
 	"include/corlib/utils/fourcc.h"
-	"include/corlib/utils/function_pointer.h"
 	"include/corlib/utils/hash_elsa.h"
 	"include/corlib/utils/hash_string.h"
 	"include/corlib/utils/integer.h"
@@ -317,21 +332,22 @@ set(CORE_MODULE_UTILS_HEADERS
 	"include/corlib/utils/not_null_ptr.h"
 	"include/corlib/utils/packed.h"
 	"include/corlib/utils/padded.h"
-	"include/corlib/utils/perfect_forwarding.h"
-	"include/corlib/utils/pseudo_virtual_pointer.h"
 	"include/corlib/utils/prehashed.h"
 	"include/corlib/utils/ptr.h"
 	"include/corlib/utils/pointer_cast.h"
 	"include/corlib/utils/scoped.h"
 	"include/corlib/utils/static_vector.h"
 	"include/corlib/utils/string_conversion.h"
+	"include/corlib/utils/string_map.h"
 	"include/corlib/utils/string_view.h"
-	"include/corlib/utils/search.h"
 	"include/corlib/utils/select_sizet_constant.h"
 	"include/corlib/utils/timer.h"
 	"include/corlib/utils/type_conversions.h"
 	"include/corlib/utils/type_inversions.h"
 	"include/corlib/utils/type_traits.h"
+	"include/corlib/utils/vector.h"
+	"include/corlib/utils/unordered_map.h"
+	"include/corlib/utils/unordered_set.h"
 	"include/corlib/utils/utility.h"
 )
 
@@ -349,7 +365,6 @@ source_group("sources\\utils" FILES ${CORE_MODULE_UTILS_SOURCES})
 set(CORE_MODULE_UTILS_DETAILS_HEADERS
 	"include/corlib/utils/details/basic_buffer_string.h"
 	"include/corlib/utils/details/basic_constexpr_string.h"
-	"include/corlib/utils/details/basic_string_view.h"
 	"include/corlib/utils/details/char_traits.h"
 	"include/corlib/utils/details/compare_key.h"
 	"include/corlib/utils/details/constexpr_knuth_morris_pratt_searcher.h"
@@ -365,29 +380,9 @@ source_group("include\\utils\\details" FILES ${CORE_MODULE_UTILS_DETAILS_HEADERS
 
 ##
 
-set(CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS
-	"include/corlib/utils/std/deque.h"
-	"include/corlib/utils/std/map.h"
-	"include/corlib/utils/std/set.h"
-	"include/corlib/utils/std/unordered_map.h"
-	"include/corlib/utils/std/unordered_set.h"
-	"include/corlib/utils/std/vector.h")
-
-source_group("include\\utils\\std" FILES ${CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS})
-
-##
-
-set(CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS
-	"include/corlib/utils/stdext/fixed_vector.h"
-	"include/corlib/utils/stdext/fixed_string.h"
-)
-
-source_group("include\\utils\\stdext" FILES ${CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS})
-
-##
-
 set(SOURCES
 	${CORE_MODULE_HEADERS}
+	${CORE_MODULE_MACRO_HEADERS}
 	${CORE_MODULE_MATH_HEADERS}
 	${CORE_MODULE_MATH_SSE_HEADERS}
 	${CORE_MODULE_MATH_SOURCES}
@@ -405,8 +400,6 @@ set(SOURCES
 	${CORE_MODULE_UTILS_HEADERS}
 	${CORE_MODULE_UTILS_SOURCES}
 	${CORE_MODULE_UTILS_DETAILS_HEADERS}
-	${CORE_MODULE_UTILS_CONTAINERS_STD_HEADERS}
-	${CORE_MODULE_UTILS_CONTAINERS_STDEXT_HEADERS}
 )
 
 if(WIN32)

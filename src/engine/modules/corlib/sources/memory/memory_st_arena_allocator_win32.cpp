@@ -11,8 +11,15 @@
 #include "corlib/sys/thread.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+st_arena_allocator::st_arena_allocator()
+    : m_arena(nullptr)
+    , m_user_thread_id(0)
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -42,7 +49,7 @@ void st_arena_allocator::initialize(size_t size, size_t initial,
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-bool st_arena_allocator::can_allocate_block(size_t const size) const noexcept
+bool st_arena_allocator::can_allocate_block(size_t const size) const XR_NOEXCEPT
 {
     if(!m_arena) return false;
     // TODO: check if allocating from one block
@@ -52,7 +59,7 @@ bool st_arena_allocator::can_allocate_block(size_t const size) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t st_arena_allocator::total_size() const noexcept
+size_t st_arena_allocator::total_size() const XR_NOEXCEPT
 {
     XR_DEBUG_ASSERTION_MSG(m_arena, "arena must be initialized");
     HANDLE const heap = static_cast<HANDLE>(m_arena);
@@ -62,7 +69,7 @@ size_t st_arena_allocator::total_size() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-size_t st_arena_allocator::allocated_size() const noexcept
+size_t st_arena_allocator::allocated_size() const XR_NOEXCEPT
 {
     XR_DEBUG_ASSERTION_MSG(m_arena, "arena must be initialized");
     HANDLE const heap = static_cast<HANDLE>(m_arena);
@@ -127,5 +134,5 @@ void st_arena_allocator::finalize()
     HeapDestroy(m_arena);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

@@ -3,23 +3,20 @@
 
 #pragma once
 
-#include "corlib/memory/memory_functions.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
-
-//-----------------------------------------------------------------------------------------------------------
-/**
-*/
-void copy(void* destination, size_t const destination_size, void const* source, 
-    size_t const source_size);
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void copy_align_16(void* destination, size_t const destination_size, 
-    void const* source, size_t const source_size);
+void copy(void* destination, size_t const destination_size, void const* source, size_t const source_size);
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+void copy_align_16(void* destination, size_t const destination_size, void const* source, size_t const source_size);
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -35,5 +32,5 @@ void zero(T(&destination)[Count])
     zero(destination, Count * sizeof(T));
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

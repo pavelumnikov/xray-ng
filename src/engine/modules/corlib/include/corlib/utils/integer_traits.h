@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "corlib/types.h"
 #include "EASTL/numeric_limits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 namespace detail
 {
+
+//-----------------------------------------------------------------------------------------------------------
 template<typename TraitsType>
 class integer_traits_base : public eastl::numeric_limits<TraitsType>
 {
@@ -40,59 +41,73 @@ integer_traits_base<TraitsType>::const_max;
 
 } // namespace detail
 
+//-----------------------------------------------------------------------------------------------------------
 template<class T> class integer_traits;
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<bool> : public detail::integer_traits_base<bool>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<char> : public detail::integer_traits_base<char>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<signed char> : public detail::integer_traits_base<signed char>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<unsigned char> : public detail::integer_traits_base<unsigned char>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<wchar_t> : public detail::integer_traits_base<wchar_t>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<short> : public detail::integer_traits_base<short>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<unsigned short> : public detail::integer_traits_base<unsigned short>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<int> : public detail::integer_traits_base<int>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<unsigned int> : public detail::integer_traits_base<unsigned int>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<long> : public detail::integer_traits_base<long>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<unsigned long> : public detail::integer_traits_base<unsigned long>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<int64_t> : public detail::integer_traits_base<int64_t>
 {};
 
+//-----------------------------------------------------------------------------------------------------------
 template<>
 class integer_traits<uint64_t> : public detail::integer_traits_base<uint64_t>
 {};
 
-} // namespace namespace xr
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

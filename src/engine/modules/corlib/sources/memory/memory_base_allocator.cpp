@@ -5,8 +5,7 @@
 #include "EASTL/internal/move_help.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -65,5 +64,5 @@ void base_allocator::free_impl(pvoid pointer XR_DEBUG_PARAMETERS_DECLARATION)
     call_free(pointer XR_DEBUG_PARAMETERS);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

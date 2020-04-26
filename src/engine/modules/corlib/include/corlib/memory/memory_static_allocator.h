@@ -10,8 +10,7 @@
 #define XR_TASK_ALLOCATOR_GRANULARITY 16
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 template<size_t Size, size_t MaxCount>
@@ -27,9 +26,9 @@ public:
     void initialize(uintptr_t allocator_stamp);
     bool check_all_free();
 
-    virtual bool can_allocate_block(size_t const size) const noexcept override;
-    virtual size_t total_size() const noexcept override;
-    virtual size_t allocated_size() const noexcept override;
+    virtual bool can_allocate_block(size_t const size) const XR_NOEXCEPT override;
+    virtual size_t total_size() const XR_NOEXCEPT override;
+    virtual size_t allocated_size() const XR_NOEXCEPT override;
 
 protected:
     virtual pvoid call_malloc(size_t size
@@ -53,13 +52,13 @@ private:
     template<size_t granularity, size_t size>
     struct alignment
     {
-        static constexpr size_t value = ((size - 1) / granularity + 1) * granularity;
+        static XR_CONSTEXPR_CPP14_OR_CONST size_t value = ((size - 1) / granularity + 1) * granularity;
     }; // struct alignment<granularity, size>
 
-    static constexpr size_t max_count = MaxCount;
-    static constexpr size_t node_size = Size;
-    static constexpr size_t max_size = sizeof(node_prefix) + node_size;
-    static constexpr size_t granularity = alignment<XR_TASK_ALLOCATOR_GRANULARITY, max_size>::value;
+    static XR_CONSTEXPR_CPP14_OR_CONST size_t max_count = MaxCount;
+    static XR_CONSTEXPR_CPP14_OR_CONST size_t node_size = Size;
+    static XR_CONSTEXPR_CPP14_OR_CONST size_t max_size = sizeof(node_prefix) + node_size;
+    static XR_CONSTEXPR_CPP14_OR_CONST size_t granularity = alignment<XR_TASK_ALLOCATOR_GRANULARITY, max_size>::value;
 
     pvoid to_node(node_prefix* prefix)
     {
@@ -253,7 +252,7 @@ void static_allocator<Size, MaxCount>::call_free(pvoid pointer
  */
 template<size_t Size, size_t MaxCount>
 inline bool
-static_allocator<Size, MaxCount>::can_allocate_block(size_t const size) const noexcept
+static_allocator<Size, MaxCount>::can_allocate_block(size_t const size) const XR_NOEXCEPT
 {
     return size <= node_size;
 }
@@ -263,7 +262,7 @@ static_allocator<Size, MaxCount>::can_allocate_block(size_t const size) const no
  */
 template<size_t Size, size_t MaxCount>
 inline size_t
-static_allocator<Size, MaxCount>::total_size() const noexcept
+static_allocator<Size, MaxCount>::total_size() const XR_NOEXCEPT
 {
     return threading::atomic_fetch_acq(m_total_size);
 }
@@ -273,7 +272,7 @@ static_allocator<Size, MaxCount>::total_size() const noexcept
  */
 template<size_t Size, size_t MaxCount>
 inline size_t
-static_allocator<Size, MaxCount>::allocated_size() const noexcept
+static_allocator<Size, MaxCount>::allocated_size() const XR_NOEXCEPT
 {
     return threading::atomic_fetch_acq(m_allocated_size);
 }

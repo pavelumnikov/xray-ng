@@ -3,21 +3,19 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename BackoffType, typename Type0, typename Type1 >
-void 
-backoff_while_equals(Type0& location, Type1 value) noexcept
+inline void 
+backoff_while_equals(Type0& location, Type1 value) XR_NOEXCEPT
 {
-    BackoffType backoff {};
-
+    BackoffType backoff;
     while(location == value)
         backoff.pause();
 }
@@ -26,11 +24,10 @@ backoff_while_equals(Type0& location, Type1 value) noexcept
 /**
 */
 template< typename BackoffType, typename Type0, typename Type1 >
-void 
-backoff_while_not_equals(Type0& location, Type1 value) noexcept
+inline void 
+backoff_while_not_equals(Type0& location, Type1 value) XR_NOEXCEPT
 {
-    BackoffType backoff {};
-
+    BackoffType backoff;
     while(location != value)
         backoff.pause();
 }
@@ -39,11 +36,10 @@ backoff_while_not_equals(Type0& location, Type1 value) noexcept
 /**
 */
 template< typename BackoffType, typename BackoffFunction >
-void 
-backoff_do_while_function(BackoffFunction&& function) noexcept
+inline void 
+backoff_do_while_function(BackoffFunction&& function) XR_NOEXCEPT
 {
-    BackoffType backoff {};
-
+    BackoffType backoff;
     do
     {
         backoff.pause();
@@ -54,14 +50,13 @@ backoff_do_while_function(BackoffFunction&& function) noexcept
 /**
 */
 template< typename BackoffType, typename BackoffFunction >
-void
-backoff_while_function(BackoffFunction&& function) noexcept
+inline void
+backoff_while_function(BackoffFunction&& function) XR_NOEXCEPT
 {
-    BackoffType backoff {};
-
+    BackoffType backoff;
     while(function())
         backoff.pause();
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

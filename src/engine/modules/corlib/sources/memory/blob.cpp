@@ -6,9 +6,12 @@
 #include <cassert>
 #include <cstring>
 
-namespace xr::memory
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, memory)
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 void blob::self_allocate(size_t const size)
 {
     assert(!this->is_valid());
@@ -19,6 +22,9 @@ void blob::self_allocate(size_t const size)
     this->set_size_and_ptr_unsafe(this_ptr, size, size);
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 void blob::self_delete()
 {
     if(this->is_valid())
@@ -33,6 +39,9 @@ void blob::self_delete()
     }
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 void blob::self_copy(const void* ptr, size_t const size)
 {
     XR_DEBUG_ASSERTION((ptr != nullptr) && (size > 0));
@@ -51,6 +60,9 @@ void blob::self_copy(const void* ptr, size_t const size)
     copy(this_ptr, size, ptr, size);
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 int blob::binary_compare(const blob& rhs) const
 {
     auto const this_size = this->get_size_unsafe();
@@ -75,6 +87,9 @@ int blob::binary_compare(const blob& rhs) const
     return -1;
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 size_t blob::hash_code() const
 {
     size_t hash = 0;
@@ -95,4 +110,5 @@ size_t blob::hash_code() const
     return hash;
 }
 
-} // namespace aztek::core::memory
+XR_NAMESPACE_END(xr, memory)
+//-----------------------------------------------------------------------------------------------------------

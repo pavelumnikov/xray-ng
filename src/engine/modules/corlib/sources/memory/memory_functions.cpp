@@ -2,19 +2,18 @@
 //
 
 #include "corlib/memory/memory_functions.h"
+#include "corlib/macro/aligning.h"
 #include "corlib/utils/aligning.h"
 #include <string.h>
 #include <intrin.h>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void copy(void* destination, size_t const destination_size, 
-    void const* const source, size_t const size)
+void copy(void* destination, size_t const destination_size, void const* const source, size_t const size)
 {
     XR_UNREFERENCED_PARAMETER(destination_size);
     XR_DEBUG_ASSERTION(destination_size >= size);
@@ -24,8 +23,7 @@ void copy(void* destination, size_t const destination_size,
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void copy_align_16(void* destination, size_t const destination_size, 
-    void const* source, size_t const source_size)
+void copy_align_16(void* destination, size_t const destination_size, void const* source, size_t const source_size)
 {
     XR_DEBUG_ASSERTION_MSG(source, "Source data must be provided to copy from");
     XR_DEBUG_ASSERTION_MSG(destination, "Destination point must be valid!");
@@ -36,8 +34,8 @@ void copy_align_16(void* destination, size_t const destination_size,
     XR_DEBUG_ASSERTION_MSG(destination_size, 
         "Size of copyable data must be higher than zero!");
 
-    XR_DEBUG_ASSERTION(utils::is_aligned(source, 16));
-    XR_DEBUG_ASSERTION(utils::is_aligned(destination, 16));
+    XR_ASSERT_16_BYTE_ALIGNED(source);
+    XR_ASSERT_16_BYTE_ALIGNED(destination);
 
     // To prevent stack growing(useful in cases like multitasking)
     auto const src = const_cast<char*>(static_cast<const char*>(source));
@@ -114,5 +112,5 @@ void zero(void* destination, size_t const size_in_bytes)
     memset(destination, 0, size_in_bytes);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

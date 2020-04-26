@@ -3,12 +3,13 @@
 
 #pragma once
 
-#include "corlib/utils/constexpr_array.h"
+#include "corlib/macro/namespaces.h"
+#include "corlib/macro/constexpr.h"
+#include "EASTL/array.h"
 #include "EASTL/utility.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace  xr::utils::details
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename Type, size_t N> 
@@ -20,26 +21,24 @@ public:
     using difference_type = ptrdiff_t;
 
 public:
-    constexpr constexpr_boyer_moore_searcher(value_type const (&needle)[N + 1]);
+    XR_CONSTEXPR_CPP14_OR_INLINE constexpr_boyer_moore_searcher(value_type const (&needle)[N + 1]);
 
     template <class ForwardIterator>
-    constexpr ::eastl::pair<ForwardIterator, ForwardIterator> operator()
+    XR_CONSTEXPR_CPP14_OR_INLINE eastl::pair<ForwardIterator, ForwardIterator> operator()
         (ForwardIterator first, ForwardIterator last) const;
 
 private:
-    using skip_table_type = 
-        containers::constexpr_array<difference_type, sizeof(value_type) << 8>;
-    using suffix_table_type = 
-        containers::constexpr_array<difference_type, N>;
+    using skip_table_type = eastl::array<difference_type, sizeof(value_type) << 8>;
+    using suffix_table_type = eastl::array<difference_type, N>;
 
     skip_table_type m_skip_table;
     suffix_table_type m_suffix_table;
-    containers::constexpr_array<value_type, N> m_needle;
+    eastl::array<value_type, N> m_needle;
 
-    constexpr auto build_skip_table(value_type const (&needle)[N + 1]);
-    constexpr bool is_prefix(value_type const (&needle)[N + 1], size_type pos);
-    constexpr size_t suffix_length(value_type const (&needle)[N + 1], size_type pos);
-    constexpr auto build_suffix_table(value_type const (&needle)[N + 1]);
+    XR_CONSTEXPR_CPP14_OR_INLINE skip_table_type build_skip_table(value_type const (&needle)[N + 1]);
+    XR_CONSTEXPR_CPP14_OR_INLINE bool is_prefix(value_type const (&needle)[N + 1], size_type pos);
+    XR_CONSTEXPR_CPP14_OR_INLINE size_t suffix_length(value_type const (&needle)[N + 1], size_type pos);
+    XR_CONSTEXPR_CPP14_OR_INLINE suffix_table_type build_suffix_table(value_type const (&needle)[N + 1]);
 };
 
 
@@ -47,10 +46,10 @@ private:
 /**
 */
 template<typename Type, size_t N>
-constexpr constexpr_boyer_moore_searcher<Type, N - 1>
+XR_CONSTEXPR_CPP14_OR_INLINE constexpr_boyer_moore_searcher<Type, N - 1>
 make_boyer_moore_searcher(Type const (&needle)[N])
 {
-    return { needle };
+    return constexpr_boyer_moore_searcher<Type, N - 1>(needle);
 }
 
 
@@ -58,11 +57,11 @@ make_boyer_moore_searcher(Type const (&needle)[N])
 /**
 */
 template<typename T, size_t N>
-constexpr 
+XR_CONSTEXPR_CPP14_OR_INLINE 
 constexpr_boyer_moore_searcher<T, N>::constexpr_boyer_moore_searcher(value_type const (&needle)[N + 1])
-    : m_skip_table { build_skip_table(needle) }
-    , m_suffix_table { build_suffix_table(needle) }
-    , m_needle(needle) 
+    : m_skip_table(build_skip_table(needle))
+    , m_suffix_table(build_suffix_table(needle))
+    , m_needle(needle)
 {}
 
 
@@ -71,12 +70,12 @@ constexpr_boyer_moore_searcher<T, N>::constexpr_boyer_moore_searcher(value_type 
 */
 template<typename T, size_t N>
 template <class ForwardIterator>
-constexpr eastl::pair<ForwardIterator, ForwardIterator> 
+XR_CONSTEXPR_CPP14_OR_INLINE eastl::pair<ForwardIterator, ForwardIterator> 
 constexpr_boyer_moore_searcher<T, N>::operator()(ForwardIterator first, ForwardIterator last) const
 {
     if(!N)
     {
-        return { first, first + N };
+        return eastl::pair<ForwardIterator, ForwardIterator>(first, first + N);
     }
 
     ForwardIterator iter = (first + N - 1);
@@ -97,14 +96,14 @@ constexpr_boyer_moore_searcher<T, N>::operator()(ForwardIterator first, ForwardI
         iter += ::std::max(this->m_skip_table[*iter], this->m_suffix_table[j]);
     }
 
-    return { last, (last + N) };
+    return eastl::pair<ForwardIterator, ForwardIterator>(last, (last + N));
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template<typename T, size_t N>
-constexpr auto 
+XR_CONSTEXPR_CPP14_OR_INLINE typename constexpr_boyer_moore_searcher<T, N>::skip_table_type
 constexpr_boyer_moore_searcher<T, N>::build_skip_table(value_type const (&needle)[N + 1])
 {
     skip_table_type skip_table;
@@ -122,7 +121,7 @@ constexpr_boyer_moore_searcher<T, N>::build_skip_table(value_type const (&needle
 /**
 */
 template<typename T, size_t N>
-constexpr bool 
+XR_CONSTEXPR_CPP14_OR_INLINE bool 
 constexpr_boyer_moore_searcher<T, N>::is_prefix(value_type const (&needle)[N + 1], size_type pos)
 {
     size_type suffixlen = (N - pos);
@@ -142,7 +141,7 @@ constexpr_boyer_moore_searcher<T, N>::is_prefix(value_type const (&needle)[N + 1
 /**
 */
 template<typename T, size_t N>
-constexpr constexpr_boyer_moore_searcher<T, N>::size_type
+XR_CONSTEXPR_CPP14_OR_INLINE constexpr_boyer_moore_searcher<T, N>::size_type
 constexpr_boyer_moore_searcher<T, N>::suffix_length(value_type const (&needle)[N + 1], size_type pos)
 {
     // increment suffix length slen to the first mismatch or beginning
@@ -159,7 +158,7 @@ constexpr_boyer_moore_searcher<T, N>::suffix_length(value_type const (&needle)[N
 }
 
 template<typename T, size_t N>
-constexpr auto 
+XR_CONSTEXPR_CPP14_OR_INLINE constexpr_boyer_moore_searcher<T, N>::suffix_table_type
 constexpr_boyer_moore_searcher<T, N>::build_suffix_table(value_type const (&needle)[N + 1])
 {
     suffix_table_type suffix;
@@ -190,5 +189,5 @@ constexpr_boyer_moore_searcher<T, N>::build_suffix_table(value_type const (&need
     return suffix;
 }
 
-} // namespace  xr::utils::searchers
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------

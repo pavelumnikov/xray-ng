@@ -5,34 +5,36 @@
 
 #include "corlib/threading/atomic_backoff.h"
 #include "corlib/threading/atomic_backoff_helpers.h"
-#include "corlib/utils/function_pointer.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
-enum class do_once_state : uint8_t
+struct do_once_state_enum
 {
-    //! No execution attempts have been undertaken yet
-    uninitialized = 0,
-    //! A thread is executing associated do-once routine
-    pending,
-    //! Do-once routine has been executed
-    executed,
-    //! Convenience alias
-    initialization_complete = executed
+    enum list : uint8_t
+    {
+        //! No execution attempts have been undertaken yet
+        uninitialized = 0,
+        //! A thread is executing associated do-once routine
+        pending,
+        //! Do-once routine has been executed
+        executed,
+        //! Convenience alias
+        initialization_complete = executed
+    };
 };
-using atomic_do_once_state = volatile do_once_state;
+typedef do_once_state_enum::list do_once_state;
+typedef volatile do_once_state atomic_do_once_state;
 
-namespace internal
+namespace details
 {
 
 //! Initialization from function that do not returns anything, e.g. initializes on demand
-void run_initializer(utils::action_func f, atomic_do_once_state& state);
+void run_initializer(void(*f)(), atomic_do_once_state& state);
 //! Initialization from function that returns result and may need re-initialization on false result
-void run_initializer(utils::prediction_func f, atomic_do_once_state& state);
+void run_initializer(bool(*f)(), atomic_do_once_state& state);
 
-}
+} // namespace details
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -40,7 +42,7 @@ void run_initializer(utils::prediction_func f, atomic_do_once_state& state);
 template< typename F >
 void atomic_do_once(const F& func, atomic_do_once_state& state)
 {
-    using do_once_backoff = default_atomic_backoff;
+    typedef default_atomic_backoff do_once_backoff;
 
     // The loop in the implementation is necessary to avoid race when thread T2
     // that arrived in the middle of initialization attempt by another thread T1
@@ -53,7 +55,7 @@ void atomic_do_once(const F& func, atomic_do_once_state& state)
         {
             if(threading::atomic_bcas_seq(state, do_once_state::pending, do_once_state::uninitialized))
             {
-                internal::run_initializer(func, state);
+                details::run_initializer(func, state);
                 break;
             }
         }
@@ -65,5 +67,5 @@ void atomic_do_once(const F& func, atomic_do_once_state& state)
     }
 };
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

@@ -9,8 +9,7 @@
 #include "corlib/utils/static_vector.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -187,5 +186,5 @@ void fiber_context::run_subtasks_and_yield_impl(utils::array_view<details::task_
 #endif
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

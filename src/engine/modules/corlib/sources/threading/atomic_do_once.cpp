@@ -4,13 +4,12 @@
 #include "corlib/threading/atomic_do_once.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading::internal
-{
+XR_NAMESPACE_BEGIN(xr, threading, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void run_initializer(utils::action_func f, atomic_do_once_state& state)
+void run_initializer(void(*f)(), atomic_do_once_state& state)
 {
     // Run function handle
     f();
@@ -21,7 +20,7 @@ void run_initializer(utils::action_func f, atomic_do_once_state& state)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void run_initializer(utils::prediction_func f, atomic_do_once_state& state)
+void run_initializer(bool(*f)(), atomic_do_once_state& state)
 {
     // Run function handle
     auto const result = f();
@@ -30,5 +29,5 @@ void run_initializer(utils::prediction_func f, atomic_do_once_state& state)
         threading::atomic_store_rel(state, do_once_state::uninitialized);
 }
 
-} // namespace xr::threading::internal
+XR_NAMESPACE_END(xr, threading, details)
 //-----------------------------------------------------------------------------------------------------------

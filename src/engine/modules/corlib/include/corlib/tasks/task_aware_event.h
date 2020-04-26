@@ -6,10 +6,9 @@
 #include "corlib/threading/event.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
-using wait_result_enum = threading::event_wait_result;
+typedef threading::event_wait_result wait_result_enum;
 
 //-----------------------------------------------------------------------------------------------------------
 class event : private threading::event
@@ -35,5 +34,5 @@ inline void event::set(bool value)
     threading::event::set(value);
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

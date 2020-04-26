@@ -7,40 +7,52 @@
 #include "corlib/tasks/details/task_group.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
+
+// forward declaration
 class fiber_context;
-} // namespace xr::tasks
+
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks::details
-{
+XR_NAMESPACE_BEGIN(xr, tasks, details)
 
 //-----------------------------------------------------------------------------------------------------------
 struct grouped_task
 {
-    fiber_context* awaiting_fiber { nullptr };
-    fiber_context* parent_fiber { nullptr };
-    task_desc desc {};
-    task_group group {};
+    fiber_context* awaiting_fiber;
+    fiber_context* parent_fiber;
+    task_desc desc;
+    task_group group;
 
-    grouped_task() = default;
-    grouped_task(const task_desc& _desc, task_group _group);
+    grouped_task() XR_NOEXCEPT;
+    grouped_task(const task_desc& _desc, task_group _group) XR_NOEXCEPT;
 
-    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(grouped_task);
+    XR_DECLARE_DEFAULT_DESTRUCTOR(grouped_task);
     XR_DECLARE_DEFAULT_COPY_ASSIGNMENT(grouped_task);
+    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(grouped_task);
 }; // struct grouped_task
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-inline grouped_task::grouped_task(const task_desc& _desc, task_group _group)
-    : awaiting_fiber { nullptr }
-    , parent_fiber { nullptr }
-    , desc { _desc }
-    , group { _group }
+inline grouped_task::grouped_task() XR_NOEXCEPT
+    : awaiting_fiber(nullptr)
+    , parent_fiber(nullptr)
+    , desc()
+    , group()
 {}
 
-} // namespace xr::tasks::details
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline grouped_task::grouped_task(const task_desc& _desc, task_group _group) XR_NOEXCEPT
+    : awaiting_fiber(nullptr)
+    , parent_fiber(nullptr)
+    , desc(_desc)
+    , group(_group)
+{}
+
+XR_NAMESPACE_END(xr, tasks, details)
 //-----------------------------------------------------------------------------------------------------------

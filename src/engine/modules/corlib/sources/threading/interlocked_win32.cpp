@@ -5,7 +5,7 @@
 #   error "This code is supported by Windows platform!"
 #endif // !defined(XRAY_PLATFORM_WINDOWS)
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 #include "corlib/types.h"
 #include "../os_include_win32.h"
 #include "corlib/utils/type_conversions.h"
@@ -34,13 +34,12 @@
 #pragma intrinsic(_InterlockedCompareExchange64)
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading::internal
-{
+XR_NAMESPACE_BEGIN(xr, threading, details)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int8_t __atomic_exchange(volatile int8_t* ptr, int8_t value) noexcept
+int8_t __atomic_exchange(volatile int8_t* ptr, int8_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -53,7 +52,7 @@ int8_t __atomic_exchange(volatile int8_t* ptr, int8_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int16_t __atomic_exchange(volatile int16_t* ptr, int16_t value) noexcept
+int16_t __atomic_exchange(volatile int16_t* ptr, int16_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -66,7 +65,7 @@ int16_t __atomic_exchange(volatile int16_t* ptr, int16_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int32_t __atomic_exchange(volatile int32_t* ptr, int32_t value) noexcept
+int32_t __atomic_exchange(volatile int32_t* ptr, int32_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -79,7 +78,7 @@ int32_t __atomic_exchange(volatile int32_t* ptr, int32_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int64_t __atomic_exchange(volatile int64_t* ptr, int64_t value) noexcept
+int64_t __atomic_exchange(volatile int64_t* ptr, int64_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -92,7 +91,7 @@ int64_t __atomic_exchange(volatile int64_t* ptr, int64_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void* __atomic_exchange(void* volatile* ptr, void* value) noexcept
+void* __atomic_exchange(void* volatile* ptr, void* value) XR_NOEXCEPT
 {
     return InterlockedExchangePointer(ptr, value);
 }
@@ -100,7 +99,7 @@ void* __atomic_exchange(void* volatile* ptr, void* value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int8_t __atomic_exchange_add(volatile int8_t* ptr, int8_t value) noexcept
+int8_t __atomic_exchange_add(volatile int8_t* ptr, int8_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -113,7 +112,7 @@ int8_t __atomic_exchange_add(volatile int8_t* ptr, int8_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int16_t __atomic_exchange_add(volatile int16_t* ptr, int16_t value) noexcept
+int16_t __atomic_exchange_add(volatile int16_t* ptr, int16_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -126,7 +125,7 @@ int16_t __atomic_exchange_add(volatile int16_t* ptr, int16_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int32_t __atomic_exchange_add(volatile int32_t* ptr, int32_t value) noexcept
+int32_t __atomic_exchange_add(volatile int32_t* ptr, int32_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -139,7 +138,7 @@ int32_t __atomic_exchange_add(volatile int32_t* ptr, int32_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int64_t __atomic_exchange_add(volatile int64_t* ptr, int64_t value) noexcept
+int64_t __atomic_exchange_add(volatile int64_t* ptr, int64_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -152,7 +151,7 @@ int64_t __atomic_exchange_add(volatile int64_t* ptr, int64_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int8_t __atomic_compare_exchange(volatile int8_t* ptr, int8_t value, int8_t comparand) noexcept
+int8_t __atomic_compare_exchange(volatile int8_t* ptr, int8_t value, int8_t comparand) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -166,7 +165,7 @@ int8_t __atomic_compare_exchange(volatile int8_t* ptr, int8_t value, int8_t comp
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int16_t __atomic_compare_exchange(volatile int16_t* ptr, int16_t value, int16_t comparand) noexcept
+int16_t __atomic_compare_exchange(volatile int16_t* ptr, int16_t value, int16_t comparand) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -180,7 +179,7 @@ int16_t __atomic_compare_exchange(volatile int16_t* ptr, int16_t value, int16_t 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int32_t __atomic_compare_exchange(volatile int32_t* ptr, int32_t value, int32_t comparand) noexcept
+int32_t __atomic_compare_exchange(volatile int32_t* ptr, int32_t value, int32_t comparand) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -194,7 +193,7 @@ int32_t __atomic_compare_exchange(volatile int32_t* ptr, int32_t value, int32_t 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int64_t __atomic_compare_exchange(volatile int64_t* ptr, int64_t value, int64_t comparand) noexcept
+int64_t __atomic_compare_exchange(volatile int64_t* ptr, int64_t value, int64_t comparand) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -208,7 +207,7 @@ int64_t __atomic_compare_exchange(volatile int64_t* ptr, int64_t value, int64_t 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void* __atomic_compare_exchange(void* volatile* ptr, void* value, void* comparand) noexcept
+void* __atomic_compare_exchange(void* volatile* ptr, void* value, void* comparand) XR_NOEXCEPT
 {
     return InterlockedCompareExchangePointer(ptr, value, comparand);
 }
@@ -216,7 +215,7 @@ void* __atomic_compare_exchange(void* volatile* ptr, void* value, void* comparan
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int8_t __atomic_or_operation(volatile int8_t* ptr, int8_t value) noexcept
+int8_t __atomic_or_operation(volatile int8_t* ptr, int8_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -229,7 +228,7 @@ int8_t __atomic_or_operation(volatile int8_t* ptr, int8_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int16_t __atomic_or_operation(volatile int16_t* ptr, int16_t value) noexcept
+int16_t __atomic_or_operation(volatile int16_t* ptr, int16_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -242,7 +241,7 @@ int16_t __atomic_or_operation(volatile int16_t* ptr, int16_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int32_t __atomic_or_operation(volatile int32_t* ptr, int32_t value) noexcept
+int32_t __atomic_or_operation(volatile int32_t* ptr, int32_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -255,7 +254,7 @@ int32_t __atomic_or_operation(volatile int32_t* ptr, int32_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int64_t __atomic_or_operation(volatile int64_t* ptr, int64_t value) noexcept
+int64_t __atomic_or_operation(volatile int64_t* ptr, int64_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -268,7 +267,7 @@ int64_t __atomic_or_operation(volatile int64_t* ptr, int64_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int8_t __atomic_and_operation(volatile int8_t* ptr, int8_t value) noexcept
+int8_t __atomic_and_operation(volatile int8_t* ptr, int8_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -281,7 +280,7 @@ int8_t __atomic_and_operation(volatile int8_t* ptr, int8_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int16_t __atomic_and_operation(volatile int16_t* ptr, int16_t value) noexcept
+int16_t __atomic_and_operation(volatile int16_t* ptr, int16_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -294,7 +293,7 @@ int16_t __atomic_and_operation(volatile int16_t* ptr, int16_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int32_t __atomic_and_operation(volatile int32_t* ptr, int32_t value) noexcept
+int32_t __atomic_and_operation(volatile int32_t* ptr, int32_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -307,7 +306,7 @@ int32_t __atomic_and_operation(volatile int32_t* ptr, int32_t value) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) noexcept
+int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) XR_NOEXCEPT
 {
     assert(ptr);
 
@@ -317,5 +316,5 @@ int64_t __atomic_and_operation(volatile int64_t* ptr, int64_t value) noexcept
     return utils::implicit_cast<int64_t>(_InterlockedAnd64(p, v));
 }
 
-} // namespace xr::threading::internal
+XR_NAMESPACE_END(xr, threading, details)
 //-----------------------------------------------------------------------------------------------------------

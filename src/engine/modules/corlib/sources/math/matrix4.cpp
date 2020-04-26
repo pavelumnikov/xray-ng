@@ -6,15 +6,14 @@
 #include "corlib/math/details/sse/sse_math_intrinsics.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::math
-{
+XR_NAMESPACE_BEGIN(xr, math)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationX(float angle) noexcept
+matrix4 matrix4::rotationX(float angle) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     float const c = cosine(angle);
     float const s = sine(angle);
@@ -29,9 +28,9 @@ matrix4 matrix4::rotationX(float angle) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationY(float angle) noexcept
+matrix4 matrix4::rotationY(float angle) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     float const c = cosine(angle);
     float const s = sine(angle);
@@ -46,9 +45,9 @@ matrix4 matrix4::rotationY(float angle) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::rotationZ(float angle) noexcept
+matrix4 matrix4::rotationZ(float angle) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     float const c = cosine(angle);
     float const s = sine(angle);
@@ -63,7 +62,7 @@ matrix4 matrix4::rotationZ(float angle) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::from_quaternion(quaternion const& rhs) noexcept
+matrix4 matrix4::from_quaternion(quaternion const& rhs) XR_NOEXCEPT
 {
     // TODO: rewrite with SSE
 
@@ -100,9 +99,9 @@ matrix4 matrix4::from_quaternion(quaternion const& rhs) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z_near, float z_far, bool is_homogenous_depth, bool reversed_z) noexcept
+matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z_near, float z_far, bool is_homogenous_depth, bool reversed_z) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     m.m11 = 2 / (right - left);
     m.m22 = 2 / (top - bottom);
@@ -127,9 +126,9 @@ matrix4 matrix4::ortho(float left, float right, float bottom, float top, float z
 /**
 */
 matrix4 matrix4::from_perspective(float fov, float ratio, float near_plane, float far_plane,
-    bool is_homogenous_depth, bool reversed_z) noexcept
+    bool is_homogenous_depth, bool reversed_z) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     float const f = 1 / tanf(fov * 0.5f);
     float const z_diff = (near_plane - far_plane);
@@ -156,9 +155,9 @@ matrix4 matrix4::from_perspective(float fov, float ratio, float near_plane, floa
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::from_euler(float yaw, float pitch, float roll) noexcept
+matrix4 matrix4::from_euler(float yaw, float pitch, float roll) XR_NOEXCEPT
 {
-    matrix4 m {};
+    matrix4 m;
 
     float sroll = sinf(roll);
     float croll = cosf(roll);
@@ -190,7 +189,7 @@ matrix4 matrix4::from_euler(float yaw, float pitch, float roll) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up) noexcept
+matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up) XR_NOEXCEPT
 {
     matrix4 result {};
 
@@ -214,7 +213,7 @@ matrix4 matrix4::look_at(const vec3f& eye, const vec3f& at, const vec3f& up) noe
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) const noexcept
+void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) const XR_NOEXCEPT
 {
     get_translation(position);
     scale = getXVector().length();
@@ -226,7 +225,7 @@ void matrix4::decompose(vec3f& position, quaternion& rotation, float& scale) con
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator *(float rhs) const noexcept
+matrix4 matrix4::operator *(float rhs) const XR_NOEXCEPT
 {
     matrix4 out;
     out.m11 = m11 * rhs;
@@ -255,7 +254,7 @@ matrix4 matrix4::operator *(float rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator +(const matrix4& rhs) const noexcept
+matrix4 matrix4::operator +(const matrix4& rhs) const XR_NOEXCEPT
 { 
     matrix4 out;
 
@@ -285,7 +284,7 @@ matrix4 matrix4::operator +(const matrix4& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-matrix4 matrix4::operator *(const matrix4& rhs) const noexcept
+matrix4 matrix4::operator *(const matrix4& rhs) const XR_NOEXCEPT
 {
     matrix4 out {};
 
@@ -342,14 +341,13 @@ matrix4 matrix4::operator *(const matrix4& rhs) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void matrix4::normalize_scale() noexcept
+void matrix4::normalize_scale() XR_NOEXCEPT
 {
-    vec3f scale
-    {
+    vec3f scale(
         1 / vec3f(m11, m21, m31).length(),
         1 / vec3f(m12, m22, m32).length(),
         1 / vec3f(m13, m23, m33).length()
-    };
+    );
 
     m11 *= scale.x;
     m21 *= scale.x;
@@ -367,7 +365,7 @@ void matrix4::normalize_scale() noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-quaternion matrix4::get_rotation() const noexcept
+quaternion matrix4::get_rotation() const XR_NOEXCEPT
 {
     quaternion rot;
     float const tr = m11 + m22 + m33;
@@ -415,7 +413,7 @@ quaternion matrix4::get_rotation() const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void matrix4::transpose() noexcept
+void matrix4::transpose() XR_NOEXCEPT
 {
     float tmp = m21;
 
@@ -446,7 +444,7 @@ void matrix4::transpose() noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void matrix4::multiply_3x3(float scale) noexcept
+void matrix4::multiply_3x3(float scale) XR_NOEXCEPT
 {
     m11 *= scale;
     m12 *= scale;
@@ -462,33 +460,31 @@ void matrix4::multiply_3x3(float scale) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-vec3f matrix4::transform_point(const vec3f& rhs) const noexcept
+vec3f matrix4::transform_point(const vec3f& rhs) const XR_NOEXCEPT
 {
-    return vec3f
-    {
+    return vec3f(
         m11 * rhs.x + m21 * rhs.y + m31 * rhs.z + m41,
         m12 * rhs.x + m22 * rhs.y + m32 * rhs.z + m42,
         m13 * rhs.x + m23 * rhs.y + m33 * rhs.z + m43
-    };
+    );
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-vec3f matrix4::transform_vector(const vec3f& rhs) const noexcept
+vec3f matrix4::transform_vector(const vec3f& rhs) const XR_NOEXCEPT
 {
-    return vec3f
-    {
+    return vec3f(
         m11 * rhs.x + m21 * rhs.y + m31 * rhs.z,
         m12 * rhs.x + m22 * rhs.y + m32 * rhs.z,
         m13 * rhs.x + m23 * rhs.y + m33 * rhs.z
-    };
+    );
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void matrix4::set_identity() noexcept
+void matrix4::set_identity() XR_NOEXCEPT
 {
     m11 = 1; m12 = 0; m13 = 0; m14 = 0;
     m21 = 0; m22 = 1; m23 = 0; m24 = 0;
@@ -496,5 +492,5 @@ void matrix4::set_identity() noexcept
     m41 = 0; m42 = 0; m43 = 0; m44 = 1;
 }
 
-} // namespace xr::math
+XR_NAMESPACE_END(xr, math)
 //-----------------------------------------------------------------------------------------------------------

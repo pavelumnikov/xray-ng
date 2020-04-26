@@ -8,8 +8,7 @@
 #ifdef XR_INSTRUMENTED_BUILD
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 //-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL base_profiler_event_listener
@@ -56,6 +55,6 @@ public:
     virtual void on_task_execute_state_changed(math::color_table debug_color, pcstr debug_id, task_execute_state type, uint32 fiber_index) = 0;
 };
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 
 #endif

@@ -7,8 +7,7 @@
 #include "EASTL/algorithm.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 template<typename T>
 constexpr T numeric_add(T _a, T _b)
@@ -100,5 +99,5 @@ constexpr T numeric_saturate_sub(T _a, T _b)
     return result;
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

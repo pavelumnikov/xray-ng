@@ -3,14 +3,13 @@
 
 #pragma once
 
-#include "corlib/utils/integer_fwd.h"      // self include
-#include "corlib/utils/integer_traits.h"   // for integer_traits
+#include "corlib/utils/integer_fwd.h" // self include
+#include "corlib/utils/integer_traits.h" // for integer_traits
 #include <limits>
 #include <cstdint>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //  fast integers from least integers
 //  int_fast_t<> works correctly for unsigned too, in spite of the name.
@@ -202,5 +201,5 @@ struct uint_value_t
     typedef typename int_fast_t<least>::type  fast;
 };
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

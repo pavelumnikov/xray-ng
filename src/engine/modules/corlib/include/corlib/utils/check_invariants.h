@@ -6,8 +6,7 @@
 #include "corlib/utils/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils::detail
-{
+XR_NAMESPACE_BEGIN(xr, utils, details)
 
 //-----------------------------------------------------------------------------------------------------------
 template<typename T>
@@ -46,12 +45,12 @@ check_invariants_raii<T>::~check_invariants_raii()
     m_object->check_invariants();
 }
 
-} // namespace xr::utils::detail
+XR_NAMESPACE_END(xr, utils, details)
 //-----------------------------------------------------------------------------------------------------------
 
 #ifdef MASTER_GOLD
 #   define XR_CHECK_INVARIANTS(Type)
 #else
 #   define XR_CHECK_INVARIANTS(Type) \
-        ::xr::utils::detail::check_invariants_raii<Type> check_invariants_helper$(this)
+        ::xr::utils::details::check_invariants_raii<Type> check_invariants_helper$(this)
 #endif // MASTER_GOLD

@@ -9,8 +9,8 @@ using namespace xr;
 
 TEST_CASE("mt_arena_allocator tests")
 {
-    constexpr size_t initial = 64_kb;
-    constexpr size_t size = 128_kb;
+    XR_CONSTEXPR_CPP14_OR_CONST size_t initial = XR_KILOBYTES_TO_BYTES(64);
+    XR_CONSTEXPR_CPP14_OR_CONST size_t size = XR_KILOBYTES_TO_BYTES(128);
 
     memory::mt_arena_allocator allocator;
     allocator.initialize(size, initial);

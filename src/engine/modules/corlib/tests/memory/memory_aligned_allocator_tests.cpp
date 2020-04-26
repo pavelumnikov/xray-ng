@@ -10,11 +10,11 @@ using namespace xr;
 
 TEST_CASE("aligned_allocator tests")
 {
-    constexpr size_t initial = 128_kb;
-    constexpr size_t size = 256_kb;
+    XR_CONSTEXPR_CPP14_OR_CONST size_t initial = XR_KILOBYTES_TO_BYTES(128);
+    XR_CONSTEXPR_CPP14_OR_CONST size_t size = XR_KILOBYTES_TO_BYTES(256);
 
-    memory::crt_allocator allocator;
-    memory::aligned_allocator<XR_DEFAULT_MACHINE_ALIGNMENT> aligned_allocator { allocator };
+    memory::crt_allocator allocator();
+    memory::aligned_allocator<XR_DEFAULT_MACHINE_ALIGNMENT> aligned_allocator(allocator);
 
     SECTION("malloc test")
     {

@@ -3,9 +3,10 @@
 
 #pragma once
 
+#include "corlib/macro/namespaces.h"
+
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 template<typename LockingValue, bool HasCacheLineSize>
 struct spin_wait_strategy_traits
@@ -14,5 +15,5 @@ struct spin_wait_strategy_traits
     static constexpr auto has_cache_line_size = HasCacheLineSize;
 };
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

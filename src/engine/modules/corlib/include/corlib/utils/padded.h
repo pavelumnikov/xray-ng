@@ -3,13 +3,12 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 
 #define XR_MAX_CACHE_LINE_PAD char XR_STRING_CONCAT(m_cache_line_pad_$, __LINE__) [XR_MAX_CACHE_LINE_SIZE]
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 //! Basic padding with template selection

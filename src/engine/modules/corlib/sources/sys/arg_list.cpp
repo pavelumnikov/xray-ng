@@ -4,8 +4,7 @@
 #include "corlib/sys/arg_list.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -51,7 +50,7 @@ arg_list::arg_list(memory::base_allocator& alloc, utils::string_view cmd_line)
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::add_arg(utils::string_view key) noexcept
+bool arg_list::add_arg(utils::string_view key) XR_NOEXCEPT
 {
     key_type const k(key.cbegin(), key.cend());
 
@@ -65,7 +64,7 @@ bool arg_list::add_arg(utils::string_view key) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::add_arg(utils::string_view key, utils::string_view arg) noexcept
+bool arg_list::add_arg(utils::string_view key, utils::string_view arg) XR_NOEXCEPT
 {
     key_type const k(key.cbegin(), key.cend());
 
@@ -82,7 +81,7 @@ bool arg_list::add_arg(utils::string_view key, utils::string_view arg) noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::has_arg(utils::string_view key) const noexcept
+bool arg_list::has_arg(utils::string_view key) const XR_NOEXCEPT
 {
     key_type const k(key.cbegin(), key.cend());
     return internal_key_exists(k);
@@ -91,21 +90,21 @@ bool arg_list::has_arg(utils::string_view key) const noexcept
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-utils::string_view arg_list::at(utils::string_view key) const noexcept
+utils::string_view arg_list::at(utils::string_view key) const XR_NOEXCEPT
 {
     key_type const k(key.cbegin(), key.cend());
 
     XR_DEBUG_ASSERTION(m_map.find(k) != eastl::end(m_map));
-    return utils::stdext::to_string_view(m_map.at(k));
+    return utils::to_string_view(m_map.at(k));
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-bool arg_list::internal_key_exists(key_type const& k) const noexcept
+bool arg_list::internal_key_exists(key_type const& k) const XR_NOEXCEPT
 {
     return m_map.find(k) != eastl::end(m_map);
 }
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

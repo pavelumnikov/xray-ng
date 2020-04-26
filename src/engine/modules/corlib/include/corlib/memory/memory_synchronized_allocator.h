@@ -7,8 +7,7 @@
 #include "corlib/threading/scoped_lock.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 template<class Allocator, class Mutex>
@@ -17,7 +16,7 @@ class memory_synchronized_allocator : public Allocator
 public:
     using allocator = Allocator;
 
-    memory_synchronized_allocator() noexcept = default;
+    memory_synchronized_allocator() XR_NOEXCEPT = default;
 
 protected:
     virtual pvoid call_malloc(size_t size
@@ -77,5 +76,5 @@ memory_synchronized_allocator<Allocator, Mutex>::call_free(pvoid pointer
     super::free_impl(pointer XR_DEBUG_PARAMETERS);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

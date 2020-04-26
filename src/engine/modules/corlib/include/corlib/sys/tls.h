@@ -6,13 +6,11 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::sys
-{
+XR_NAMESPACE_BEGIN(xr, sys)
 
 //-----------------------------------------------------------------------------------------------------------
-using tls_handle = uint32_t;
-
-uintptr_t constexpr invalid_thread_local_storage = UINT32_MAX;
+typedef uint32_t tls_handle;
+XR_CONSTEXPR_CPP14_OR_CONST uint32_t invalid_thread_local_storage = UINT32_MAX;
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -35,7 +33,7 @@ void* get_tls_data(tls_handle const tls);
 template<typename T>
 T* get_tls_typed_data(tls_handle const tls)
 {
-    return reinterpret_cast<T*>(sys::get_tls_data(tls));
+    return reinterpret_cast<T*>(get_tls_data(tls));
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -43,5 +41,5 @@ T* get_tls_typed_data(tls_handle const tls)
 */
 void destroy_thread_local(tls_handle const tls);
 
-} // namespace xr::sys
+XR_NAMESPACE_END(xr, sys)
 //-----------------------------------------------------------------------------------------------------------

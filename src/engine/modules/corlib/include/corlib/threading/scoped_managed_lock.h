@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 /// <summary>
 /// <c>scoped_managed_lock</c> is a RAII class that allows to do manual locking of some section. Can be
@@ -22,18 +21,15 @@ public:
     /// <param name="cs">Reference to a locking object.</param>
     /// <param name="force_lock">Lock by default on true, TryLock on false.</param>
     /// <param name="is_scope_locked">Retrieves result of locking.</param>
-    scoped_managed_lock(T& cs, bool force_lock, bool& is_scope_locked) noexcept;
+    scoped_managed_lock(T& cs, bool force_lock, bool& is_scope_locked) XR_NOEXCEPT;
 
     /// <summary>
     /// Unlocks locking object.
     /// </summary>
     ~scoped_managed_lock();
 
-    scoped_managed_lock(const scoped_managed_lock&) = delete;
-    scoped_managed_lock& operator=(const scoped_managed_lock&) = delete;
-
-    scoped_managed_lock(scoped_managed_lock&&) = delete;
-    scoped_managed_lock& operator=(scoped_managed_lock&&) = delete;
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(scoped_managed_lock);
+    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(scoped_managed_lock);
 
 private:
     uint8_t m_locking_pattern;
@@ -44,20 +40,20 @@ private:
 /**
 */
 template< typename T >
-scoped_managed_lock< T >::scoped_managed_lock(T& cs, bool const force_lock, bool& is_scope_locked) noexcept
+scoped_managed_lock< T >::scoped_managed_lock(T& cs, bool const force_lock, bool& is_scope_locked) XR_NOEXCEPT
     : m_locking_pattern(1)
     , m_cs(cs)
 {
     if(force_lock)
     {
-        this->m_cs.lock();
+        m_cs.lock();
         is_scope_locked = true;
     }
     else
     {
-        if(this->m_cs.try_lock())
+        if(m_cs.try_lock())
         {
-            this->m_locking_pattern = 0;
+            m_locking_pattern = 0;
             is_scope_locked = true;
         }
         else
@@ -73,9 +69,9 @@ scoped_managed_lock< T >::scoped_managed_lock(T& cs, bool const force_lock, bool
 template< typename T >
 scoped_managed_lock< T >::~scoped_managed_lock()
 {
-    if(!this->m_locking_pattern)
-        this->m_cs.unlock();
+    if(!m_locking_pattern)
+        m_cs.unlock();
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

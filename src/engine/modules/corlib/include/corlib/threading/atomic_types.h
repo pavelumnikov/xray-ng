@@ -6,19 +6,18 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
-using atomic_bool = volatile bool;
-using atomic_int8 = volatile int8_t;
-using atomic_uint8 = volatile uint8_t;
-using atomic_int16 = volatile int16_t;
-using atomic_uint16 = volatile uint16_t;
-using atomic_int32 = volatile int32_t;
-using atomic_uint32 = volatile uint32_t;
-using atomic_int64 = volatile int64_t;
-using atomic_uint64 = volatile uint64_t;
-using atomic_size_t = volatile size_t;
+typedef volatile bool atomic_bool;
+typedef volatile int8_t atomic_int8;
+typedef volatile uint8_t atomic_uint8;
+typedef volatile int16_t atomic_int16;
+typedef volatile uint16_t atomic_uint16;
+typedef volatile int32_t atomic_int32;
+typedef volatile uint32_t atomic_uint32;
+typedef volatile int64_t atomic_int64;
+typedef volatile uint64_t atomic_uint64;
+typedef volatile size_t atomic_size_t;
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

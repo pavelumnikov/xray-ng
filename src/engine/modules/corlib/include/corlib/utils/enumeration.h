@@ -38,11 +38,16 @@
 
 #pragma once
 
-#include "corlib/platform.h"
+#include "corlib/types.h"
 #include "corlib/utils/type_conversions.h"
 #include "corlib/utils/string_view.h"
 #include "EASTL/optional.h"
 #include "EASTL/string_view.h"
+
+// Checks magic_enum compiler compatibility.
+#if defined(__clang__) || defined(__GNUC__) && __GNUC__ >= 9 || defined(_MSC_VER)
+#   define MAGIC_ENUM_SUPPORTED 1
+#endif
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::utils
@@ -83,29 +88,29 @@ inline constexpr bool is_enum_v = eastl::is_enum_v<T> && eastl::is_same_v<T, eas
 template <size_t N>
 struct static_string
 {
-    constexpr explicit static_string(string_view str) noexcept : static_string { str, eastl::make_index_sequence<N>{} }
+    constexpr explicit static_string(string_view str) XR_NOEXCEPT : static_string { str, eastl::make_index_sequence<N>{} }
     {
         assert(str.size() == N);
     }
 
-    constexpr const char* data() const noexcept
+    constexpr const char* data() const XR_NOEXCEPT
     {
         return chars.data();
     }
 
-    constexpr size_t size() const noexcept
+    constexpr size_t size() const XR_NOEXCEPT
     {
         return chars.size();
     }
 
-    constexpr operator string_view() const noexcept
+    constexpr operator string_view() const XR_NOEXCEPT
     {
         return { data(), size() };
     }
 
 private:
     template <size_t... I>
-    constexpr static_string(string_view str, eastl::index_sequence<I...>) noexcept : chars { { str[I]... } }
+    constexpr static_string(string_view str, eastl::index_sequence<I...>) XR_NOEXCEPT : chars { { str[I]... } }
     {}
 
     const eastl::array<char, N> chars;
@@ -114,20 +119,20 @@ private:
 template <>
 struct static_string<0>
 {
-    constexpr explicit static_string(string_view) noexcept
+    constexpr explicit static_string(string_view) XR_NOEXCEPT
     {}
 
-    constexpr const char* data() const noexcept
+    constexpr const char* data() const XR_NOEXCEPT
     {
         return nullptr;
     }
 
-    constexpr size_t size() const noexcept
+    constexpr size_t size() const XR_NOEXCEPT
     {
         return 0;
     }
 
-    constexpr operator string_view() const noexcept
+    constexpr operator string_view() const XR_NOEXCEPT
     {
         return {};
     }
@@ -135,13 +140,13 @@ struct static_string<0>
 
 struct char_equal
 {
-    constexpr bool operator()(char lhs, char rhs) const noexcept
+    constexpr bool operator()(char lhs, char rhs) const XR_NOEXCEPT
     {
         return lhs == rhs;
     }
 };
 
-constexpr string_view pretty_name(eastl::string_view name) noexcept
+constexpr string_view pretty_name(eastl::string_view name) XR_NOEXCEPT
 {
     for(size_t i = name.size(); i > 0; --i)
     {
@@ -167,7 +172,7 @@ constexpr string_view pretty_name(eastl::string_view name) noexcept
 
 template <typename BinaryPredicate>
 constexpr bool cmp_equal(string_view lhs, string_view rhs, BinaryPredicate p)
-noexcept(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>)
+XR_NOEXCEPT(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>)
 {
     if(lhs.size() != rhs.size())
     {
@@ -187,7 +192,7 @@ noexcept(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>)
 }
 
 template <typename L, typename R>
-constexpr bool cmp_less(L lhs, R rhs) noexcept
+constexpr bool cmp_less(L lhs, R rhs) XR_NOEXCEPT
 {
     static_assert(eastl::is_integral_v<L> && eastl::is_integral_v<R>,
         "detail::cmp_less requires integral type.");
@@ -210,7 +215,7 @@ constexpr bool cmp_less(L lhs, R rhs) noexcept
 }
 
 template <typename E>
-constexpr auto n() noexcept
+constexpr auto n() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "current constexpr function requires enum type.");
 #  if defined(__clang__)
@@ -227,7 +232,7 @@ template <typename E>
 inline constexpr auto type_name_v = n<E>();
 
 template <typename E, E V>
-constexpr auto n() noexcept
+constexpr auto n() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "current constexpr function requires enum type.");
 #  if defined(__clang__) || defined(__GNUC__)
@@ -242,7 +247,7 @@ template <typename E, E V>
 inline constexpr auto name_v = n<E, V>();
 
 template <typename E>
-constexpr int reflected_min() noexcept
+constexpr int reflected_min() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::reflected_min requires enum type.");
     constexpr auto lhs = enum_range<E>::min;
@@ -254,7 +259,7 @@ constexpr int reflected_min() noexcept
 }
 
 template <typename E>
-constexpr int reflected_max() noexcept
+constexpr int reflected_max() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::reflected_max requires enum type.");
     constexpr auto lhs = enum_range<E>::max;
@@ -272,7 +277,7 @@ template <typename E>
 inline constexpr int reflected_max_v = reflected_max<E>();
 
 template <typename E>
-constexpr size_t reflected_size() noexcept
+constexpr size_t reflected_size() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::reflected_size requires enum type.");
     static_assert(reflected_max_v<E> > reflected_min_v<E>, "enum_range requires max > min.");
@@ -284,7 +289,7 @@ constexpr size_t reflected_size() noexcept
 }
 
 template <typename E, int... I>
-constexpr auto values(eastl::integer_sequence<int, I...>) noexcept
+constexpr auto values(eastl::integer_sequence<int, I...>) XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::values requires enum type.");
     constexpr eastl::array<bool, sizeof...(I)> valid { { (n<E, static_cast<E>(I + reflected_min_v<E>)>().size() != 0)... } };
@@ -315,7 +320,7 @@ template <typename E>
 inline constexpr int max_v = values_v<E>.empty() ? 0 : static_cast<int>(values_v<E>.back());
 
 template <typename E>
-constexpr size_t range_size() noexcept
+constexpr size_t range_size() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::range_size requires enum type.");
     constexpr auto size = max_v<E> -min_v<E> +1;
@@ -335,7 +340,7 @@ template <typename E>
 inline constexpr auto invalid_index_v = (eastl::numeric_limits<index_t<E>>::max)();
 
 template <typename E, int... I>
-constexpr auto indexes(eastl::integer_sequence<int, I...>) noexcept
+constexpr auto indexes(eastl::integer_sequence<int, I...>) XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::indexes requires enum type.");
     index_t<E> i = 0;
@@ -347,7 +352,7 @@ constexpr auto indexes(eastl::integer_sequence<int, I...>) noexcept
 }
 
 template <typename E, size_t... I>
-constexpr auto names(eastl::index_sequence<I...>) noexcept
+constexpr auto names(eastl::index_sequence<I...>) XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::names requires enum type.");
 
@@ -358,7 +363,7 @@ constexpr auto names(eastl::index_sequence<I...>) noexcept
 }
 
 template <typename E, size_t... I>
-constexpr auto entries(eastl::index_sequence<I...>) noexcept
+constexpr auto entries(eastl::index_sequence<I...>) XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "detail::entries requires enum type.");
 
@@ -424,17 +429,17 @@ struct enum_traits<E, true>
     inline static constexpr eastl::array<eastl::pair<E, string_view>, count> entries = detail::entries<E>(
         eastl::make_index_sequence<count_v<E>>{});
 
-    [[nodiscard]] static constexpr bool reflected(E value) noexcept
+    [[nodiscard]] static constexpr bool reflected(E value) XR_NOEXCEPT
     {
         return reflected(static_cast<U>(value));
     }
 
-    [[nodiscard]] static constexpr int index(E value) noexcept
+    [[nodiscard]] static constexpr int index(E value) XR_NOEXCEPT
     {
         return index(static_cast<U>(value));
     }
 
-    [[nodiscard]] static constexpr E value(size_t index) noexcept
+    [[nodiscard]] static constexpr E value(size_t index) XR_NOEXCEPT
     {
         if constexpr(is_sparse)
         {
@@ -446,7 +451,7 @@ struct enum_traits<E, true>
         }
     }
 
-    [[nodiscard]] static constexpr string_view name(E value) noexcept
+    [[nodiscard]] static constexpr string_view name(E value) XR_NOEXCEPT
     {
         if(const auto i = index(value); i != -1)
         {
@@ -463,12 +468,12 @@ private:
     using U = underlying_type;
     inline static constexpr auto indexes = detail::indexes<E>(eastl::make_integer_sequence<int, range_size_v<E>>{});
 
-    static constexpr bool reflected(U value) noexcept
+    static constexpr bool reflected(U value) XR_NOEXCEPT
     {
         return value >= static_cast<U>(reflected_min_v<E>) && value <= static_cast<U>(reflected_max_v<E>);
     }
 
-    static constexpr int index(U value) noexcept
+    static constexpr int index(U value) XR_NOEXCEPT
     {
         if(value >= static_cast<U>(min_v<E>) && value <= static_cast<U>(max_v<E>))
         {
@@ -532,7 +537,7 @@ using enum_traits = detail::enum_traits<eastl::decay_t<E>>;
 // Returns eastl::optional with enum value.
 template <typename E, typename BinaryPredicate>
 [[nodiscard]] constexpr auto enum_cast(string_view value, BinaryPredicate p) 
-noexcept(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>) -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
+XR_NOEXCEPT(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>) -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
 {
     static_assert(eastl::is_invocable_r_v<bool, BinaryPredicate, char, char>,
         "enum_cast requires bool(char, char) invocable predicate.");
@@ -563,7 +568,7 @@ noexcept(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>) -> 
 }
 
 template <typename E>
-[[nodiscard]] constexpr auto enum_cast(string_view value) noexcept -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
+[[nodiscard]] constexpr auto enum_cast(string_view value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
 {
     return enum_cast<E>(value, detail::char_equal {});
 }
@@ -571,7 +576,7 @@ template <typename E>
 // Obtains enum value from integer value.
 // Returns eastl::optional with enum value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_cast(underlying_type_t<E> value) noexcept -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
+[[nodiscard]] constexpr auto enum_cast(underlying_type_t<E> value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
 {
     using D = eastl::decay_t<E>;
 
@@ -585,7 +590,7 @@ template <typename E>
 
 // Returns integer value from enum value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_integer(E value) noexcept -> detail::enable_if_enum_t<E, underlying_type_t<E>>
+[[nodiscard]] constexpr auto enum_integer(E value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, underlying_type_t<E>>
 {
     return static_cast<underlying_type_t<E>>(value);
 }
@@ -593,7 +598,7 @@ template <typename E>
 // Obtains index in enum value sequence from enum value.
 // Returns eastl::optional with index.
 template <typename E>
-[[nodiscard]] constexpr auto enum_index(E value) noexcept -> detail::enable_if_enum_t<E, eastl::optional<size_t>>
+[[nodiscard]] constexpr auto enum_index(E value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, eastl::optional<size_t>>
 {
     if(const auto i = enum_traits<E>::index(value); i != -1)
     {
@@ -605,21 +610,21 @@ template <typename E>
 
 // Checks whether enum contains enumerator with such value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_contains(E value) noexcept -> detail::enable_if_enum_t<E, bool>
+[[nodiscard]] constexpr auto enum_contains(E value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, bool>
 {
     return enum_traits<E>::index(value) != -1;
 }
 
 // Checks whether enum contains enumerator with such integer value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_contains(underlying_type_t<E> value) noexcept -> detail::enable_if_enum_t<E, bool>
+[[nodiscard]] constexpr auto enum_contains(underlying_type_t<E> value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, bool>
 {
     return enum_cast<E>(value).has_value();
 }
 
 // Checks whether enum contains enumerator with such string enum name.
 template <typename E>
-[[nodiscard]] constexpr auto enum_contains(string_view value) noexcept -> detail::enable_if_enum_t<E, bool>
+[[nodiscard]] constexpr auto enum_contains(string_view value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, bool>
 {
     return enum_cast<E>(value).has_value();
 }
@@ -627,7 +632,7 @@ template <typename E>
 // Returns enum value at specified index.
 // No bounds checking is performed: the behavior is undefined if index >= number of enum values.
 template <typename E>
-[[nodiscard]] constexpr auto enum_value(size_t index) noexcept -> detail::enable_if_enum_t<E, eastl::decay_t<E>>
+[[nodiscard]] constexpr auto enum_value(size_t index) XR_NOEXCEPT -> detail::enable_if_enum_t<E, eastl::decay_t<E>>
 {
     return enum_traits<E>::value(index);
 }
@@ -635,14 +640,14 @@ template <typename E>
 // Obtains value enum sequence.
 // Returns eastl::array with enum values, sorted by enum value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_values() noexcept -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::values)&>
+[[nodiscard]] constexpr auto enum_values() XR_NOEXCEPT -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::values)&>
 {
     return enum_traits<E>::values;
 }
 
 // Returns number of enum values.
 template <typename E>
-[[nodiscard]] constexpr auto enum_count() noexcept -> detail::enable_if_enum_t<E, size_t>
+[[nodiscard]] constexpr auto enum_count() XR_NOEXCEPT -> detail::enable_if_enum_t<E, size_t>
 {
     return enum_traits<E>::count;
 }
@@ -650,7 +655,7 @@ template <typename E>
 // Returns string enum name from static storage enum variable.
 // This version is much lighter on the compile times and is not restricted to the enum_range limitation.
 template <auto V>
-[[nodiscard]] constexpr auto enum_name() noexcept -> detail::enable_if_enum_t<decltype(V), string_view>
+[[nodiscard]] constexpr auto enum_name() XR_NOEXCEPT -> detail::enable_if_enum_t<decltype(V), string_view>
 {
     constexpr string_view name = detail::name_v<eastl::decay_t<decltype(V)>, V>;
     static_assert(name.size() > 0, "Enum value does not have a name.");
@@ -661,7 +666,7 @@ template <auto V>
 // Returns string enum name from enum value.
 // If enum value does not have name or value out of range, returns empty string.
 template <typename E>
-[[nodiscard]] constexpr auto enum_name(E value) noexcept -> detail::enable_if_enum_t<E, string_view>
+[[nodiscard]] constexpr auto enum_name(E value) XR_NOEXCEPT -> detail::enable_if_enum_t<E, string_view>
 {
     return enum_traits<E>::name(value);
 }
@@ -669,7 +674,7 @@ template <typename E>
 // Obtains string enum name sequence.
 // Returns eastl::array with string enum names, sorted by enum value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_names() noexcept -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::names)&>
+[[nodiscard]] constexpr auto enum_names() XR_NOEXCEPT -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::names)&>
 {
     return enum_traits<E>::names;
 }
@@ -677,7 +682,7 @@ template <typename E>
 // Obtains pair (value enum, string enum name) sequence.
 // Returns eastl::array with eastl::pair (value enum, string enum name), sorted by enum value.
 template <typename E>
-[[nodiscard]] constexpr auto enum_entries() noexcept -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::entries)&>
+[[nodiscard]] constexpr auto enum_entries() XR_NOEXCEPT -> detail::enable_if_enum_t<E, decltype(enum_traits<E>::entries)&>
 {
     return enum_traits<E>::entries;
 }
@@ -686,43 +691,43 @@ namespace bitwise_operators
 {
 
 template <typename E>
-constexpr auto operator~(E rhs) noexcept -> detail::enable_if_enum_t<E, E>
+constexpr auto operator~(E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E>
 {
     return static_cast<E>(~static_cast<underlying_type_t<E>>(rhs));
 }
 
 template <typename E>
-constexpr auto operator|(E lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E>
+constexpr auto operator|(E lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E>
 {
     return static_cast<E>(static_cast<underlying_type_t<E>>(lhs) | static_cast<underlying_type_t<E>>(rhs));
 }
 
 template <typename E>
-constexpr auto operator&(E lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E>
+constexpr auto operator&(E lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E>
 {
     return static_cast<E>(static_cast<underlying_type_t<E>>(lhs)& static_cast<underlying_type_t<E>>(rhs));
 }
 
 template <typename E>
-constexpr auto operator^(E lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E>
+constexpr auto operator^(E lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E>
 {
     return static_cast<E>(static_cast<underlying_type_t<E>>(lhs) ^ static_cast<underlying_type_t<E>>(rhs));
 }
 
 template <typename E>
-constexpr auto operator|=(E& lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E&>
+constexpr auto operator|=(E& lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E&>
 {
     return lhs = lhs | rhs;
 }
 
 template <typename E>
-constexpr auto operator&=(E& lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E&>
+constexpr auto operator&=(E& lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E&>
 {
     return lhs = lhs & rhs;
 }
 
 template <typename E>
-constexpr auto operator^=(E& lhs, E rhs) noexcept -> detail::enable_if_enum_t<E, E&>
+constexpr auto operator^=(E& lhs, E rhs) XR_NOEXCEPT -> detail::enable_if_enum_t<E, E&>
 {
     return lhs = lhs ^ rhs;
 }

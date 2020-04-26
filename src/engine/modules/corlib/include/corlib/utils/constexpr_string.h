@@ -8,8 +8,7 @@
 #include "corlib/utils/string_view.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 template<size_t N>
@@ -48,7 +47,7 @@ using constexpr_wstring512 = constexpr_wstring<512>;
 /**
 */
 template<size_t N>
-utils::string_view to_string_view(constexpr_string<N> const& s) noexcept
+utils::string_view to_string_view(constexpr_string<N> const& s) XR_NOEXCEPT
 {
     return { eastl::begin(s), eastl::size(s) };
 }
@@ -57,12 +56,12 @@ utils::string_view to_string_view(constexpr_string<N> const& s) noexcept
 /**
 */
 template<size_t N>
-utils::wstring_view to_wstring_view(constexpr_wstring<N> const& s) noexcept
+utils::wstring_view to_wstring_view(constexpr_wstring<N> const& s) XR_NOEXCEPT
 {
     return { eastl::begin(s), eastl::size(s) };
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------
 
 

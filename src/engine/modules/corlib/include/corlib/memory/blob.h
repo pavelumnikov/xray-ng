@@ -7,14 +7,15 @@
 #include "corlib/memory/memory_allocator_base.h"
 #include "EASTL/internal/move_help.h"
 
-namespace xr::memory
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, memory)
 
+//-----------------------------------------------------------------------------------------------------------
 class blob final
 {
 public:
     /// default constructor
-    constexpr explicit blob(base_allocator& allocator) noexcept
+    XR_CONSTEXPR_CPP14_OR_INLINE explicit blob(base_allocator& allocator) XR_NOEXCEPT
         : m_ptr(nullptr)
         , m_size(0)
         , m_alloc_size(0)
@@ -22,29 +23,29 @@ public:
     {}
 
     /// per-per byte copy constructor
-    blob(base_allocator& allocator, buffer_ref& ref) noexcept(false)
+    blob(base_allocator& allocator, buffer_ref& ref) XR_NOEXCEPT
         : blob { allocator }
     {
-        this->self_copy(ref.as_pointer<void*>(), ref.length());
+        self_copy(ref.as_pointer<void*>(), ref.length());
     }
 
     /// reserve N bytes
-    blob(base_allocator& allocator, size_t const size) noexcept(false)
+    blob(base_allocator& allocator, size_t const size) XR_NOEXCEPT
         : blob { allocator }
     {
-        this->self_allocate(size);
+        self_allocate(size);
     }
 
     /// copy constructor
-    blob(const blob& rhs) noexcept(false)
+    blob(const blob& rhs) XR_NOEXCEPT
         : blob { *rhs.m_allocator }
     {
         if(rhs.is_valid())
-            this->self_copy(rhs.m_ptr, rhs.m_size);
+            self_copy(rhs.m_ptr, rhs.m_size);
     }
 
     /// move constructor
-    blob(blob&& rhs) noexcept
+    blob(blob&& rhs) XR_NOEXCEPT
         : m_ptr(eastl::move(rhs.m_ptr))
         , m_size(eastl::move(rhs.m_size))
         , m_alloc_size(eastl::move(rhs.m_alloc_size))
@@ -58,31 +59,31 @@ public:
     /// destructor
     ~blob()
     {
-        this->self_delete();
+        self_delete();
     }
 
     /// assignment operator
-    blob& operator=(const blob& rhs) noexcept(false)
+    blob& operator=(const blob& rhs) XR_NOEXCEPT
     {
         if(rhs.is_valid())
-            this->self_copy(rhs.m_ptr, rhs.m_size);
+            self_copy(rhs.m_ptr, rhs.m_size);
 
         return *this;
     }
 
     /// move assignment operator
-    blob& operator=(blob&& rhs) noexcept
+    blob& operator=(blob&& rhs) XR_NOEXCEPT
     {
-        this->m_ptr = eastl::move(rhs.m_ptr);
+        m_ptr = eastl::move(rhs.m_ptr);
         rhs.m_ptr = nullptr;
 
-        this->m_size = eastl::move(rhs.m_size);
+        m_size = eastl::move(rhs.m_size);
         rhs.m_size = 0;
 
-        this->m_alloc_size = eastl::move(rhs.m_alloc_size);
+        m_alloc_size = eastl::move(rhs.m_alloc_size);
         rhs.m_alloc_size = 0;
 
-        this->m_allocator = eastl::move(rhs.m_allocator);
+        m_allocator = eastl::move(rhs.m_allocator);
 
         return *this;
     }
@@ -90,76 +91,76 @@ public:
     /// equality operator
     bool operator==(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) == 0);
+        return (binary_compare(rhs) == 0);
     }
 
     /// inequality operator
     bool operator!=(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) != 0);
+        return (binary_compare(rhs) != 0);
     }
 
     /// greater operator
     bool operator>(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) > 0);
+        return (binary_compare(rhs) > 0);
     }
 
     /// less operator
     bool operator<(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) < 0);
+        return (binary_compare(rhs) < 0);
     }
 
     /// greater-equal operator
     bool operator>=(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) >= 0);
+        return (binary_compare(rhs) >= 0);
     }
 
     /// less-equal operator
     bool operator<=(const blob& rhs) const
     {
-        return (this->binary_compare(rhs) <= 0);
+        return (binary_compare(rhs) <= 0);
     }
 
     /// return true if the blob contains data
-    constexpr bool is_valid() const
+    XR_CONSTEXPR_CPP14_OR_INLINE bool is_valid() const
     {
-        auto const result = this->get_ptr_unsafe();
+        auto const result = get_ptr_unsafe();
         return result != nullptr;
     }
 
     /// reserve N bytes
     void reserve(size_t const size)
     {
-        auto const alloc_size = this->get_alloc_size_unsafe();
+        auto const alloc_size = get_alloc_size_unsafe();
 
         if(alloc_size < size)
         {
-            this->self_delete();
-            this->self_allocate(size);
+            self_delete();
+            self_allocate(size);
         }
 
-        this->set_size_unsafe(size);
+        set_size_unsafe(size);
     }
 
     /// trim the size member (without re-allocating!)
     void trim(size_t const size)
     {
-        this->set_size_unsafe(size);
+        set_size_unsafe(size);
     }
 
     /// set blob contents
     void set(buffer_ref& ref)
     {
-        this->self_copy(ref.as_pointer<void*>(), ref.length());
+        self_copy(ref.as_pointer<void*>(), ref.length());
     }
 
     /// get blob size
-    constexpr buffer_ref get() const
+    XR_CONSTEXPR_CPP14_OR_INLINE buffer_ref get() const
     {
-        return buffer_ref { this->m_ptr, this->m_size };
+        return buffer_ref { m_ptr, m_size };
     }
 
     /// get a hash code (compatible with Util::HashTable)
@@ -175,39 +176,39 @@ private:
     /// do a binary comparison between this and other blob
     int binary_compare(const blob& rhs) const;
 
-    constexpr void set_size_unsafe(size_t const sz)
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_size_unsafe(size_t const sz)
     {
         m_size = sz;
     }
 
-    constexpr void set_size_and_ptr_unsafe(void* ptr, size_t const sz)
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_size_and_ptr_unsafe(void* ptr, size_t const sz)
     {
         m_size = sz;
         m_ptr = ptr;
     }
 
-    constexpr void set_size_and_ptr_unsafe(void* ptr, size_t const sz, size_t const alloc)
+    XR_CONSTEXPR_CPP14_OR_INLINE void set_size_and_ptr_unsafe(void* ptr, size_t const sz, size_t const alloc)
     {
         m_size = sz;
         m_ptr = ptr;
         m_alloc_size = alloc;
     }
 
-    constexpr void* get_ptr_unsafe() const
+    XR_CONSTEXPR_CPP14_OR_INLINE void* get_ptr_unsafe() const
     {
-        auto const result = this->m_ptr;
+        auto const result = m_ptr;
         return result;
     }
 
-    constexpr size_t get_size_unsafe() const
+    XR_CONSTEXPR_CPP14_OR_INLINE size_t get_size_unsafe() const
     {
-        auto const result = this->m_size;
+        auto const result = m_size;
         return result;
     }
 
-    constexpr size_t get_alloc_size_unsafe() const
+    XR_CONSTEXPR_CPP14_OR_INLINE size_t get_alloc_size_unsafe() const
     {
-        auto const result = this->m_alloc_size;
+        auto const result = m_alloc_size;
         return result;
     }
 
@@ -217,21 +218,5 @@ private:
     base_allocator* m_allocator;
 }; // class blob
 
-} // namespace aztek::core::memory
-
-namespace eastl
-{
-
-using namespace xr;
-template <typename T> struct hash;
-
-template<>
-struct hash<memory::blob>
-{
-    size_t operator()(const memory::blob& rhs) const
-    {
-        return rhs.hash_code();
-    }
-};
-
-} // namespace eastl
+XR_NAMESPACE_END(xr, memory)
+//-----------------------------------------------------------------------------------------------------------

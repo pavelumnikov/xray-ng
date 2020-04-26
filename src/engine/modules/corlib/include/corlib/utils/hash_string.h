@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include "EASTL/fixed_string.h"
+#include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::utils
-{
+XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -33,5 +32,5 @@ size_t hash_string_func(TString const& s)
     return hash;
 }
 
-} // namespace xr::utils::hashing::std
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

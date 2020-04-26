@@ -3,14 +3,13 @@
 
 #pragma once
 
-#include "corlib/utils/std/vector.h"
+#include "corlib/utils/vector.h"
 #include "corlib/threading/spin_wait.h"
 #include "corlib/threading/scoped_lock.h"
 #include "corlib/memory/memory_aligned_allocator.h"
 #include "corlib/memory/allocator_macro.h"
 
-namespace xr::tasks
-{
+XR_NAMESPACE_BEGIN(xr, tasks)
 
 template<typename T, size_t Priority, size_t Capacity>
 class priority_task_queue
@@ -284,5 +283,5 @@ priority_task_queue<T, Priority, Capacity>::try_pop_newest(T& item)
     return false;
 }
 
-} // namespace xr::tasks
+XR_NAMESPACE_END(xr, tasks)
 //-----------------------------------------------------------------------------------------------------------

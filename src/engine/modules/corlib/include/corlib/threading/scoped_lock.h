@@ -4,21 +4,17 @@
 #pragma once
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 template< typename T >
 class scoped_lock final
 {
 public:
-    explicit scoped_lock(T& cs) noexcept;
-    ~scoped_lock() noexcept;
+    explicit scoped_lock(T& cs) XR_NOEXCEPT;
+    ~scoped_lock() XR_NOEXCEPT;
 
-    scoped_lock(const scoped_lock&) = delete;
-    scoped_lock& operator=(const scoped_lock&) = delete;
-
-    scoped_lock(scoped_lock&&) = delete;
-    scoped_lock& operator=(scoped_lock&&) = delete;
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(scoped_lock);
+    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(scoped_lock);
 
 private:
     T& m_cs;
@@ -28,20 +24,20 @@ private:
 /**
 */
 template< typename T >
-scoped_lock< T >::scoped_lock(T& cs) noexcept
+scoped_lock< T >::scoped_lock(T& cs) XR_NOEXCEPT
     : m_cs(cs)
 {
-    this->m_cs.lock();
+    m_cs.lock();
 }
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 template< typename T >
-scoped_lock< T >::~scoped_lock() noexcept
+scoped_lock< T >::~scoped_lock() XR_NOEXCEPT
 {
-    this->m_cs.unlock();
+    m_cs.unlock();
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

@@ -48,8 +48,7 @@ union _LARGE_INTEGER;
 #undef FALSE
 #endif
 
-namespace xr::sys::win
-{
+XR_NAMESPACE_BEGIN(xr, sys, win)
 
 // Typedefs for basic Windows types
 typedef int32_t BOOL;
@@ -101,4 +100,4 @@ typedef RTL_SRWLOCK SRWLOCK, *PSRWLOCK;
 static const BOOL TRUE = 1;
 static const BOOL FALSE = 0;
 
-} // namespace xr::sys::win
+XR_NAMESPACE_END(xr, sys, win)

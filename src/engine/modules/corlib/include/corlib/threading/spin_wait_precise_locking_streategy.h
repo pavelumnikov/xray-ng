@@ -5,11 +5,9 @@
 
 #include "corlib/threading/spin_wait_strategy_traits.h"
 #include "corlib/threading/atomic_types.h"
-#include "corlib/signalling_bool.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 namespace details
 {
@@ -25,14 +23,14 @@ struct spin_wait_precise_value_type
 
 /// <summary>
 /// </summary>
-struct spin_wait_precise_strategy final
-    : spin_wait_strategy_traits< details::spin_wait_precise_value_type, false >
+struct spin_wait_precise_strategy final 
+    : spin_wait_strategy_traits<details::spin_wait_precise_value_type, false>
 {
-    void reset(volatile locking_value& locking_value) const noexcept;
-    signalling_bool try_lock(volatile locking_value& lockingValue) const noexcept;
-    void lock(volatile locking_value& locking_value) const noexcept;
-    void unlock(volatile locking_value& locking_value) const noexcept;
+    void reset(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    signalling_bool try_lock(volatile locking_value& lockingValue) const XR_NOEXCEPT;
+    void lock(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    void unlock(volatile locking_value& locking_value) const XR_NOEXCEPT;
 };
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------

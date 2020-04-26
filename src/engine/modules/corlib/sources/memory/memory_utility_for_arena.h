@@ -6,8 +6,7 @@
 #include "corlib/types.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
+XR_NAMESPACE_BEGIN(xr, memory)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -21,7 +20,7 @@ inline uintptr_t internal_adjust_alignment(uintptr_t alignment)
 /**
 */
 inline pvoid
-align_pointer(pvoid p, uintptr_t align, uintptr_t offset) noexcept
+align_pointer(pvoid p, uintptr_t align, uintptr_t offset) XR_NOEXCEPT
 {
     auto const alignment = internal_adjust_alignment(align);
 
@@ -41,7 +40,7 @@ align_pointer(pvoid p, uintptr_t align, uintptr_t offset) noexcept
 /**
 */
 inline void* 
-unalign_pointer(pvoid p) noexcept
+unalign_pointer(pvoid p) XR_NOEXCEPT
 {
     auto ptr = reinterpret_cast<uintptr_t>(p);
     // ptr points to the pointer to starting of the memory block
@@ -52,5 +51,5 @@ unalign_pointer(pvoid p) noexcept
     return reinterpret_cast<pvoid>(ptr);
 }
 
-} // namespace xr::memory
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------

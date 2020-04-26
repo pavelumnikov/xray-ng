@@ -7,8 +7,7 @@
 #include "corlib/threading/spin_wait_strategy_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::threading
-{
+XR_NAMESPACE_BEGIN(xr, threading)
 
 /// <summary>
 /// On platforms with proper HW support, this lock may speculatively execute its critical sections, using HW mechanisms
@@ -20,20 +19,20 @@ namespace xr::threading
 struct spin_wait_speculative_strategy final
     : spin_wait_strategy_traits<uint8_t, false>
 {
-    void reset(volatile locking_value& locking_value) const noexcept;
-    signalling_bool try_lock(volatile locking_value& locking_value) const noexcept;
-    void lock(volatile locking_value& locking_value) const noexcept;
-    void unlock(volatile locking_value& locking_value) const noexcept;
+    void reset(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    signalling_bool try_lock(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    void lock(volatile locking_value& locking_value) const XR_NOEXCEPT;
+    void unlock(volatile locking_value& locking_value) const XR_NOEXCEPT;
 };
 
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
 inline void 
-spin_wait_speculative_strategy::reset(volatile locking_value& locking_value) const noexcept
+spin_wait_speculative_strategy::reset(volatile locking_value& locking_value) const XR_NOEXCEPT
 {
     locking_value = 0;
 }
 
-} // namespace xr::threading
+XR_NAMESPACE_END(xr, threading)
 //-----------------------------------------------------------------------------------------------------------
