@@ -217,7 +217,8 @@ void file_api_win32::initialize()
 {
     for(size_t i = 0; i < eastl::size(m_thread_handles); ++i)
     {
-        m_thread_handles[i] = sys::spawn_thread(async_io_func, this, L"io_worker_thread", sys::thread_priority::high, 1_mb, static_cast<uint32_t>(i));
+        m_thread_handles[i] = sys::spawn_thread(async_io_func, this, L"io_worker_thread",
+            sys::thread_priority::high, XR_MEGABYTES_TO_BYTES(1), static_cast<uint32_t>(i));
     }
 }
 

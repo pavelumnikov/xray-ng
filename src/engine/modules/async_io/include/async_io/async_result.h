@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "corlib/signalling_bool.h"
 #include "corlib/threading/interlocked.h"
 
 namespace xr::async_io

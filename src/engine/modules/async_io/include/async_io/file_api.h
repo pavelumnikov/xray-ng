@@ -4,17 +4,15 @@
 #pragma once
 
 #include "corlib/memory/buffer_ref.h"
-#include "corlib/utils/string/fixed_string.h"
+#include "corlib/utils/buffer_string.h"
 #include "corlib/utils/string_view.h"
 #include "corlib/utils/ptr.h"
 #include "corlib/sys/win/handle.h"
 #include "async_io/async_result.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::memory
-{
-class base_allocator;
-} // namespace xr::memory
+XR_NAMESPACE_BEGIN(xr, memory)class base_allocator;
+XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
@@ -26,7 +24,6 @@ auto constexpr path_length = 256;
 using file_handle = sys::win::handle_wrapper<sys::win::handle_traits>;
 
 using async_result_ptr = utils::shared_ptr<async_result>;
-using path = utils::string::fixed_wstring<path_length>;
 using path_view = utils::wstring_view;
 
 //-----------------------------------------------------------------------------------------------------------
