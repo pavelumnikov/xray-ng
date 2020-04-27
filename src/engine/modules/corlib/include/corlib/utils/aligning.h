@@ -98,5 +98,5 @@ next_highest_power_of_two(size_t v)
     return v;
 }
 
-} // namespace xr::utils
+XR_NAMESPACE_END(xr, utils)
 //-----------------------------------------------------------------------------------------------------------

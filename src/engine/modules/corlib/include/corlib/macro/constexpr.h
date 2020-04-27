@@ -33,6 +33,19 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
+// XR_CONSTEXPR_CPP14_OR_CONST macro
+#if defined(XR_CONSTEXPR_CPP11)
+#   error please do not define XR_CONSTEXPR_CPP11 macros
+#endif // #if defined(XR_CONSTEXPR_CPP11)
+
+#if XR_COMPILER_SUPPORTS_CPP11
+#   define XR_CONSTEXPR_CPP11 constexpr
+#else
+#   define XR_CONSTEXPR_CPP11
+#endif
+
+//-----------------------------------------------------------------------------------------------------------
+
 // XR_CONSTEXPR_OR_ENUM macro
 #if defined(XR_CONSTEXPR_OR_ENUM)
 #   error please do not define XR_CONSTEXPR_OR_ENUM macros
