@@ -3,28 +3,25 @@
 
 #pragma once
 
+#include "async_io/async_result.h"
 #include "corlib/memory/buffer_ref.h"
 #include "corlib/utils/buffer_string.h"
 #include "corlib/utils/string_view.h"
 #include "corlib/utils/ptr.h"
 #include "corlib/sys/win/handle.h"
-#include "async_io/async_result.h"
+#include "corlib/memory/memory_allocator_base.h"
 
 //-----------------------------------------------------------------------------------------------------------
-XR_NAMESPACE_BEGIN(xr, memory)class base_allocator;
-XR_NAMESPACE_END(xr, memory)
-//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, async_io)
 
-//-----------------------------------------------------------------------------------------------------------
-namespace xr::async_io
-{
 // file path definiton
-auto constexpr path_length = 256;
-// file handle definition
-using file_handle = sys::win::handle_wrapper<sys::win::handle_traits>;
+size_t XR_CONSTEXPR_CPP14_OR_CONST path_length = 256;
 
-using async_result_ptr = utils::shared_ptr<async_result>;
-using path_view = utils::wstring_view;
+// file handle definition
+typedef sys::win::handle_wrapper<sys::win::handle_traits> file_handle;
+
+typedef utils::shared_ptr<async_result> async_result_ptr;
+typedef utils::wstring_view path_view;
 
 //-----------------------------------------------------------------------------------------------------------
 // how stream must be opened.
@@ -80,5 +77,5 @@ void shutdown_async_io();
  */
 file_api& current_file_api();
 
-} // namespace xr::async_io
+XR_NAMESPACE_END(xr, async_io)
 //-----------------------------------------------------------------------------------------------------------

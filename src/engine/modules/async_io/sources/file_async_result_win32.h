@@ -8,8 +8,7 @@
 #include <Windows.h>
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::async_io::details
-{
+XR_NAMESPACE_BEGIN(xr, async_io, details)
 
 //-----------------------------------------------------------------------------------------------------------
 struct OVERLAPPEDEX : public OVERLAPPED
@@ -17,12 +16,11 @@ struct OVERLAPPEDEX : public OVERLAPPED
     pvoid used_data;
 }; // struct OVERLAPPEDEX
 
-} // namespace xr::async_io::details
+XR_NAMESPACE_END(xr, async_io, details)
 //-----------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::async_io
-{
+XR_NAMESPACE_BEGIN(xr, async_io)
 
 //-----------------------------------------------------------------------------------------------------------
 class XR_NON_VIRTUAL file_async_result : public async_result
@@ -103,5 +101,5 @@ read_file_async_result::get_read_size() const
     return m_read_size;
 }
 
-} // namespace xr::async_io
+XR_NAMESPACE_END(xr, async_io)
 //-----------------------------------------------------------------------------------------------------------

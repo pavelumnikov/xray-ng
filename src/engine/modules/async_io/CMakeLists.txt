@@ -21,6 +21,7 @@ source_group("include" FILES ${ASYNC_IO_MODULE_HEADERS})
 ##
 
 set(ASYNC_IO_MODULE_SOURCES
+	"sources/async_request_queue.h"
 	"sources/file_api_win32.cpp"
 	"sources/file_api_win32.h"
 	"sources/file_async_result_win32.cpp"

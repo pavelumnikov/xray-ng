@@ -1,0 +1,267 @@
+// This file is a part of xray-ng engine
+//
+
+#pragma once
+
+#include "corlib/utils/vector.h"
+#include "corlib/threading/spin_wait.h"
+#include "corlib/threading/scoped_lock.h"
+#include "corlib/memory/proxy/eastl_proxy_allocator.h"
+#include "corlib/memory/memory_aligned_allocator.h"
+#include "corlib/memory/allocator_macro.h"
+
+XR_NAMESPACE_BEGIN(xr, async_io)
+
+template<typename T, size_t Priority, size_t Capacity>
+class async_request_queue
+{
+    //////////////////////////////////////////////////////////////////////////
+    class queue
+    {
+        static const size_t MASK = Capacity - 1u;
+
+        void* m_data;
+        size_t begin;
+        size_t end;
+
+        inline T* buffer()
+        {
+            return (T*)(m_data);
+        }
+
+        inline void copy_ctor(T* element, const T& val)
+        {
+            new(element) T(val);
+        }
+
+        inline void call_dtor(T* element)
+        {
+            XR_UNREFERENCED_PARAMETER(element);
+            element->~T();
+        }
+
+        inline size_t size() const
+        {
+            if(is_empty())
+            {
+                return 0;
+            }
+
+            size_t count = ((end & MASK) - (begin & MASK)) & MASK;
+            return count;
+        }
+
+        inline void clear()
+        {
+            size_t queueSize = size();
+            for(size_t i = 0; i < queueSize; i++)
+            {
+                T* pElement = buffer() + ((begin + i) & MASK);
+                call_dtor(pElement);
+            }
+
+            begin = 0;
+            end = 0;
+        }
+
+    public:
+
+        queue()
+            : m_data { nullptr }
+            , begin { 0 }
+            , end { 0 }
+        {}
+
+        // queue is just dummy until you call the Create
+        void create(memory::base_allocator& alloc)
+        {
+            size_t bytesCount = sizeof(T) * Capacity;
+            m_data = XR_ALLOCATE_MEMORY(alloc, bytesCount, "concurrent queue: queue");
+        }
+
+        void destroy(memory::base_allocator& alloc)
+        {
+            XR_DEALLOCATE_MEMORY(alloc, m_data);
+            m_data = nullptr;
+        }
+
+        ~queue()
+        {
+            XR_DEBUG_ASSERTION(m_data == nullptr);
+        }
+
+        inline bool has_space(size_t itemCount)
+        {
+            if((size() + itemCount) >= Capacity)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        inline bool add(const T& item)
+        {
+            XR_DEBUG_ASSERTION_MSG(m_data, "Can't add items to dummy queue");
+
+            if((size() + 1) >= Capacity)
+            {
+                return false;
+            }
+
+            size_t index = (end & MASK);
+            T* pElement = buffer() + index;
+            copy_ctor(pElement, item);
+            end++;
+
+            return true;
+        }
+
+
+        inline bool try_pop_oldest(T& item)
+        {
+            if(is_empty())
+                return false;
+
+            XR_DEBUG_ASSERTION_MSG(m_data, "Can't pop items from dummy queue");
+
+            size_t index = (begin & MASK);
+            T* pElement = buffer() + index;
+            begin++;
+            item = *pElement;
+            call_dtor(pElement);
+            return true;
+        }
+
+        inline bool try_pop_newest(T& item)
+        {
+            if(is_empty())
+                return false;
+
+            XR_DEBUG_ASSERTION_MSG(m_data, "Can't pop items from dummy queue");
+
+            end--;
+            size_t index = (end & MASK);
+            T* pElement = buffer() + index;
+            item = *pElement;
+            call_dtor(pElement);
+            return true;
+        }
+
+        inline bool is_empty() const
+        {
+            return (begin == end);
+        }
+    };
+    //////////////////////////////////////////////////////////////////////////
+
+    using mutex = threading::spin_wait_fairness;
+    memory::base_allocator& m_allocator;
+    mutex m_mutex;
+    queue m_queues[Priority];
+
+public:
+    async_request_queue(memory::base_allocator& alloc);
+    ~async_request_queue();
+
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(async_request_queue);
+    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(async_request_queue);
+
+    bool add(const T& item);
+    bool try_pop_oldest(T& item);
+    bool try_pop_newest(T& item);
+}; // class async_request_queue<T, Priority, Capacity>
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t Priority, size_t Capacity>
+inline async_request_queue<T, Priority, Capacity>::async_request_queue(memory::base_allocator& alloc)
+    : m_allocator(alloc)
+    , m_mutex()
+    , m_queues()
+{
+    for(uint32_t i = 0; i < eastl::size(m_queues); i++)
+        m_queues[i].create(alloc);
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t Priority, size_t Capacity>
+inline async_request_queue<T, Priority, Capacity>::~async_request_queue()
+{
+    for(uint32_t i = 0; i < eastl::size(m_queues); i++)
+        m_queues[i].destroy(m_allocator);
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t Priority, size_t Capacity>
+inline bool
+async_request_queue<T, Priority, Capacity>::add(const T& item)
+{
+    threading::scoped_lock lock { m_mutex };
+    // Check for space for all m_queues.
+    // At the moment it is not known exactly in what queue items will be added.
+    for(size_t i = 0; i < eastl::size(m_queues); i++)
+    {
+        queue& q = m_queues[i];
+        if(!q.has_space(count))
+            return false;
+    }
+
+    // Adding the tasks into the appropriate queue
+    for(size_t i = 0; i < count; i++)
+    {
+        const T& item = item_array[i];
+        uint32_t queueIndex = (uint32_t)item.desc.priority;
+        XR_DEBUG_ASSERTION_MSG(queueIndex < eastl::size(m_queues), "Invalid task priority");
+
+        queue& q = m_queues[queueIndex];
+        bool res = q.add(item_array[i]);
+        XR_UNREFERENCED_PARAMETER(res);
+        XR_DEBUG_ASSERTION_MSG(res == true, "Sanity check failed");
+    }
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t Priority, size_t Capacity>
+inline bool
+async_request_queue<T, Priority, Capacity>::try_pop_oldest(T& item)
+{
+    threading::scoped_lock lock(m_mutex);
+    for(uint32_t queueIndex = 0; queueIndex < 3; queueIndex++)
+    {
+        queue& q = m_queues[queueIndex];
+        if(q.try_pop_oldest(item))
+            return true;
+    }
+
+    return false;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t Priority, size_t Capacity>
+inline bool
+async_request_queue<T, Priority, Capacity>::try_pop_newest(T& item)
+{
+    threading::scoped_lock lock(m_mutex);
+    for(uint32_t queueIndex = 0; queueIndex < 3; queueIndex++)
+    {
+        queue& queue = m_queues[queueIndex];
+        if(queue.try_pop_newest(item))
+            return true;
+    }
+    return false;
+}
+
+XR_NAMESPACE_END(xr, async_io)
+//-----------------------------------------------------------------------------------------------------------

@@ -8,8 +8,7 @@
 #include "corlib/threading/scoped_lock.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::async_io
-{
+XR_NAMESPACE_BEGIN(xr, async_io)
 
 //-----------------------------------------------------------------------------------------------------------
 static memory::uninitialized_reference<file_api_win32> file_api_system;
@@ -18,11 +17,11 @@ static memory::uninitialized_reference<file_api_win32> file_api_system;
 /**
  */
 file_api_win32::file_api_win32(memory::base_allocator& alloc)
-    : m_async_requests { memory::proxy::eastl_proxy_allocator { alloc } }
-    , m_async_requests_lock {}
-    , m_thread_handles {}
-    , m_allocator { alloc }
-    , m_quit_status { false }
+    : m_async_requests(memory::proxy::eastl_proxy_allocator(alloc))
+    , m_async_requests_lock()
+    , m_thread_handles()
+    , m_allocator(alloc)
+    , m_quit_status(false)
 {
     initialize();
 }
@@ -84,8 +83,8 @@ file_handle file_api_win32::create_file_descriptor(path_view name, access_mode m
             XR_DEBUG_ASSERTION(false);
     }
 
-    file_handle file { ::CreateFileW(name.data(), access, share_mode,
-        nullptr, disposition, flags_and_attributes, nullptr) };
+    file_handle file(::CreateFileW(name.data(), access, share_mode,
+        nullptr, disposition, flags_and_attributes, nullptr));
 
     // If we successfully created file session
     if(file.is_valid())
@@ -287,4 +286,5 @@ file_api& current_file_api()
     return file_api_system.ref();
 }
 
-} // namespace xr::async_io
+XR_NAMESPACE_END(xr, async_io)
+//-----------------------------------------------------------------------------------------------------------

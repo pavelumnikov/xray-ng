@@ -7,12 +7,11 @@
 #include "corlib/memory/memory_allocator_base.h"
 #include "corlib/sys/thread.h"
 #include "corlib/threading/spin_wait.h"
-#include "corlib/utils/std/deque.h"
+#include "corlib/utils/deque.h"
 #include "file_async_result_win32.h"
 
 //-----------------------------------------------------------------------------------------------------------
-namespace xr::async_io
-{
+XR_NAMESPACE_BEGIN(xr, async_io)
 
 //-----------------------------------------------------------------------------------------------------------
 class file_api_win32 : public file_api
@@ -36,7 +35,7 @@ public:
 
 private:
     using mutex = threading::spin_wait_fairness;
-    static constexpr uint32_t max_io_threads = 2;
+    static XR_CONSTEXPR_CPP14_OR_CONST uint32_t max_io_threads = 2;
 
     static uint32_t async_io_func(void* arg);
 
@@ -49,12 +48,12 @@ private:
     void initialize();
     void finalize();
 
-    utils::std::deque<async_result_ptr> m_async_requests;
+    utils::deque<async_result_ptr> m_async_requests;
     mutex m_async_requests_lock;
     sys::thread_handle m_thread_handles[max_io_threads];
     memory::base_allocator& m_allocator;
     volatile bool m_quit_status;
 };
 
-} // namespace xr::async_io
+XR_NAMESPACE_END(xr, async_io)
 //-----------------------------------------------------------------------------------------------------------
