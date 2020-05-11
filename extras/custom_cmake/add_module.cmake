@@ -311,6 +311,7 @@ function (xrng_fixup_definitions_internal ProjectName ProjectType)
 		target_compile_definitions(${ProjectName} PRIVATE XR_MAC_OS_X_VERSION=${MAC_OS_X_VERSION})
 	elseif(UNIX)
 		target_compile_definitions(${ProjectName} PRIVATE XRAY_PLATFORM_LINUX)
+		target_compile_definitions(${ProjectName} PRIVATE _GNU_SOURCE)
 	endif(WIN32)
 
 	## Fixup project definitions for specific platform
