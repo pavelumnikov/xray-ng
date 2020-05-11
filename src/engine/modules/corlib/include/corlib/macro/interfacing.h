@@ -38,11 +38,7 @@
 #   error please do not define XR_DECLARE_INTERFACE macros
 #endif // #if defined(XR_DECLARE_INTERFACE)
 
-#ifdef XR_MSVC_COMPILER_FAMILY
-#   define XR_DECLARE_INTERFACE(x) __interface x
-#else
-#   define XR_DECLARE_INTERFACE(x) struct XR_NON_VIRTUAL x
-#endif
+#define XR_DECLARE_INTERFACE(x) struct XR_NON_VIRTUAL x
 
 //-----------------------------------------------------------------------------------------------------------
 

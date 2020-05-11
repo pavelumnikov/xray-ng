@@ -329,6 +329,7 @@ set(CORE_MODULE_UTILS_HEADERS
 	"include/corlib/utils/integer_fwd.h"
 	"include/corlib/utils/integer_traits.h"
 	"include/corlib/utils/intrusive_list_node.h"
+	"include/corlib/utils/list.h"
 	"include/corlib/utils/not_null_ptr.h"
 	"include/corlib/utils/packed.h"
 	"include/corlib/utils/padded.h"

@@ -18,8 +18,8 @@
 #endif
 
 #define XR_DECLARE_TASK_IMPL(TYPE, STACK_REQUIREMENTS, TASK_PRIORITY, DEBUG_COLOR) \
-    static constexpr xr::tasks::task_stack_request stack_requirements = STACK_REQUIREMENTS; \
-    static constexpr xr::tasks::task_priority task_priority = TASK_PRIORITY; \
+    static XR_CONSTEXPR_CPP14_OR_CONST xr::tasks::task_stack_request stack_requirements = STACK_REQUIREMENTS; \
+    static XR_CONSTEXPR_CPP14_OR_CONST xr::tasks::task_priority task_priority = TASK_PRIORITY; \
     static void task_entry_pfn(xr::tasks::execution_context& context, xr::pvoid user_data) \
     { \
         XR_SCHEDULER_PROFILER_TASK_SCOPE_CODE_INJECTION(TYPE, DEBUG_COLOR, __FILE__, __LINE__); \

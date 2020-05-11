@@ -205,21 +205,22 @@ namespace eastl
 	class ListBase
 	{
 	public:
-		typedef T                                    value_type;
-		typedef Allocator                            allocator_type;
-		typedef ListNode<T>                          node_type;
-		typedef eastl_size_t                         size_type;     // See config.h for the definition of eastl_size_t, which defaults to size_t.
-		typedef ptrdiff_t                            difference_type;
+		typedef T value_type;
+		typedef Allocator allocator_type;
+		typedef ListNode<T> node_type;
+		typedef eastl_size_t size_type; // See config.h for the definition of eastl_size_t, which defaults to size_t.
+		typedef ptrdiff_t difference_type;
 		#if EASTL_LIST_PROXY_ENABLED
 			typedef ListNodeBaseProxy< ListNode<T> > base_node_type;
 		#else
-			typedef ListNodeBase                     base_node_type; // We use ListNodeBase instead of ListNode<T> because we don't want to create a T.
+			typedef ListNodeBase base_node_type; // We use ListNodeBase instead of ListNode<T> because we don't want to create a T.
 		#endif
 
 	protected:
-		eastl::compressed_pair<base_node_type, allocator_type>  mNodeAllocator;
+		eastl::compressed_pair<base_node_type, allocator_type> mNodeAllocator;
+
 		#if EASTL_LIST_SIZE_CACHE
-			size_type  mSize;
+		size_type mSize;
 		#endif
 
 		base_node_type& internalNode() EA_NOEXCEPT { return mNodeAllocator.first(); }
@@ -229,8 +230,8 @@ namespace eastl
 
 	public:
 		const allocator_type& get_allocator() const EA_NOEXCEPT;
-		allocator_type&       get_allocator() EA_NOEXCEPT;
-		void                  set_allocator(const allocator_type& allocator);
+		allocator_type& get_allocator() EA_NOEXCEPT;
+		void set_allocator(const allocator_type& allocator);
 
 	protected:
 		ListBase();
@@ -238,7 +239,7 @@ namespace eastl
 	   ~ListBase();
 
 		node_type* DoAllocateNode();
-		void       DoFreeNode(node_type* pNode);
+		void DoFreeNode(node_type* pNode);
 
 		void DoInit() EA_NOEXCEPT;
 		void DoClear();
@@ -273,27 +274,27 @@ namespace eastl
 	///     MemoryPool myPool(sizeof(WidgetList::node_type), 100); // Make a pool of 100 Widget nodes.
 	///     WidgetList myList(&myPool);                            // Create a list that uses the pool.
 	///
-	template <typename T, typename Allocator = EASTLAllocatorType>
+	template <typename T, typename Allocator>
 	class list : public ListBase<T, Allocator>
 	{
-		typedef ListBase<T, Allocator>                  base_type;
-		typedef list<T, Allocator>                      this_type;
+		typedef ListBase<T, Allocator> base_type;
+		typedef list<T, Allocator> this_type;
 
 	public:
-		typedef T                                       value_type;
-		typedef T*                                      pointer;
-		typedef const T*                                const_pointer;
-		typedef T&                                      reference;
-		typedef const T&                                const_reference;
-		typedef ListIterator<T, T*, T&>                 iterator;
-		typedef ListIterator<T, const T*, const T&>     const_iterator;
-		typedef eastl::reverse_iterator<iterator>       reverse_iterator;
+		typedef T value_type;
+		typedef T* pointer;
+		typedef const T* const_pointer;
+		typedef T& reference;
+		typedef const T& const_reference;
+		typedef ListIterator<T, T*, T&> iterator;
+		typedef ListIterator<T, const T*, const T&> const_iterator;
+		typedef eastl::reverse_iterator<iterator> reverse_iterator;
 		typedef eastl::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef typename base_type::size_type           size_type;
-		typedef typename base_type::difference_type     difference_type;
-		typedef typename base_type::allocator_type      allocator_type;
-		typedef typename base_type::node_type           node_type;
-		typedef typename base_type::base_node_type      base_node_type;
+		typedef typename base_type::size_type size_type;
+		typedef typename base_type::difference_type difference_type;
+		typedef typename base_type::allocator_type allocator_type;
+		typedef typename base_type::node_type node_type;
+		typedef typename base_type::base_node_type base_node_type;
 
 		using base_type::mNodeAllocator;
 		using base_type::DoAllocateNode;
@@ -331,37 +332,36 @@ namespace eastl
 
 		void assign(size_type n, const value_type& value);
 
-		template <typename InputIterator>                       // It turns out that the C++ std::list specifies a two argument
-		void assign(InputIterator first, InputIterator last);   // version of assign that takes (int size, int value). These are not 
-																// iterators, so we need to do a template compiler trick to do the right thing.
+		template <typename InputIterator> // It turns out that the C++ std::list specifies a two argument
+		void assign(InputIterator first, InputIterator last); // version of assign that takes (int size, int value). These are not iterators, so we need to do a template compiler trick to do the right thing.
 		void assign(std::initializer_list<value_type> ilist);
 
-		iterator       begin() EA_NOEXCEPT;
+		iterator begin() EA_NOEXCEPT;
 		const_iterator begin() const EA_NOEXCEPT;
 		const_iterator cbegin() const EA_NOEXCEPT;
 
-		iterator       end() EA_NOEXCEPT;
+		iterator end() EA_NOEXCEPT;
 		const_iterator end() const EA_NOEXCEPT;
 		const_iterator cend() const EA_NOEXCEPT;
 
-		reverse_iterator       rbegin() EA_NOEXCEPT;
+		reverse_iterator rbegin() EA_NOEXCEPT;
 		const_reverse_iterator rbegin() const EA_NOEXCEPT;
 		const_reverse_iterator crbegin() const EA_NOEXCEPT;
 
-		reverse_iterator       rend() EA_NOEXCEPT;
+		reverse_iterator rend() EA_NOEXCEPT;
 		const_reverse_iterator rend() const EA_NOEXCEPT;
 		const_reverse_iterator crend() const EA_NOEXCEPT;
 
-		bool      empty() const EA_NOEXCEPT;
+		bool empty() const EA_NOEXCEPT;
 		size_type size() const EA_NOEXCEPT;
 
 		void resize(size_type n, const value_type& value);
 		void resize(size_type n);
 
-		reference       front();
+		reference front();
 		const_reference front() const;
 
-		reference       back();
+		reference back();
 		const_reference back() const;
 
 		template <typename... Args>
@@ -370,15 +370,15 @@ namespace eastl
 		template <typename... Args>
 		void emplace_back(Args&&... args);
 
-		void      push_front(const value_type& value);
-		void      push_front(value_type&& x);
+		void push_front(const value_type& value);
+		void push_front(value_type&& x);
 		reference push_front();
-		void*     push_front_uninitialized();
+		void* push_front_uninitialized();
 
-		void      push_back(const value_type& value);
-		void      push_back(value_type&& x);
+		void push_back(const value_type& value);
+		void push_back(value_type&& x);
 		reference push_back();
-		void*     push_back_uninitialized();
+		void* push_back_uninitialized();
 
 		void pop_front();
 		void pop_back();
@@ -812,13 +812,6 @@ namespace eastl
 	///////////////////////////////////////////////////////////////////////
 	// list
 	///////////////////////////////////////////////////////////////////////
-
-	template <typename T, typename Allocator>
-	inline list<T, Allocator>::list()
-		: base_type()
-	{
-		// Empty
-	}
 
 
 	template <typename T, typename Allocator>

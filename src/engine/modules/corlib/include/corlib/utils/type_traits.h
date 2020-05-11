@@ -21,16 +21,12 @@ struct any
     {}
 };
 
-template <typename>
+template <typename T>
 struct is_span final : eastl::false_type
 {};
 
-template <typename>
-struct is_std_array final : eastl::false_type
-{};
-
-template <typename T, size_t N>
-struct is_std_array<eastl::array<T, N>> final : eastl::true_type
+template <typename T, typename = void>
+struct is_std_array : eastl::false_type
 {};
 
 template <typename, typename = void>
@@ -52,7 +48,7 @@ struct is_container
 };
 
 template <typename, typename, typename = void>
-struct is_container_element_type_compatible final : false_type
+struct is_container_element_type_compatible final : eastl::false_type
 {};
 
 template <typename T, typename E>
