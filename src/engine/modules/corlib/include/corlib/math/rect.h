@@ -12,11 +12,20 @@ XR_NAMESPACE_BEGIN(xr, math)
 template<typename Dimension>
 struct rect final
 {
-    typedef Dimension type;
-    type x {}, y {};
-    type width {}, height {};
- 
+    typedef Dimension type; 
+
     XR_CONSTEXPR_CPP14_OR_INLINE rect() XR_NOEXCEPT;
+    XR_CONSTEXPR_CPP14_OR_INLINE rect(type top, type bottom, type left, type right) XR_NOEXCEPT;
+
+    XR_CONSTEXPR_CPP14_OR_INLINE type width() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE type height() const;
+
+    XR_CONSTEXPR_CPP14_OR_INLINE type center_x() const;
+    XR_CONSTEXPR_CPP14_OR_INLINE type center_y() const;
+
+    XR_CONSTEXPR_CPP14_OR_INLINE type area() const;
+
+    type top, bottom, left, right;
 }; // struct rect<Dimension>
 
 //-----------------------------------------------------------------------------------------------------------
@@ -24,11 +33,72 @@ struct rect final
  */
 template<typename Dimension>
 XR_CONSTEXPR_CPP14_OR_INLINE rect<Dimension>::rect() XR_NOEXCEPT
-    : x(0)
-    , y(0)
-    , width(0)
-    , height(0)
+    : top(0)
+    , bottom(0)
+    , left(0)
+    , right(0)
 {}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE rect<Dimension>::rect(type top, type bottom, type left, type right) XR_NOEXCEPT
+    : top(top)
+    , bottom(bottom)
+    , left(left)
+    , right(right)
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE typename rect<Dimension>::type 
+rect<Dimension>::width() const
+{
+    return right - left;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE typename rect<Dimension>::type
+rect<Dimension>::height() const
+{
+    return top - bottom;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE typename rect<Dimension>::type
+rect<Dimension>::center_x() const
+{
+    return (right + left) / 2;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE typename rect<Dimension>::type
+rect<Dimension>::center_y() const
+{
+    return (top + bottom) / 2;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename Dimension>
+XR_CONSTEXPR_CPP14_OR_INLINE typename rect<Dimension>::type
+rect<Dimension>::area() const
+{
+    return width() * height();
+}
 
 //-----------------------------------------------------------------------------------------------------------
 typedef rect<int32_t> int_rect;
