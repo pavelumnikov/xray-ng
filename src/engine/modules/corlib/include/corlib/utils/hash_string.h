@@ -10,7 +10,7 @@ XR_NAMESPACE_BEGIN(xr, utils)
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename TString>
 size_t hash_string_func(TString const& s)
 {

@@ -14,7 +14,7 @@ size_t XR_CONSTEXPR_CPP14_OR_CONST default_alignment_v = select_size_t_constant_
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template< typename T >
 XR_CONSTEXPR_CPP14_OR_INLINE auto
 align_up(T const arg, uintptr_t const alignment) XR_NOEXCEPT
@@ -27,7 +27,7 @@ align_up(T const arg, uintptr_t const alignment) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template< typename T > // works for not power-of-2 alignments
 XR_CONSTEXPR_CPP14_OR_INLINE auto
 align_up_generic(T arg, uintptr_t const alignment) XR_NOEXCEPT
@@ -40,7 +40,7 @@ align_up_generic(T arg, uintptr_t const alignment) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template< typename T >
 XR_CONSTEXPR_CPP14_OR_INLINE auto
 align_down(T const arg, uintptr_t const alignment) XR_NOEXCEPT
@@ -53,7 +53,7 @@ align_down(T const arg, uintptr_t const alignment) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 template<typename T>
 XR_CONSTEXPR_CPP14_OR_INLINE bool
 is_aligned(T* pointer, uintptr_t const alignment) XR_NOEXCEPT
@@ -63,7 +63,7 @@ is_aligned(T* pointer, uintptr_t const alignment) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 XR_CONSTEXPR_CPP14_OR_INLINE bool
 is_power_of_2(uintptr_t const arg) XR_NOEXCEPT
 {
@@ -72,7 +72,7 @@ is_power_of_2(uintptr_t const arg) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 XR_CONSTEXPR_CPP14_OR_INLINE bool
 is_power_of_2_multiple(uintptr_t const arg, uintptr_t const divisor) XR_NOEXCEPT
 {
@@ -83,7 +83,7 @@ is_power_of_2_multiple(uintptr_t const arg, uintptr_t const divisor) XR_NOEXCEPT
 
 //-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
 XR_CONSTEXPR_CPP14_OR_INLINE auto
 next_highest_power_of_two(size_t v)
 {

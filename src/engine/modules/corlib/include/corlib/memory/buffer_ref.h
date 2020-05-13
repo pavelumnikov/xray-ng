@@ -67,6 +67,7 @@ public:
      * @return A sub buffer definition.
      */
     XR_CONSTEXPR_CPP14_OR_INLINE buffer_ref sub_buf(size_t const length) const;
+
     bool is_valid() const;
 
 private:
