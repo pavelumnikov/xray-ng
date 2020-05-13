@@ -40,9 +40,9 @@
 
 #include "corlib/types.h"
 #include "corlib/utils/type_conversions.h"
-#include "corlib/utils/string_view.h"
+#include "corlib/utils/constexpr_string.h"
 #include "EASTL/optional.h"
-#include "EASTL/string_view.h"
+#include "EASTL/array.h"
 
 // Checks magic_enum compiler compatibility.
 #if defined(__clang__) || defined(__GNUC__) && __GNUC__ >= 9 || defined(_MSC_VER)
@@ -85,59 +85,6 @@ struct supported
 template <typename T>
 inline constexpr bool is_enum_v = eastl::is_enum_v<T> && eastl::is_same_v<T, eastl::decay_t<T>>;
 
-template <size_t N>
-struct static_string
-{
-    constexpr explicit static_string(string_view str) XR_NOEXCEPT : static_string { str, eastl::make_index_sequence<N>{} }
-    {
-        assert(str.size() == N);
-    }
-
-    constexpr const char* data() const XR_NOEXCEPT
-    {
-        return chars.data();
-    }
-
-    constexpr size_t size() const XR_NOEXCEPT
-    {
-        return chars.size();
-    }
-
-    constexpr operator string_view() const XR_NOEXCEPT
-    {
-        return { data(), size() };
-    }
-
-private:
-    template <size_t... I>
-    constexpr static_string(string_view str, eastl::index_sequence<I...>) XR_NOEXCEPT : chars { { str[I]... } }
-    {}
-
-    const eastl::array<char, N> chars;
-};
-
-template <>
-struct static_string<0>
-{
-    constexpr explicit static_string(string_view) XR_NOEXCEPT
-    {}
-
-    constexpr const char* data() const XR_NOEXCEPT
-    {
-        return nullptr;
-    }
-
-    constexpr size_t size() const XR_NOEXCEPT
-    {
-        return 0;
-    }
-
-    constexpr operator string_view() const XR_NOEXCEPT
-    {
-        return {};
-    }
-};
-
 struct char_equal
 {
     constexpr bool operator()(char lhs, char rhs) const XR_NOEXCEPT
@@ -172,7 +119,6 @@ constexpr string_view pretty_name(eastl::string_view name) XR_NOEXCEPT
 
 template <typename BinaryPredicate>
 constexpr bool cmp_equal(string_view lhs, string_view rhs, BinaryPredicate p)
-XR_NOEXCEPT(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>)
 {
     if(lhs.size() != rhs.size())
     {
@@ -218,6 +164,7 @@ template <typename E>
 constexpr auto n() XR_NOEXCEPT
 {
     static_assert(is_enum_v<E>, "current constexpr function requires enum type.");
+
 #  if defined(__clang__)
     constexpr string_view name { __PRETTY_FUNCTION__ + 34, sizeof(__PRETTY_FUNCTION__) - 36 };
 #  elif defined(__GNUC__)
@@ -225,7 +172,8 @@ constexpr auto n() XR_NOEXCEPT
 #  elif defined(_MSC_VER)
     constexpr string_view name { __FUNCSIG__ + 40, sizeof(__FUNCSIG__) - 57 };
 #  endif
-    return static_string<name.size()>{name};
+
+    return utils::constexpr_string<name.size()>{name};
 }
 
 template <typename E>
@@ -240,7 +188,7 @@ constexpr auto n() XR_NOEXCEPT
 #  elif defined(_MSC_VER)
     constexpr auto name = pretty_name({ __FUNCSIG__, sizeof(__FUNCSIG__) - 17 });
 #  endif
-    return static_string<name.size()>{name};
+    return utils::constexpr_string<name.size()>{name};
 }
 
 template <typename E, E V>
@@ -424,10 +372,12 @@ struct enum_traits<E, true>
 
     inline static constexpr size_t count = detail::count_v<E>;
     inline static constexpr eastl::array<E, count> values = detail::values_v<E>;
-    inline static constexpr eastl::array<string_view, count> names = detail::names<E>(
-        eastl::make_index_sequence<count_v<E>>{});
-    inline static constexpr eastl::array<eastl::pair<E, string_view>, count> entries = detail::entries<E>(
-        eastl::make_index_sequence<count_v<E>>{});
+
+    inline static constexpr eastl::array<string_view, count> names = 
+        detail::names<E>(eastl::make_index_sequence<count_v<E>>{});
+
+    inline static constexpr eastl::array<eastl::pair<E, string_view>, count> entries =
+        detail::esntries<E>(eastl::make_index_sequence<count_v<E>>{});
 
     [[nodiscard]] static constexpr bool reflected(E value) XR_NOEXCEPT
     {
@@ -537,7 +487,7 @@ using enum_traits = detail::enum_traits<eastl::decay_t<E>>;
 // Returns eastl::optional with enum value.
 template <typename E, typename BinaryPredicate>
 [[nodiscard]] constexpr auto enum_cast(string_view value, BinaryPredicate p) 
-XR_NOEXCEPT(eastl::is_nothrow_invocable_r_v<bool, BinaryPredicate, char, char>) -> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
+-> detail::enable_if_enum_t<E, eastl::optional<eastl::decay_t<E>>>
 {
     static_assert(eastl::is_invocable_r_v<bool, BinaryPredicate, char, char>,
         "enum_cast requires bool(char, char) invocable predicate.");
