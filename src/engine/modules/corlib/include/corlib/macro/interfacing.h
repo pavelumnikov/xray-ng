@@ -25,11 +25,7 @@
 #   error please do not define XR_FORWARD_DECLARE_INTERFACE macros
 #endif // #if defined(XR_FORWARD_DECLARE_INTERFACE)
 
-#ifdef XR_MSVC_COMPILER_FAMILY
-#   define XR_FORWARD_DECLARE_INTERFACE(x) __interface x
-#else
-#   define XR_FORWARD_DECLARE_INTERFACE(x) struct x
-#endif
+#define XR_FORWARD_DECLARE_INTERFACE(x) struct x
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -39,6 +35,15 @@
 #endif // #if defined(XR_DECLARE_INTERFACE)
 
 #define XR_DECLARE_INTERFACE(x) struct XR_NON_VIRTUAL x
+
+//-----------------------------------------------------------------------------------------------------------
+
+// XR_DECLARE_INTERFACE macro
+#if defined(XR_DECLARE_SINGLE_INHERITED_INTERFACE)
+#   error please do not define XR_DECLARE_SINGLE_INHERITED_INTERFACE macros
+#endif // #if defined(XR_DECLARE_SINGLE_INHERITED_INTERFACE)
+
+#define XR_DECLARE_SINGLE_INHERITED_INTERFACE(x, y) struct XR_NON_VIRTUAL x : public y
 
 //-----------------------------------------------------------------------------------------------------------
 
