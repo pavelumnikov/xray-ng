@@ -9,9 +9,15 @@
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, utils)
 
+// Delegate interface inspired by works of marcmo (github.com/marcmo/delegates) 
+// and Stefan Reinalter (https://blog.molecular-matters.com/)
+//
+template <typename T>
+class delegate_def {};
+
 //-----------------------------------------------------------------------------------------------------------
 template <typename R, typename... Params>
-class delegate_def final
+class delegate_def<R(Params...)>
 {
 public:
     XR_CONSTEXPR_CPP14_OR_INLINE delegate_def() XR_NOEXCEPT;
@@ -52,7 +58,7 @@ using delegate = delegate_def<R(Args...)>;
 /**
  */
 template <typename R, typename... Params>
-constexpr delegate_def<R, Params...>::delegate_def()
+constexpr delegate_def<R(Params...)>::delegate_def()
     : m_stub(nullptr, nullptr)
 {}
 
@@ -61,7 +67,7 @@ constexpr delegate_def<R, Params...>::delegate_def()
  */
 template <typename R, typename... Params>
 template <class C, R(C:: * func)(Params...) >
-inline void delegate_def<R, Params...>::bind(C* instance)
+inline void delegate_def<R(Params...)>::bind(C* instance)
 {
     m_stub.first = instance;
     m_stub.second = &class_method_stub< C, func >;
@@ -72,7 +78,7 @@ inline void delegate_def<R, Params...>::bind(C* instance)
  */
 template <typename R, typename... Params>
 template <R(*func)(Params...) >
-inline void delegate_def<R, Params...>::bind()
+inline void delegate_def<R(Params...)>::bind()
 {
     m_stub.second = &function_stub< func >;
 }
@@ -81,7 +87,7 @@ inline void delegate_def<R, Params...>::bind()
 /**
  */
 template <typename R, typename... Params>
-inline R delegate_def<R, Params...>::invoke(Params... args) const
+inline R delegate_def<R(Params...)>::invoke(Params... args) const
 {
     return m_stub.second(m_stub.first, args...);
 }
@@ -91,7 +97,7 @@ inline R delegate_def<R, Params...>::invoke(Params... args) const
  */
 template <typename R, typename... Params>
 template<typename C, R(C:: * func)(Params...) >
-R delegate_def<R, Params...>::class_method_stub(pvoid instance, Params... args)
+R delegate_def<R(Params...)>::class_method_stub(pvoid instance, Params... args)
 {
     return (static_cast<C*>(instance)->*func)(args...);
 }
@@ -101,7 +107,7 @@ R delegate_def<R, Params...>::class_method_stub(pvoid instance, Params... args)
  */
 template <typename R, typename... Params>
 template<R(*func)(Params...) >
-R delegate_def<R, Params...>::function_stub(pvoid instance, Params... args)
+R delegate_def<R(Params...)>::function_stub(pvoid instance, Params... args)
 {
     return (*func)(args...);
 }
