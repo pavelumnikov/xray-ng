@@ -94,6 +94,7 @@ set(CORE_MODULE_MEMORY_HEADERS
 	"include/corlib/memory/buffer_range.h"
 	"include/corlib/memory/buffer_ref.h"
 	"include/corlib/memory/memory_aligned_allocator.h"
+	"include/corlib/memory/memory_aligned_helpers.h"
 	"include/corlib/memory/memory_allocator_base.h"
 	"include/corlib/memory/memory_crt_allocator.h"
 	"include/corlib/memory/memory_debug_parameters.h"
