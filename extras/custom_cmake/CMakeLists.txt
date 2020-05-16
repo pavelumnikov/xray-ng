@@ -3,14 +3,18 @@ cmake_minimum_required(VERSION 3.10)
 set(PROJECT_NAME custom_cmake)
 
 set(CMAKE_FILES 
-	"add_module.cmake")
+	"add_module.cmake"
+)
 
 set(CMAKE_PROGRAMS_FILES 
-	"programs/use_nuget.cmake")
+	"programs/use_nuget.cmake"
+)
 
 set(CMAKE_MODULE_FILES
 	"modules/include_catch.cmake"
-	"modules/include_renderdoc.cmake")
+	"modules/include_renderdoc.cmake"
+	"modules/include_vulkan.cmake"
+)
 
 source_group("\\" FILES ${CMAKE_FILES})
 source_group("programs" FILES ${CMAKE_PROGRAMS_FILES})
