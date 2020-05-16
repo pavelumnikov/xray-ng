@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/utils/string_view.h"
+#include "EASTL/array.h"
 #include "EASTL/type_traits.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -51,7 +52,10 @@ public:
     XR_CONSTEXPR_CPP14_OR_INLINE const_pointer c_str() const XR_NOEXCEPT;
 
 private:
-    value_type m_str[N];
+    template<size_t... I>
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(view_type str, eastl::index_sequence<I...>) XR_NOEXCEPT;
+
+    eastl::array<value_type, N> m_str;
 }; // class basic_constexpr_string
 
 //-----------------------------------------------------------------------------------------------------------
@@ -60,7 +64,17 @@ private:
 template<typename T, size_t N>
 XR_CONSTEXPR_CPP14_OR_INLINE
 basic_constexpr_string<T, N>::basic_constexpr_string() XR_NOEXCEPT
-    : m_str()
+    : basic_constexpr_string { {}, eastl::make_index_sequence<N>() }
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T, size_t N>
+template<size_t... I>
+XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string<T, N>::basic_constexpr_string(
+    view_type str, eastl::index_sequence<I...>) noexcept
+    : m_str { { str[I]... } }
 {}
 
 //-----------------------------------------------------------------------------------------------------------
@@ -70,22 +84,16 @@ template<typename T, size_t N>
 template<size_t M>
 XR_CONSTEXPR_CPP14_OR_INLINE
 basic_constexpr_string<T, N>::basic_constexpr_string(value_type const(&str)[M]) XR_NOEXCEPT
-{
-    XR_STATIC_ASSERT(M <= N, "input string");
-    for(size_t i = 0; i < M; ++i)
-        m_str[i] = str[i];
-}
+    : basic_constexpr_string { str, eastl::make_index_sequence<N>{} }
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
 template<typename T, size_t N>
 XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string<T, N>::basic_constexpr_string(view_type str) XR_NOEXCEPT
-{
-    XR_DEBUG_ASSERTION_MSG(N <= str.size(), "input string");
-    for(size_type i = 0; i < str.size(); ++i)
-        m_str[i] = str[i];
-}
+    : basic_constexpr_string { str, eastl::make_index_sequence<N>{} }
+{}
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -94,7 +102,7 @@ template<typename T, size_t N>
 XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_pointer
 basic_constexpr_string<T, N>::c_str() const XR_NOEXCEPT
 {
-    return m_str;
+    return eastl::data(m_str);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -124,7 +132,7 @@ template<typename T, size_t N>
 XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_iterator
 basic_constexpr_string<T, N>::begin() const XR_NOEXCEPT
 {
-    return m_str;
+    return eastl::begin(m_str);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -134,7 +142,7 @@ template<typename T, size_t N>
 XR_CONSTEXPR_CPP14_OR_INLINE typename basic_constexpr_string<T, N>::const_iterator
 basic_constexpr_string<T, N>::end() const XR_NOEXCEPT
 {
-    return (m_str + N);
+    return eastl::end(m_str);
 }
 
 
@@ -153,6 +161,7 @@ public:
     typedef const_pointer const_iterator;
     typedef size_t size_type;
     typedef ptrdiff_t difference_type;
+    typedef eastl::basic_string_view<T> view_type;
 
     XR_CONSTEXPR_OR_ENUM(size_type, npos, -1);
 
@@ -160,6 +169,8 @@ public:
 
     template<size_t M>
     explicit XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(value_type const(&str)[M]) XR_NOEXCEPT;
+
+    XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(view_type str) XR_NOEXCEPT;
 
     XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(this_type const& rhs) XR_NOEXCEPT = default;
     XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string(this_type&& rhs) XR_NOEXCEPT = default;
@@ -192,6 +203,14 @@ template<typename T>
 template<size_t M>
 XR_CONSTEXPR_CPP14_OR_INLINE
 basic_constexpr_string<T, 0>::basic_constexpr_string(value_type const(&str)[M]) XR_NOEXCEPT
+{}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+template<typename T>
+XR_CONSTEXPR_CPP14_OR_INLINE basic_constexpr_string<T, 0>::basic_constexpr_string(view_type str) XR_NOEXCEPT
+    : basic_constexpr_string {}
 {}
 
 //-----------------------------------------------------------------------------------------------------------
