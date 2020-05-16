@@ -235,6 +235,10 @@ function (xrng_fixup_dependencies_internal ModuleName ModuleDependencies)
 		target_link_libraries(${XR_PROJECT_NAME} ${XR_MODULE_DEPENDENCY_LIST})
 	endif()
 
+	if(XR_PLATFORM_DEPENDENCY_LIST)
+		target_link_libraries(${XR_PROJECT_NAME} ${XR_PLATFORM_DEPENDENCY_LIST})
+	endif()
+
 	if(XR_EXTERNAL_DEPENDENCY_LIST)
 		add_dependencies(${XR_PROJECT_NAME} ${XR_EXTERNAL_DEPENDENCY_LIST})
 		target_link_libraries(${XR_PROJECT_NAME} ${XR_EXTERNAL_DEPENDENCY_LIST})
