@@ -377,7 +377,7 @@ struct enum_traits<E, true>
         detail::names<E>(eastl::make_index_sequence<count_v<E>>{});
 
     inline static constexpr eastl::array<eastl::pair<E, string_view>, count> entries =
-        detail::esntries<E>(eastl::make_index_sequence<count_v<E>>{});
+        detail::entries<E>(eastl::make_index_sequence<count_v<E>>{});
 
     [[nodiscard]] static constexpr bool reflected(E value) XR_NOEXCEPT
     {
