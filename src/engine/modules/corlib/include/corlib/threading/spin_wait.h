@@ -34,7 +34,7 @@ struct spin_wait_cache_line
 
     using locking_value = typename LockingStrategy::locking_value;
 
-    using cache_line_selector_t = std::conditional_t<LockingStrategy::has_cache_line_size,
+    using cache_line_selector_t = eastl::conditional_t<LockingStrategy::has_cache_line_size,
         cache_line_selector<LockingStrategy>, default_cache_line_selector>;
 
     static XR_CONSTEXPR_CPP14_OR_CONST size_t cache_line_size = cache_line_selector_t::value;
