@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "corlib/memory/allocator_helper.h"
 #include <malloc.h> // for _alloca
 #include <new> // for new placement
 
@@ -39,12 +40,15 @@
     (allocator).free_impl(ptr XR_DEBUG_PARAMETERS_DEFINITION)
 
 //-----------------------------------------------------------------------------------------------------------
-#define XR_DEALLOCATE_MEMORY_T(allocator, type, ptr) \
-    ptr->~type(); \
+#define XR_DEALLOCATE_MEMORY_T(allocator, ptr) \
+    xr::memory::call_destruct(ptr); \
     XR_DEALLOCATE_MEMORY(allocator, reinterpret_cast<xr::pvoid>(ptr))
 
 //-----------------------------------------------------------------------------------------------------------
 #define XR_STACK_ALLOCATE_MEMORY(size) _alloca((size))
+
+//-----------------------------------------------------------------------------------------------------------
+#define XR_STACK_ALLOCATE_ARRAY_T(type, count) (((type)*))XR_STACK_ALLOCATE_MEMORY(sizeof(type) * (count))
 
 //-----------------------------------------------------------------------------------------------------------
 #define XR_STACK_ALIGN_ALLOCATE_MEMORY(size, align) \
