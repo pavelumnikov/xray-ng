@@ -129,7 +129,7 @@ void create_splash_screen(memory::base_allocator& allocator)
 {
     g_splash_screen.worker_thread = sys::spawn_thread(
         details::on_splash_screen, &g_splash_screen, L"splash screen",
-        sys::thread_priority::medium, 32_kb, 0);
+        sys::thread_priority::medium, XR_KILOBYTES_TO_BYTES(32), 0);
 
     XR_DEBUG_ASSERTION_MSG(
         g_splash_screen.worker_thread != sys::unknown_thread_handle,
