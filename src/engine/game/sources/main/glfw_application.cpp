@@ -1,58 +1,74 @@
-/*
-
-  Copyright (c) 2019, Pavel Umnikov
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions are met:
-
-  * Redistributions of source code must retain the above copyright notice,
-    this list of conditions and the following disclaimer.
-  * Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
-  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
-  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-  DAMAGE.
-
-*/
+// This file is a part of xray-ng engine
+//
 
 #include "glfw_application.h"
 #include "win/splash_screen.h"
 #include "GLFW/glfw3.h"
-#include "corlib/etl/containers/static_vector.h"
-#include "corlib/threading/interlocked.h"
+#include "corlib/utils/static_vector.h"
+#include "corlib/utils/string_conversion.h"
 #include "corlib/memory/memory_mt_arena_allocator.h"
+#include "corlib/memory/uninitialized_reference.h"
 #include "corlib/tasks/task_system.h"
+#include "rendering_api/api.h"
 #include "async_io/file_api.h"
-#include "corlib/sys/thread.h"
-#include <Windows.h>
+#include "../modules/rendering_module.h"
+#include "../config.h"
+#include "../constants.h"
 
-//------------------------------------------------------------------------------
-namespace xr::game::main::details
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, game, main, details)
 
-//------------------------------------------------------------------------------
+static memory::uninitialized_reference<modules::rendering_module> the_rendering_module;
+static tasks::task_group the_initialization_group { tasks::task_group::invalid };
+static tasks::task_group the_shutdown_group { tasks::task_group::invalid };
+
+//-----------------------------------------------------------------------------------------------------------
 /**
-*/
-void pre_initialize_application(memory::base_allocator& misc_allocator,
-    memory::base_allocator& io_system_allocator)
+ */
+void set_window_from_config(GLFWwindow* window)
 {
-    create_splash_screen(misc_allocator);
-    tasks::initialize_tasks(misc_allocator);
-    async_io::initialize_async_io(io_system_allocator);
+    int width = 640;
+    int height = 480;
+
+    const char* value = nullptr;
+    if(find_config_value(constants::window_width, &value))
+    {
+        auto opt = utils::as_int(value);
+        if(opt.has_value())
+            width = opt.value();
+    }
+
+    if(find_config_value(constants::window_height, &value))
+    {
+        auto opt = utils::as_int(value);
+        if(opt.has_value())
+            height = opt.value();
+    }
+
+    glfwSetWindowSize(window, width, height);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+void pre_initialize_application(initialize_application_desc const& desc, GLFWwindow* window)
+{
+    set_window_from_config(window);
+
+    // task system
+    tasks::initialize_tasks(desc.misc_allocator);
+    the_initialization_group = tasks::current_scheduler().create_group();
+    XR_DEBUG_ASSERTION_MSG(the_initialization_group.is_valid(), "initialization tasks group is invalid");
+
+    // asynchronous IO system
+    async_io::initialize_async_io(desc.io_system_allocator);
+
+    // rendering module
+    XR_DEBUG_ASSERTION_MSG(!the_rendering_module.is_constructed(), "rendering module already inialized");
+    memory::construct_reference(the_rendering_module, desc.rendering_allocator, window);
+}
+
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void post_initialize_application(GLFWwindow* window)
@@ -61,44 +77,75 @@ void post_initialize_application(GLFWwindow* window)
     destroy_splash_screen();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
-void on_initialize_application()
+void on_initialize_application(initialize_application_desc const& desc, GLFWwindow* window)
 {
+    constexpr uint32_t timeout_ms = 35000;
+    tasks::scheduler& s = tasks::current_scheduler();
+
+    rendering_api::descs::renderer_desc r_desc;
+    r_desc.api = rendering_api::render_api::vulkan;
+    r_desc.mode = rendering_api::gpu_mode::single;
+    r_desc.target = rendering_api::shader_target::sm_5_1;
+    r_desc.enable_gpu_based_validation = false;
+
+    rendering_api::render_init_result result;
+    rendering_api::initialize(desc.rendering_allocator, r_desc, result);
+    XR_DEBUG_ASSERTION(result == rendering_api::render_init_result::success);
+
+    bool done_in_time = s.wait_group(the_initialization_group, timeout_ms);
+    XR_UNREFERENCED_PARAMETER(done_in_time);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void on_shutdown_application()
 {
+    the_shutdown_group = tasks::current_scheduler().create_group();
+    XR_DEBUG_ASSERTION_MSG(the_shutdown_group.is_valid(), "shutdown tasks group is invalid");
+
+    // rendering module
+    XR_DEBUG_ASSERTION_MSG(the_rendering_module.is_constructed(), "rendering module must be inialized");
+    memory::destruct_reference(the_rendering_module);
+
+    rendering_api::render_destroy_result result;
+    rendering_api::shutdown(nullptr, result);
+    XR_DEBUG_ASSERTION(result == rendering_api::render_destroy_result::success);
+
     async_io::shutdown_async_io();
     tasks::shutdown_tasks();
+    shutdown_config();
 }
 
-} // namespace xr::game::main::details
+XR_NAMESPACE_END(xr, game, main, details)
+//-----------------------------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
-namespace xr::game::main
-{
+//-----------------------------------------------------------------------------------------------------------
+XR_NAMESPACE_BEGIN(xr, game, main)
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
-void initialize_application(
-    memory::base_allocator& misc_allocator,
-    memory::base_allocator& io_system_allocator,
-    GLFWwindow* window)
+void early_initialize_application(memory::base_allocator& misc_allocator)
 {
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    create_splash_screen(misc_allocator);
+    initialize_config(misc_allocator);
+}
 
-    details::pre_initialize_application(misc_allocator, io_system_allocator);
-    details::on_initialize_application();
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+void initialize_application(initialize_application_desc const& desc, GLFWwindow* window)
+{
+    details::pre_initialize_application(desc, window);
+    details::on_initialize_application(desc, window);
     details::post_initialize_application(window);
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void shutdown_application()
@@ -106,15 +153,12 @@ void shutdown_application()
     details::on_shutdown_application();
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
 */
 void run_application()
 {
     //constexpr uint32_t timeout_ms = 1500;
-
-    //sys::thread_id main_thread = sys::current_thread_id();
-    //tasks::task_group master_group = tasks::task_group::get_default_group();
 
     //details::main_task first_task {};
     //tasks::scheduler& s = tasks::current_scheduler();
@@ -124,5 +168,5 @@ void run_application()
     //XR_UNREFERENCED_PARAMETER(done_in_time);
 }
 
-} // namespace xr::paranoia
-//------------------------------------------------------------------------------
+XR_NAMESPACE_END(xr, game, main)
+//-----------------------------------------------------------------------------------------------------------
