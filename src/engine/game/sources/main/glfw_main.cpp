@@ -1,30 +1,5 @@
-/*
-
-  Copyright (c) 2019, Pavel Umnikov
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions are met:
-
-  * Redistributions of source code must retain the above copyright notice,
-    this list of conditions and the following disclaimer.
-  * Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
-
-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY
-  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
-  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-  DAMAGE.
-
-*/
+// This file is a part of xray-ng engine
+//
 
 #include "glfw_application.h"
 #include "corlib/threading/interlocked.h"
@@ -35,6 +10,8 @@
 #include "corlib/sys/thread.h"
 #include "corlib/sys/chrono.h"
 #include "GLFW/glfw3.h"
+#include "../config.h"
+#include "../constants.h"
 
 #if defined(XRAY_PLATFORM_WINDOWS)
 #include <Windows.h>
@@ -42,31 +19,7 @@
 
 using namespace xr;
 
-//------------------------------------------------------------------------------
-#if defined(XRAY_PLATFORM_WINDOWS)
-struct ole_initializer final
-{
-    ole_initializer()
-    {
-#if XR_WITH_EDITOR
-        // Sciter needs it for drag-n-drop, etc.
-        (void)OleInitialize(nullptr);
-#endif // defined(XRAY_PLATFORM_WINDOWS)
-    }
-
-    ~ole_initializer()
-    {
-#if XR_WITH_EDITOR
-        OleUninitialize();
-#endif // defined(XRAY_PLATFORM_WINDOWS)
-    }
-
-    XR_DECLARE_DELETE_COPY_ASSIGNMENT(ole_initializer);
-    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(ole_initializer);
-}; // struct ole_initializer
-#endif // defined(XRAY_PLATFORM_WINDOWS)
-
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 struct glfw_initializer final
 {
     glfw_initializer(memory::base_allocator& alloc)
@@ -125,30 +78,63 @@ private:
     }
 }; // struct glfw_initializer
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 /**
-*/
+ */
+static int32_t early_engine_requirements_check()
+{
+    // may be it's better to check inside rendering subsystem, but it's better to check as
+    // early as we can. it's bad idea to do such checks inside tasks, so this is placed here.
+    if(glfwVulkanSupported() == GLFW_FALSE)
+    {
+        const char* error = nullptr;
+        if(glfwGetError(&error) == GLFW_NO_ERROR)
+            error = constants::vulkan_support_error_msg;
+        if(MessageBoxA(nullptr, error, constants::xrayng_caption, MB_ICONSTOP | MB_OK) == MB_OK)
+            return 1;
+    }
+
+    return 0;
+}
+
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 int main(int argc, char** argv)
 {
-#if defined(XRAY_PLATFORM_WINDOWS)
-    ole_initializer ole_init {};
-#endif // defined(XRAY_PLATFORM_WINDOWS)
-
     memory::crt_allocator misc_allocator {};
+    game::main::early_initialize_application(misc_allocator);
+
     memory::st_arena_allocator glfw_allocator {};
-    glfw_allocator.initialize(1_mb, 256_kb, sys::current_thread_id());
+    glfw_allocator.initialize(XR_MEGABYTES_TO_BYTES(1), XR_KILOBYTES_TO_BYTES(256), sys::current_thread_id());
+
     memory::mt_arena_allocator io_system_allocator {};
-    io_system_allocator.initialize(64_mb, 16_mb);
+    io_system_allocator.initialize(XR_MEGABYTES_TO_BYTES(64), XR_MEGABYTES_TO_BYTES(16));
+
+    memory::mt_arena_allocator rendering_subsystem_allocator {};
+    rendering_subsystem_allocator.initialize(XR_MEGABYTES_TO_BYTES(256), XR_MEGABYTES_TO_BYTES(16));
 
     glfw_initializer glfw_init { glfw_allocator };
-    auto const main_window = glfwCreateWindow(320, 240, "xray-ng", nullptr, nullptr);
-    game::main::initialize_application(misc_allocator, io_system_allocator, main_window);
+    int32_t result = early_engine_requirements_check();
+    if(result) return result;
+
+    auto const main_window = glfwCreateWindow(320, 240, constants::xrayng_caption, nullptr, nullptr);
+    glfwSetInputMode(main_window, GLFW_STICKY_KEYS, GL_TRUE);
+
+    game::main::initialize_application_desc desc
+    {
+        misc_allocator,
+        io_system_allocator,
+        rendering_subsystem_allocator
+    };
+    game::main::initialize_application(desc, main_window);
 
     bool exiting = false;
     while(!exiting)
     {
         // Use PeekMessage() so we can use idle time to render the scene. 
-        auto const have_exit = !!glfwWindowShouldClose(main_window);
+        bool const have_exit = !!glfwWindowShouldClose(main_window);
 
         if(have_exit)
         {
@@ -162,16 +148,14 @@ int main(int argc, char** argv)
 
     game::main::shutdown_application();
     glfwDestroyWindow(main_window);
+
+    return result;
 }
 
 #if defined(XRAY_PLATFORM_WINDOWS)
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char* lpCmdLine, int nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hInstance);
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-    UNREFERENCED_PARAMETER(nCmdShow);
-
+    XR_UNREFERENCED_PARAMETER(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
     return main(__argc, __argv);
 }
 #endif
