@@ -51,10 +51,10 @@
 #define XR_STACK_ALLOCATE_CAST_T(type, size) (type*)XR_STACK_ALLOCATE_MEMORY(size)
 
 //-----------------------------------------------------------------------------------------------------------
-#define XR_STACK_ALLOCATE_T(type) (type*)XR_STACK_ALLOCATE_MEMORY(sizeof(type))
+#define XR_STACK_ALLOCATE_T(type) XR_STACK_ALLOCATE_CAST_T(type, sizeof(type))
 
 //-----------------------------------------------------------------------------------------------------------
-#define XR_STACK_ALLOCATE_ARRAY_T(type, count) (type*)XR_STACK_ALLOCATE_MEMORY(sizeof(type) * (count))
+#define XR_STACK_ALLOCATE_ARRAY_T(type, count) XR_STACK_ALLOCATE_CAST_T(type, sizeof(type) * (count))
 
 //-----------------------------------------------------------------------------------------------------------
 #define XR_STACK_ALIGN_ALLOCATE_MEMORY(size, align) \
