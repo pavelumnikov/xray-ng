@@ -162,6 +162,7 @@ vk_render_device::vk_render_device(memory::base_allocator& alloc)
     , m_cpu_aligned_allocator { alloc }
     , m_proxy_allocator { alloc }
     , m_vk_proxy_allocator { alloc }
+    , m_internal_caps {}
     , m_instance {}
 {}
 
@@ -221,7 +222,7 @@ void vk_render_device::initialize(bool enable_debug_layer)
  */
 void vk_render_device::shutdown()
 {
-
+    shutdown_memory_allocation();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -344,7 +345,11 @@ void vk_render_device::initialize_memory_allocation()
     VmaAllocatorCreateInfo create_info = { 0 };
     create_info.device = m_device;
     create_info.physicalDevice = m_active_gpu;
-    // TODO: add RenderDoc support
+
+    if(m_internal_caps.dedicated_allocation_extension && !m_internal_caps.renderdoc_layer_enabled)
+    {
+        create_info.flags |= VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT;
+    }
 
     VmaVulkanFunctions vma_functions = {};
     vma_functions.vkAllocateMemory = vkAllocateMemory;

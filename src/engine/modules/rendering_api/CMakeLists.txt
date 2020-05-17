@@ -46,6 +46,7 @@ set(RENDERAPI_MODULE_VK_SOURCES
 	"sources/vk/vk_include.h"
 	"sources/vk/vk_instance.cpp"
 	"sources/vk/vk_instance.h"
+	"sources/vk/vk_internal_caps.h"
 	"sources/vk/vk_mem_alloc.h"
 	"sources/vk/vk_mem_proxy.cpp"
 	"sources/vk/vk_mem_proxy.h"

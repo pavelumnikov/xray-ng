@@ -8,6 +8,7 @@
 #include "rendering_api/common.h"
 #include "../base_render_device.h"
 #include "vk_mem_proxy.h"
+#include "vk_internal_caps.h"
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3.h"
 
@@ -46,11 +47,13 @@ inline bool queue_family_indices::is_complete() const XR_NOEXCEPT
 }
 
 //-----------------------------------------------------------------------------------------------------------
-class XR_ALIGNAS(64) vk_render_device : public base_render_device
+class vk_render_device : public base_render_device
 {
 public:
     vk_render_device(memory::base_allocator& alloc);
     virtual ~vk_render_device();
+
+    const vk_internal_caps& internal_caps() const;
 
     // Implementation base_render_device
 
@@ -79,6 +82,7 @@ private:
     memory::aligned_allocator<16> m_cpu_aligned_allocator;
     memory::proxy::eastl_proxy_allocator m_proxy_allocator;
     memory_proxy_allocator m_vk_proxy_allocator;
+    vk_internal_caps m_internal_caps;
 
     VkInstance m_instance;
     VkPhysicalDevice m_active_gpu;
