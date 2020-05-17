@@ -5,3 +5,4 @@ set(XR_PROJECT_PREFIX ${XR_PROJECT_PREFIX}/modules)
 
 add_subdirectory(corlib)
 add_subdirectory(async_io)
+add_subdirectory(rendering_api)
