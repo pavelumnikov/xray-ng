@@ -20,8 +20,7 @@ template <typename R, typename... Params>
 class delegate_def<R(Params...)>
 {
 public:
-    XR_CONSTEXPR_CPP14_OR_INLINE delegate_def() XR_NOEXCEPT;
-
+    XR_DECLARE_DEFAULT_CONSTRUCTOR(delegate_def);
     XR_DECLARE_DEFAULT_DESTRUCTOR(delegate_def);
     XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(delegate_def);
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(delegate_def);
@@ -45,7 +44,7 @@ private:
     template<R(*func)(Params...) >
     static R function_stub(pvoid instance, Params... args);
 
-    method_stub m_stub;
+    method_stub m_stub {};
 }; // class delegate_def<R(Args...)>
 
 //-----------------------------------------------------------------------------------------------------------
@@ -58,17 +57,10 @@ using delegate = delegate_def<R(Args...)>;
 /**
  */
 template <typename R, typename... Params>
-constexpr delegate_def<R(Params...)>::delegate_def()
-    : m_stub(nullptr, nullptr)
-{}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
- */
-template <typename R, typename... Params>
 template <class C, R(C:: * func)(Params...) >
 inline void delegate_def<R(Params...)>::bind(C* instance)
 {
+    XR_DEBUG_ASSERTION_MSG(instance != nullptr, "invalid pointer to instance for delegate");
     m_stub.first = instance;
     m_stub.second = &class_method_stub< C, func >;
 }
