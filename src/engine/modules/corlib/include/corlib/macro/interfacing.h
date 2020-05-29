@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/macro/compiler.h"
+#include "corlib/macro/constexpr.h"
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -70,6 +71,58 @@
 #else
 #   define XR_DECLARE_DEFAULT_DESTRUCTOR(x) public: ~x() {}
 #endif // #if XR_COMPILER_SUPPORTS_CPP11
+
+//-----------------------------------------------------------------------------------------------------------
+
+// XR_DECLARE_DEFAULT_CONSTRUCTOR macro
+#if defined(XR_DECLARE_DEFAULT_CONSTRUCTOR)
+#   error please do not define XR_DECLARE_DEFAULT_CONSTRUCTOR macros
+#endif // #if defined(XR_DECLARE_DEFAULT_CONSTRUCTOR)
+
+#if XR_COMPILER_SUPPORTS_CPP11
+#   define XR_DECLARE_DEFAULT_CONSTRUCTOR(x) public: x() = default
+#else
+#   define XR_DECLARE_DEFAULT_CONSTRUCTOR(x) public: x() {}
+#endif // #if XR_DECLARE_DEFAULT_CONSTRUCTOR
+
+//-----------------------------------------------------------------------------------------------------------
+
+// XR_DECLARE_DEFAULT_CONSTRUCTOR macro
+#if defined(XR_DECLARE_DEFAULT_NOEXCEPT_CONSTRUCTOR)
+#   error please do not define XR_DECLARE_DEFAULT_NOEXCEPT_CONSTRUCTOR macros
+#endif // #if defined(XR_DECLARE_DEFAULT_NOEXCEPT_CONSTRUCTOR)
+
+#if XR_COMPILER_SUPPORTS_CPP11
+#   define XR_DECLARE_DEFAULT_NOEXCEPT_CONSTRUCTOR(x) public: x() XR_NOEXCEPT = default
+#else
+#   define XR_DECLARE_DEFAULT_NOEXCEPT_CONSTRUCTOR(x) public: x() XR_NOEXCEPT {}
+#endif // #if XR_DECLARE_DEFAULT_CONSTRUCTOR
+
+//-----------------------------------------------------------------------------------------------------------
+
+// XR_DECLARE_DEFAULT_CONSTRUCTOR macro
+#if defined(XR_DECLARE_DEFAULT_CONSTEXPR_NOEXCEPT_CONSTRUCTOR)
+#   error please do not define XR_DECLARE_DEFAULT_CONSTEXPR_NOEXCEPT_CONSTRUCTOR macros
+#endif // #if defined(XR_DECLARE_DEFAULT_CONSTEXPR_NOEXCEPT_CONSTRUCTOR)
+
+#if XR_COMPILER_SUPPORTS_CPP11
+#   define XR_DECLARE_DEFAULT_CONSTEXPR_NOEXCEPT_CONSTRUCTOR(x) public: XR_CONSTEXPR_CPP14_OR_INLINE x() XR_NOEXCEPT = default
+#else
+#   define XR_DECLARE_DEFAULT_CONSTEXPR_NOEXCEPT_CONSTRUCTOR(x) public: XR_CONSTEXPR_CPP14_OR_INLINE x() XR_NOEXCEPT {}
+#endif // #if XR_DECLARE_DEFAULT_CONSTRUCTOR
+
+//-----------------------------------------------------------------------------------------------------------
+
+// XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC macro
+#if defined(XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC)
+#   error please do not define XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC macros
+#endif // #if defined(XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC)
+
+#if XR_COMPILER_SUPPORTS_CPP11
+#   define XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC(x) x() = default
+#else
+#   define XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC(x) x() {}
+#endif // #if XR_DECLARE_DEFAULT_CONSTRUCTOR_NO_PUBLIC
 
 //-----------------------------------------------------------------------------------------------------------
 
