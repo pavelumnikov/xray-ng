@@ -3,15 +3,11 @@
 
 #include "file_api_win32.h"
 #include "file_async_result_win32.h"
-#include "corlib/memory/uninitialized_reference.h"
 #include "corlib/memory/proxy/eastl_proxy_allocator.h"
 #include "corlib/threading/scoped_lock.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, async_io)
-
-//-----------------------------------------------------------------------------------------------------------
-static memory::uninitialized_reference<file_api_win32> file_api_system;
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -251,39 +247,6 @@ uint32_t file_api_win32::async_io_func(void* arg)
     }
 
     return 0;
-}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
- */
-void initialize_async_io(memory::base_allocator& alloc)
-{
-    XR_DEBUG_ASSERTION_MSG(!file_api_system.is_constructed(),
-        "file api already initialized");
-
-    memory::construct_reference(file_api_system, alloc);
-}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
- */
-void shutdown_async_io()
-{
-    XR_DEBUG_ASSERTION_MSG(file_api_system.is_constructed(),
-        "file api must be initialized");
-
-    memory::destruct_reference(file_api_system);
-}
-
-//-----------------------------------------------------------------------------------------------------------
-/**
- */
-file_api& current_file_api()
-{
-    XR_DEBUG_ASSERTION_MSG(file_api_system.is_constructed(),
-        "file api must be initialized");
-
-    return file_api_system.ref();
 }
 
 XR_NAMESPACE_END(xr, async_io)
