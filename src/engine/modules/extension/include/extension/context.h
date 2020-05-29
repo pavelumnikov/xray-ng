@@ -38,7 +38,7 @@ public:
     ~context();
 
     template<typename T, typename ... Args>
-    void register_subsystem(tick_group group, Args... args);
+    void register_subsystem(tick_group group, Args&& ... args);
 
     template<typename T>
     utils::shared_ptr<T> get_subsystem() const;
@@ -60,10 +60,10 @@ private:
 /**
  */
 template<typename T, typename ... Args>
-inline void context::register_subsystem(tick_group group, Args... args)
+inline void context::register_subsystem(tick_group group, Args&& ... args)
 {
     validate_subsystem<T>();
-    auto sub = utils::make_shared_ptr<subsystem_wrapper>(m_allocator, this, args...);
+    auto sub = utils::make_shared_ptr<subsystem_wrapper>(m_allocator, this, eastl::forward<Args&&>(args)...);
     m_subsystems.emplace_back(eastl::move(sub), group);
 }
 
