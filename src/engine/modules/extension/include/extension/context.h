@@ -20,13 +20,17 @@ enum class tick_group
 //-----------------------------------------------------------------------------------------------------------
 struct subsystem_wrapper
 {
-    subsystem_wrapper(utils::shared_ptr<subsystem> const& ptr, tick_group group);
+    subsystem_wrapper(utils::shared_ptr<subsystem> ptr, tick_group group) XR_NOEXCEPT;
+    XR_DECLARE_DEFAULT_DESTRUCTOR(subsystem_wrapper);
+    XR_DECLARE_DEFAULT_MOVE_ASSIGNMENT(subsystem_wrapper);
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(subsystem_wrapper);
+
     utils::shared_ptr<subsystem> ptr;
     tick_group group;
 }; // struct subsystem_wrapper
 
-subsystem_wrapper::subsystem_wrapper(utils::shared_ptr<subsystem> const& ptr, tick_group group)
-    : ptr(ptr)
+inline subsystem_wrapper::subsystem_wrapper(utils::shared_ptr<subsystem> ptr, tick_group group) XR_NOEXCEPT
+    : ptr(eastl::move(ptr))
     , group(group)
 {}
 
@@ -63,8 +67,8 @@ template<typename T, typename ... Args>
 inline void context::register_subsystem(tick_group group, Args&& ... args)
 {
     validate_subsystem<T>();
-    auto sub = utils::make_shared_ptr<subsystem_wrapper>(m_allocator, this, eastl::forward<Args&&>(args)...);
-    m_subsystems.emplace_back(eastl::move(sub), group);
+    auto sub = utils::make_shared_ptr<T>(m_allocator, this, eastl::forward<Args&&>(args)...);
+    m_subsystems.emplace_back(eastl::static_pointer_cast<subsystem>(sub), group);
 }
 
 //-----------------------------------------------------------------------------------------------------------
