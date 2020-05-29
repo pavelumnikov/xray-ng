@@ -26,13 +26,13 @@ namespace eastl
 	template <typename T>
 	void intrusive_ptr_add_ref(T* p)
 	{
-		p->AddRef();
+		p->add_ref();
 	}
 	 
 	template <typename T>
 	void intrusive_ptr_release(T* p)
 	{
-		p->Release();
+		p->release();
 	}
 
 
