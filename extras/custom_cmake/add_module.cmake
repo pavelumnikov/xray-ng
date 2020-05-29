@@ -34,6 +34,7 @@ function (xrng_fixup_pch_internal ModuleName AffectedSources)
 		return()
 
 	else()
+		target_include_directories(${ModuleName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/sources)
 		message(" - Precompiled header: yes")
 
 	endif(NOT (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${PRECOMPILED_HEADER_PATH} OR 
