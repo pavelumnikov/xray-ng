@@ -37,7 +37,7 @@ set(SOURCES ${ASYNC_IO_MODULE_HEADERS} ${ASYNC_IO_MODULE_SOURCES})
 ##
 
 set(OPTIONS generic:cpp17=yes generic:noexceptions=yes)
-set(DEPENDENCY module:eastl module:corlib)
+set(DEPENDENCY module:eastl module:corlib module:extension)
 
 xrng_engine_add_module(${PROJECT_NAME} STATIC OPTIONS DEPENDENCY SOURCES)
 
