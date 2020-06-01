@@ -12,6 +12,7 @@ set(CMAKE_PROGRAMS_FILES
 
 set(CMAKE_MODULE_FILES
 	"modules/include_catch.cmake"
+	"modules/include_fmod.cmake"
 	"modules/include_renderdoc.cmake"
 	"modules/include_vulkan.cmake"
 )
