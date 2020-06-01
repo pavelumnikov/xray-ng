@@ -418,10 +418,9 @@ endif(WIN32)
 ##
 
 set(OPTIONS generic:cpp17=yes generic:noexceptions=yes win:asm=yes)
-set(DEPENDENCY module:eastl module:glfw win:Ws2_32 win:Mswsock win:AdvApi32)
+set(DEPENDENCY module:eastl)
 
 xrng_engine_add_module(${PROJECT_NAME} STATIC OPTIONS DEPENDENCY SOURCES)
-target_include_directories(${PROJECT_NAME} PRIVATE ${eastl_SOURCE_DIR}/include)
 
 ## For Visual Studio
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER ${XR_PROJECT_PREFIX})
