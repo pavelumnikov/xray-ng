@@ -23,11 +23,11 @@ public:
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(base_allocator);
     XR_DECLARE_DELETE_MOVE_ASSIGNMENT(base_allocator);
 
-    pvoid malloc_impl(size_t size 
+    XR_COMPILER_ALLOCATOR_HINT pvoid malloc_impl(size_t size
         XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION
         XR_DEBUG_PARAMETERS_DECLARATION);
 
-    pvoid realloc_impl(pvoid pointer, size_t new_size 
+    XR_COMPILER_ALLOCATOR_HINT pvoid realloc_impl(pvoid pointer, size_t new_size
         XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION 
         XR_DEBUG_PARAMETERS_DECLARATION);
 

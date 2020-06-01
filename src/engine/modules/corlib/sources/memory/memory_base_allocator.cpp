@@ -36,7 +36,7 @@ base_allocator::on_free(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) const
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid base_allocator::malloc_impl(size_t size 
+XR_COMPILER_ALLOCATOR_HINT pvoid base_allocator::malloc_impl(size_t size
     XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION)
 {
     pvoid ptr = call_malloc(size XR_DEBUG_PARAMETERS_DESCRIPTION XR_DEBUG_PARAMETERS);
@@ -47,7 +47,7 @@ pvoid base_allocator::malloc_impl(size_t size
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-pvoid base_allocator::realloc_impl(pvoid pointer, size_t new_size 
+XR_COMPILER_ALLOCATOR_HINT pvoid base_allocator::realloc_impl(pvoid pointer, size_t new_size
     XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION)
 {
     pvoid ptr = call_realloc(pointer, new_size XR_DEBUG_PARAMETERS_DESCRIPTION XR_DEBUG_PARAMETERS);
