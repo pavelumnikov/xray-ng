@@ -33,6 +33,19 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
+// XR_CONSTEXPR_CPP14_OR_STATIC_CONST macro
+#if defined(XR_CONSTEXPR_CPP14_OR_STATIC_CONST)
+#   error please do not define XR_CONSTEXPR_CPP14_OR_STATIC_CONST macros
+#endif // #if defined(XR_CONSTEXPR_CPP14_OR_STATIC_CONST)
+
+#if XR_COMPILER_SUPPORTS_CPP14
+#   define XR_CONSTEXPR_CPP14_OR_STATIC_CONST constexpr
+#else
+#   define XR_CONSTEXPR_CPP14_OR_STATIC_CONST static const
+#endif
+
+//-----------------------------------------------------------------------------------------------------------
+
 // XR_CONSTEXPR_CPP14_OR_CONST macro
 #if defined(XR_CONSTEXPR_CPP11)
 #   error please do not define XR_CONSTEXPR_CPP11 macros
