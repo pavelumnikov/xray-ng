@@ -5,9 +5,6 @@
 
 #include "corlib/memory/memory_allocator_base.h"
 
-// forward declaration
-struct GLFWwindow;
-
 //-----------------------------------------------------------------------------------------------------------
 namespace xr::game::main
 {
@@ -28,9 +25,7 @@ void early_initialize_application(memory::base_allocator& misc_allocator);
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void initialize_application(
-    initialize_application_desc const& desc,
-    GLFWwindow* window);
+void initialize_application(initialize_application_desc const& desc);
 
 //-----------------------------------------------------------------------------------------------------------
 /**
@@ -40,7 +35,7 @@ void shutdown_application();
 //-----------------------------------------------------------------------------------------------------------
 /**
 */
-void run_application();
+bool run_application();
 
 } // namespace xr::game::main
 //-----------------------------------------------------------------------------------------------------------

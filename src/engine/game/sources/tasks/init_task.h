@@ -3,31 +3,34 @@
 
 #pragma once
 
+#include "../main/application.h"
+#include "extension/context.h"
 #include "corlib/tasks/task_system.h"
-#include "../modules/rendering_module.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, game, task)
 
 //-----------------------------------------------------------------------------------------------------------
-class rendering_subsystem_task
+class init_task
 {
 public:
-    XR_DECLARE_TASK(rendering_subsystem_task,
+    XR_DECLARE_TASK(init_task,
         tasks::task_stack_request::small_stack,
         tasks::task_priority::default_prority,
         math::color_table::orange);
 
-    rendering_subsystem_task(modules::rendering_module& rm);
-    ~rendering_subsystem_task() = default;
-    
-    XR_DECLARE_DELETE_COPY_ASSIGNMENT(rendering_subsystem_task);
-    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(rendering_subsystem_task);
+    init_task(main::initialize_application_desc const& desc, extension::context& ctx);
+    ~init_task() = default;
+
+    XR_DECLARE_DELETE_COPY_ASSIGNMENT(init_task);
+    XR_DECLARE_DELETE_MOVE_ASSIGNMENT(init_task);
+
+    void operator()(tasks::execution_context& context);
 
 private:
-    void operator()(tasks::execution_context& context);
-    modules::rendering_module& m_rendering_module;
-}; // class rendering_subsystem_task
+    main::initialize_application_desc const& m_init_desc;
+    extension::context& m_extension_context;
+}; // class init_task
 
 XR_NAMESPACE_END(xr, game, task)
 //-----------------------------------------------------------------------------------------------------------
