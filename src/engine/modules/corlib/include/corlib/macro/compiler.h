@@ -128,3 +128,18 @@
 #endif // XR_COMPILER_SUPPORTS_CPP11
 
 //-----------------------------------------------------------------------------------------------------------
+
+// XR_COMPILER_ALLOCATOR_HINT macro
+#if defined(XR_COMPILER_ALLOCATOR_HINT)
+#   error please do not define XR_COMPILER_ALLOCATOR_HINT macros
+#endif // #if defined(XR_COMPILER_ALLOCATOR_HINT)
+
+#if XR_MSVC_COMPILER_FAMILY
+#   if _MSVC_LANG >= 201402L
+#      define XR_COMPILER_ALLOCATOR_HINT __declspec(allocator)
+#   endif // _MSVC_LANG >= 201402L
+#else
+#   define XR_COMPILER_ALLOCATOR_HINT
+#endif // XR_MSVC_COMPILER_FAMILY
+
+//-----------------------------------------------------------------------------------------------------------
