@@ -4,6 +4,7 @@ set(PROJECT_NAME custom_cmake)
 
 set(CMAKE_FILES 
 	"add_module.cmake"
+	"install_dll_if_exists.cmake"
 )
 
 set(CMAKE_PROGRAMS_FILES 
