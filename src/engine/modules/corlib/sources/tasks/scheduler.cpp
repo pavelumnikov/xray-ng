@@ -46,7 +46,7 @@ XR_NAMESPACE_END(xr, tasks, details)
 XR_NAMESPACE_BEGIN(xr, tasks)
 
 constexpr size_t scheduler_stack_size = XR_MEGABYTES_TO_BYTES(1); // 1Mb
-constexpr size_t standard_fiber_stack_size = XR_KILOBYTES_TO_BYTES(128); // 128Kb
+constexpr size_t standard_fiber_stack_size = XR_KILOBYTES_TO_BYTES(256); // 256Kb
 constexpr size_t reserve_standard_fiber_stack_size = standard_fiber_stack_size / 2;
 constexpr size_t extended_fiber_stack_size = XR_MEGABYTES_TO_BYTES(1); // 1Mb
 constexpr size_t reserve_extended_fiber_stack_size = extended_fiber_stack_size / 2;
