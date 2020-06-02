@@ -26,8 +26,6 @@ source_group("include" FILES ${SFX_MODULE_HEADERS})
 set(SFX_MODULE_SOURCES
 	"sources/pch.cpp"
 	"sources/pch.h"
-	"sources/sfx_init_task.cpp"
-	"sources/sfx_init_task.h"
 	"sources/sfx_subsystem.cpp"
 )
 
