@@ -11,7 +11,7 @@
 namespace xr::details
 {
 template<typename ... Args>
-void unreferenced_arguments(Args... args)
+void unreferenced_arguments(Args&&... args)
 {}
 } // namespace xr::details
 #else
