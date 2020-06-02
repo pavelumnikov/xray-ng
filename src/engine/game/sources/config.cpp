@@ -6,8 +6,8 @@
 #include "corlib/utils/fixed_string.h"
 #include "corlib/memory/uninitialized_reference.h"
 #include "corlib/memory/proxy/eastl_proxy_allocator.h"
-#include <stdio.h>
 #include "constants.h"
+#include <stdio.h>
 
 //-----------------------------------------------------------------------------------------------------------
 namespace xr
@@ -55,6 +55,7 @@ void close_config_file(FILE* f)
  */
 void save_config_to_file(FILE* file, config_map const& map)
 {
+    // TODO: implement this
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -62,20 +63,23 @@ void save_config_to_file(FILE* file, config_map const& map)
  */
 void load_config_from_file(FILE* file, config_map& map)
 {
-    int size = 512, pos, c;
+    // TODO: bounds checking
+
+    int c;
+    uint32_t size = 512, pos;
     char temp_buffer[512] { 0 };
-    do
-    { // read all lines in file
+    do // read all lines in file
+    {
         pos = 0;
         do
         { // read one line
             c = fgetc(file);
-            if(c != EOF) temp_buffer[pos++] = (char)c;
-            if(pos >= size - 1)
-            { // skip for now
+            if(c != EOF)
+                temp_buffer[pos++] = static_cast<char>(c);
+            if(pos >= size - 1) // skip for now
                 continue;
-            }
         } while(c != EOF && c != '\n');
+
         temp_buffer[pos] = 0;
         if(strlen(temp_buffer) > 0)
         {

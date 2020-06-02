@@ -32,14 +32,18 @@ int main(int argc, char** argv)
     memory::mt_arena_allocator io_system_allocator {};
     io_system_allocator.initialize(XR_MEGABYTES_TO_BYTES(64), XR_MEGABYTES_TO_BYTES(16));
 
-    memory::mt_arena_allocator rendering_subsystem_allocator {};
-    rendering_subsystem_allocator.initialize(XR_MEGABYTES_TO_BYTES(256), XR_MEGABYTES_TO_BYTES(16));
+    memory::mt_arena_allocator gfx_subsystem_allocator {};
+    gfx_subsystem_allocator.initialize(XR_MEGABYTES_TO_BYTES(256), XR_MEGABYTES_TO_BYTES(16));
+
+    memory::mt_arena_allocator sfx_subsystem_allocator {};
+    sfx_subsystem_allocator.initialize(XR_MEGABYTES_TO_BYTES(64), XR_MEGABYTES_TO_BYTES(16));
 
     game::main::initialize_application_desc desc
     {
         misc_allocator,
         io_system_allocator,
-        rendering_subsystem_allocator
+        gfx_subsystem_allocator,
+        sfx_subsystem_allocator
     };
 
     game::main::initialize_application(desc);

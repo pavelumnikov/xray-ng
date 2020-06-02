@@ -14,7 +14,8 @@ struct initialize_application_desc
 {
     memory::base_allocator& misc_allocator;
     memory::base_allocator& io_system_allocator;
-    memory::base_allocator& rendering_allocator;
+    memory::base_allocator& gfx_allocator;
+    memory::base_allocator& sfx_allocator;
 };
 
 //-----------------------------------------------------------------------------------------------------------
