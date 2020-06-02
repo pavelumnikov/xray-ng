@@ -54,7 +54,7 @@ public:
     virtual void free_file_descriptor(file_handle handle) = 0;
 
     virtual async_result_ptr read_file_async(file_handle handle,
-        memory::buffer_ref& buffer, size_t read, uint64_t offset = 0) = 0;
+        memory::buffer_ref& buffer, size_t read, uint32_t offset = 0) = 0;
 
     virtual async_result_ptr write_file_async(file_handle handle,
         memory::buffer_ref& buffer, size_t write) = 0;

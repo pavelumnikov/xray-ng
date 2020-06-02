@@ -108,7 +108,7 @@ void file_api_win32::free_file_descriptor(file_handle handle)
 /**
  */
 async_result_ptr file_api_win32::read_file_async(file_handle handle, 
-    memory::buffer_ref& buffer, size_t read, uint64_t offset)
+    memory::buffer_ref& buffer, size_t read, uint32_t offset)
 {
     auto result = utils::make_shared_ptr<read_file_async_result>(m_allocator, handle, buffer, read, offset);
     async_result_ptr ptr = eastl::static_pointer_cast<async_result>(result);

@@ -26,7 +26,7 @@ public:
     virtual void free_file_descriptor(file_handle handle) override;
 
     virtual async_result_ptr read_file_async(file_handle handle,
-        memory::buffer_ref& buffer, size_t read, uint64_t offset = 0) override;
+        memory::buffer_ref& buffer, size_t read, uint32_t offset = 0) override;
 
     virtual async_result_ptr write_file_async(file_handle handle,
         memory::buffer_ref& buffer, size_t write) override;
