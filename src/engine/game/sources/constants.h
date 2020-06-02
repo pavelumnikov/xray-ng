@@ -4,7 +4,7 @@
 #include "corlib/macro/constexpr.h"
 
 //-----------------------------------------------------------------------------------------------------------
-XR_NAMESPACE_BEGIN(xr, contants)
+XR_NAMESPACE_BEGIN(xr, constants)
 
 //-----------------------------------------------------------------------------------------------------------
 // shared
@@ -23,5 +23,5 @@ XR_CONSTEXPR_CPP14_OR_STATIC_CONST char vulkan_support_error_msg[] = "Vulkan is 
 XR_CONSTEXPR_CPP14_OR_STATIC_CONST char window_width[] = "r_window_width";
 XR_CONSTEXPR_CPP14_OR_STATIC_CONST char window_height[] = "r_window_height";
 
-XR_NAMESPACE_END(xr, contants)
+XR_NAMESPACE_END(xr, constants)
 //-----------------------------------------------------------------------------------------------------------
