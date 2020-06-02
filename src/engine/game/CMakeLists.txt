@@ -92,6 +92,7 @@ set(DEPENDENCY
 	module:corlib
 	module:extension
 	module:async_io
+	module:sfx
 	win:delayimp
 )
 
