@@ -123,8 +123,15 @@ void shutdown_config()
  */
 void load_config()
 {
+    FILE* file;
     XR_CONFIG_CHECK_CONSTRUCTED;
-    FILE* file = fopen(constants::xrayng_default_config, "a+");
+
+#if XRAY_PLATFORM_WINDOWS
+    (void)fopen_s(&file, constants::xrayng_default_config, "a+");
+#else
+    file = fopen(constants::xrayng_default_config, "a+");
+#endif // XRAY_PLATFORM_WINDOWS
+
     details::load_config_from_file(file, the_config_map.ref());
     fclose(file);
 }
@@ -134,8 +141,15 @@ void load_config()
  */
 void save_config()
 {
+    FILE* file;
     XR_CONFIG_CHECK_CONSTRUCTED;
-    FILE* file = fopen(constants::xrayng_default_config, "w+");
+
+#if XRAY_PLATFORM_WINDOWS
+    (void)fopen_s(&file, constants::xrayng_default_config, "w+");
+#else
+    file = fopen(constants::xrayng_default_config, "w+");
+#endif // XRAY_PLATFORM_WINDOWS
+
     details::save_config_to_file(file, the_config_map.ref());
     fclose(file);
 }
