@@ -46,7 +46,9 @@ public:
 
     const char* get_name() const XR_NOEXCEPT;
     void set_name(utils::string_view s) XR_NOEXCEPT;
+
     void set_base_allocator(base_allocator& alloc) XR_NOEXCEPT;
+    memory::base_allocator& get_base_allocator() XR_NOEXCEPT;
 
 private:
     base_allocator* m_allocator;
@@ -143,6 +145,16 @@ eastl_proxy_allocator::set_base_allocator(base_allocator& alloc) XR_NOEXCEPT
 
     m_allocator = &alloc;
     m_allocator_attached = true;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
+inline memory::base_allocator& 
+eastl_proxy_allocator::get_base_allocator() XR_NOEXCEPT
+{
+    XR_DEBUG_ASSERTION(m_allocator_attached);
+    return *m_allocator;
 }
 
 XR_NAMESPACE_END(xr, memory, proxy)
