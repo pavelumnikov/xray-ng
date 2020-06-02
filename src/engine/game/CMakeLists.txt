@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 ## Add modules function
 include(${CMAKE_MODULE_PATH}/add_module.cmake)
+include(${CMAKE_MODULE_PATH}/install_dll_if_exists.cmake)
 
 include(CheckFunctionExists)
 include(CheckIncludeFiles)
@@ -104,3 +105,8 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GA
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${GAME_PROJECT_OUTPUT})
 install(FILES ${PARANOIA_MODULE_RESOURCES} DESTINATION ${GAME_PROJECT_OUTPUT})
+
+xrng_install_dll_if_exists(${FMODSDK_LL_PATH}/lib "fmod64" ${GAME_PROJECT_OUTPUT})
+xrng_install_dll_if_exists(${FMODSDK_LL_PATH}/lib "fmodL64" ${GAME_PROJECT_OUTPUT})
+xrng_install_dll_if_exists(${FMODSDK_STUDIO_PATH}/lib "fmodstudio64" ${GAME_PROJECT_OUTPUT})
+xrng_install_dll_if_exists(${FMODSDK_STUDIO_PATH}/lib "fmodstudioL64" ${GAME_PROJECT_OUTPUT})
