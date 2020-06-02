@@ -10,6 +10,6 @@ function (xrng_engine_add_fmod ModuleName)
 	
 	## Add private include paths for selected project name
 	target_include_directories(${ModuleName} PRIVATE ${FMODSDK_LL_PATH}/inc ${FMODSDK_STUDIO_PATH}/inc)
-	target_link_directories(${ModuleName} PRIVATE ${FMODSDK_LL_PATH}/lib ${FMODSDK_STUDIO_PATH}/lib)
+	target_link_directories(${ModuleName} PUBLIC ${FMODSDK_LL_PATH}/lib ${FMODSDK_STUDIO_PATH}/lib)
 	target_link_libraries(${ModuleName} fmod64_vc fmodstudio64_vc)
 endfunction(xrng_engine_add_fmod ModuleName)
