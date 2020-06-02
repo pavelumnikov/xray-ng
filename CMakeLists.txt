@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 cmake_policy(SET CMP0054 NEW)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+## Workrounds
+string(REPLACE "/GR" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) # Disable RTTI
+string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) # Disable Exceptions
+
 ## For Visual Studio
 set(XR_PROJECT_PREFIX xray-ng)
 
