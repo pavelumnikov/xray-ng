@@ -5,7 +5,7 @@
 
 #include "extension/subsystem.h"
 #include "corlib/utils/ptr.h"
-#include "corlib/utils/static_vector.h"
+#include "corlib/utils/vector.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, extension)
@@ -56,8 +56,11 @@ private:
     template<typename T>
     static void validate_subsystem();
 
+    using subsystem_wrappers_container = utils::vector<subsystem_wrapper>;
+
     memory::base_allocator& m_allocator;
-    utils::static_vector<subsystem_wrapper, 32> m_subsystems;
+    memory::proxy::eastl_proxy_allocator m_proxy_allocator;
+    subsystem_wrappers_container m_subsystems;
 }; // class context
 
 //-----------------------------------------------------------------------------------------------------------

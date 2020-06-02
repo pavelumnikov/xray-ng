@@ -11,7 +11,8 @@ XR_NAMESPACE_BEGIN(xr, extension)
  */
 context::context(memory::base_allocator& alloc)
     : m_allocator { alloc }
-    , m_subsystems {}
+    , m_proxy_allocator { m_allocator }
+    , m_subsystems { m_proxy_allocator }
 {}
 
 //-----------------------------------------------------------------------------------------------------------

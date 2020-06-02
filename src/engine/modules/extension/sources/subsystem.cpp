@@ -11,7 +11,7 @@ XR_NAMESPACE_BEGIN(xr, extension)
  */
 bool subsystem::initialize_async(tasks::execution_context& ctx)
 {
-    XR_UNREFERENCED_PARAMETER(&ctx);
+    XR_UNREFERENCED_PARAMETER(ctx);
     return true;
 }
 
@@ -20,7 +20,7 @@ bool subsystem::initialize_async(tasks::execution_context& ctx)
  */
 void subsystem::tick_async(tasks::execution_context& ctx, float delta)
 {
-    XR_UNREFERENCED_PARAMETER(&ctx, delta);
+    XR_UNREFERENCED_PARAMETER(ctx, delta);
 }
 
 //-----------------------------------------------------------------------------------------------------------
