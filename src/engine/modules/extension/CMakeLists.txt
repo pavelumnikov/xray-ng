@@ -22,6 +22,8 @@ source_group("include" FILES ${EXTENSION_MODULE_HEADERS})
 
 set(EXTENSION_MODULE_SOURCES
 	"sources/context.cpp"
+	"sources/parallel_init_task.cpp"
+	"sources/parallel_init_task.h"
 	"sources/subsystem.cpp"
 )
 	
