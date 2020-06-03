@@ -4,6 +4,7 @@
 #pragma once
 
 #include "corlib/memory/memory_allocator_base.h"
+#include "corlib/memory/blob.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, sfx, fmod_impl)
@@ -28,6 +29,7 @@ private:
     static void fmod_free();
 
     memory::base_allocator& m_allocator;
+    memory::blob m_fmod_fixed_block;
     FMOD::Studio::System* m_system;
 }; // class fmod_device
 

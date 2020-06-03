@@ -7,11 +7,14 @@
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, sfx, fmod_impl)
 
+XR_CONSTEXPR_CPP14_OR_STATIC_CONST uint32_t the_fmod_block_size = XR_MEGABYTES_TO_BYTES(16);
+
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
 fmod_device::fmod_device(memory::base_allocator& alloc)
     : m_allocator { alloc }
+    , m_fmod_fixed_block { m_allocator, the_fmod_block_size }
     , m_system { nullptr }
 {}
 
@@ -20,6 +23,9 @@ fmod_device::fmod_device(memory::base_allocator& alloc)
  */
 void fmod_device::initialize()
 {
+    memory::buffer_ref memory_blob = m_fmod_fixed_block.get();
+    FMOD::Memory_Initialize(memory_blob.as_pointer<void*>(), memory_blob.length(), nullptr, nullptr, nullptr);
+
     FMOD_RESULT result = FMOD::Studio::System::create(&m_system);
     if(!result)
     {
