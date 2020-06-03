@@ -82,7 +82,6 @@ size_t st_arena_allocator::allocated_size() const XR_NOEXCEPT
 pvoid st_arena_allocator::call_malloc(size_t size
     XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION)
 {
-    XR_UNREFERENCED_PARAMETER(description);
     XR_DEBUG_PARAMETERS_UNREFERENCED_GUARD;
     XR_DEBUG_ASSERTION_MSG(m_arena, "arena must be initialized before malloc");
     XR_DEBUG_ASSERTION_MSG(m_user_thread_id == sys::current_thread_id(),
@@ -99,7 +98,7 @@ pvoid st_arena_allocator::call_malloc(size_t size
 pvoid st_arena_allocator::call_realloc(pvoid pointer, size_t new_size
     XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION)
 {
-    XR_UNREFERENCED_PARAMETER(description);
+    XR_DEBUG_PARAMETERS_UNREFERENCED_GUARD;
     XR_DEBUG_ASSERTION_MSG(m_arena, "arena must be initialized before reallocation");
     XR_DEBUG_ASSERTION_MSG(m_user_thread_id == sys::current_thread_id(),
         "could not reallocate on other thread than specified");

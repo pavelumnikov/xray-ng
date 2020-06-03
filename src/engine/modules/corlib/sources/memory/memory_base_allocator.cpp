@@ -11,14 +11,16 @@ XR_NAMESPACE_BEGIN(xr, memory)
 /**
 */
 void
-base_allocator::on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size,
-    utils::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const
+base_allocator::on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size
+    XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION) const
 {
+#if defined(DEBUG)
     if(base_profiler_event_listener* event_listener = m_event_listener)
     {
-        event_listener->on_malloc_done(buffer, buffer_size, previous_size,
-            description XR_DEBUG_PARAMETERS);
+        event_listener->on_malloc_done(buffer, buffer_size, previous_size
+            XR_DEBUG_PARAMETERS_DESCRIPTION XR_DEBUG_PARAMETERS);
     }
+#endif // defined(DEBUG)
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -27,10 +29,12 @@ base_allocator::on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size
 void
 base_allocator::on_free(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) const
 {
+#if defined(DEBUG)
     if(base_profiler_event_listener* event_listener = m_event_listener)
     {
         event_listener->on_free_done(buffer XR_DEBUG_PARAMETERS);
     }
+#endif // defined(DEBUG)
 }
 
 //-----------------------------------------------------------------------------------------------------------

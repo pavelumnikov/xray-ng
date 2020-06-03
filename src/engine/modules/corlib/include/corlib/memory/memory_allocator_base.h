@@ -54,8 +54,8 @@ protected:
     virtual void call_free(pvoid pointer 
         XR_DEBUG_PARAMETERS_DECLARATION) = 0;
 
-    void on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size, 
-        utils::string_view description XR_DEBUG_PARAMETERS_DECLARATION) const;
+    void on_malloc(pvoid buffer, size_t buffer_size, size_t previous_size 
+        XR_DEBUG_PARAMETERS_DESCRIPTION_DECLARATION XR_DEBUG_PARAMETERS_DECLARATION) const;
 
     void on_free(pvoid& buffer XR_DEBUG_PARAMETERS_DECLARATION) const;
 

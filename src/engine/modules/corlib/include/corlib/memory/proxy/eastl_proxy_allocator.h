@@ -130,7 +130,7 @@ eastl_proxy_allocator::get_name() const XR_NOEXCEPT
 /**
  */
 inline void 
-eastl_proxy_allocator::set_name(utils::string_view s) const XR_NOEXCEPT
+eastl_proxy_allocator::set_name(utils::string_view s) XR_NOEXCEPT
 {}
 
 #endif // #if !defined(XR_DEBUG)
@@ -144,7 +144,10 @@ eastl_proxy_allocator::set_base_allocator(base_allocator& alloc) XR_NOEXCEPT
     XR_DEBUG_ASSERTION(!m_allocator_attached);
 
     m_allocator = &alloc;
+
+#if defined(DEBUG)
     m_allocator_attached = true;
+#endif // defined(DEBUG)
 }
 
 //-----------------------------------------------------------------------------------------------------------
