@@ -2,7 +2,7 @@
 //
 
 #include "extension/context.h"
-#include "parallel_init_task.h"
+#include "task/parallel_init_task.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, extension)
@@ -33,10 +33,15 @@ bool context::initialize_async(tasks::execution_context& ctx)
 {
     bool result = true;
     size_t count = m_subsystems.size();
-    utils::array_view<parallel_init_task> t(XR_STACK_ALLOCATE_MEMORY(sizeof(parallel_init_task) * count), count);
+
+    pvoid view_map = XR_STACK_ALLOCATE_MEMORY(sizeof(task::parallel_init_task) * count);
+    utils::array_view<task::parallel_init_task> t(view_map, count);
 
     for(size_t i = 0; i < count; ++i)
-        memory::call_emplace_construct(&t[i], m_subsystems[i].ptr);
+    {
+        auto ptr = m_subsystems[i].ptr;
+        memory::call_emplace_construct(&t[i], ptr); // for async init
+    }
 
     ctx.run_subtasks_and_yield(tasks::task_group::get_default_group(), t.get_raw_data(), t.size());
     return result;

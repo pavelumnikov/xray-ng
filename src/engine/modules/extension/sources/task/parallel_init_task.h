@@ -7,7 +7,7 @@
 #include "corlib/tasks/task_system.h"
 
 //-----------------------------------------------------------------------------------------------------------
-XR_NAMESPACE_BEGIN(xr, extension)
+XR_NAMESPACE_BEGIN(xr, extension, task)
 
 //-----------------------------------------------------------------------------------------------------------
 class parallel_init_task
@@ -30,5 +30,5 @@ private:
     utils::shared_ptr<subsystem> m_system;
 }; // class sfx_init_task
 
-XR_NAMESPACE_END(xr, extension)
+XR_NAMESPACE_END(xr, extension, task)
 //-----------------------------------------------------------------------------------------------------------
