@@ -22,8 +22,6 @@ source_group("include" FILES ${EXTENSION_MODULE_HEADERS})
 
 set(EXTENSION_MODULE_SOURCES
 	"sources/context.cpp"
-	"sources/parallel_init_task.cpp"
-	"sources/parallel_init_task.h"
 	"sources/subsystem.cpp"
 )
 	
@@ -31,7 +29,20 @@ source_group("sources" FILES ${EXTENSION_MODULE_SOURCES})
 
 ##
 
-set(SOURCES ${EXTENSION_MODULE_HEADERS} ${EXTENSION_MODULE_SOURCES})
+set(EXTENSION_MODULE_TASKS_SOURCES
+	"sources/task/parallel_init_task.cpp"
+	"sources/task/parallel_init_task.h"
+)
+	
+source_group("sources\\task" FILES ${EXTENSION_MODULE_TASKS_SOURCES})
+
+##
+
+set(SOURCES
+	${EXTENSION_MODULE_HEADERS}
+	${EXTENSION_MODULE_SOURCES}
+	${EXTENSION_MODULE_TASKS_SOURCES}
+)
 
 ##
 
