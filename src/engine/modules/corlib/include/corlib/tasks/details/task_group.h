@@ -112,7 +112,7 @@ task_group::operator!= (const task_group& other) const XR_NOEXCEPT
 inline int
 task_group::get_valid_index() const XR_NOEXCEPT
 {
-    //MT_ASSERT(is_valid(), "Try to get invalid index");
+    XR_DEBUG_ASSERTION_MSG(is_valid(), "Try to get invalid index");
     return id;
 }
 
