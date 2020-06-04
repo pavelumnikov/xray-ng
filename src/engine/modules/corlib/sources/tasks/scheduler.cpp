@@ -246,11 +246,11 @@ void task_scheduler::release_fiber_context(fiber_context*&& fiber_ctx)
     switch(required_stack)
     {
         case task_stack_request::small_stack:
-            res = m_standard_fibers_available.enqueue(std::move(fiber_ctx));
+            res = m_standard_fibers_available.enqueue(eastl::move(fiber_ctx));
             break;
 
         case task_stack_request::huge_stack:
-            res = m_extended_fibers_available.enqueue(std::move(fiber_ctx));
+            res = m_extended_fibers_available.enqueue(eastl::move(fiber_ctx));
             break;
 
         default:
@@ -612,7 +612,7 @@ void task_scheduler::scheduler_fiber_process_task(details::thread_context& conte
         if(task_status == fiber_task_status::FINISHED)
         {
             XR_DEBUG_ASSERTION_MSG(children_fibers_count == 0, "Sanity check failed");
-            context.current_scheduler->release_fiber_context(std::move(fiber_ctx));
+            context.current_scheduler->release_fiber_context(eastl::move(fiber_ctx));
 
             // If parent fiber is exist transfer flow control to parent fiber, if parent fiber is null, exit
             fiber_ctx = parent_fiber;
@@ -908,7 +908,7 @@ void task_scheduler::release_group(task_group group)
     m_group_stats[idx].set_debug_is_free(true);
 #endif // defined(DEBUG)
 
-    bool res = m_available_groups.enqueue(std::move(group));
+    bool res = m_available_groups.enqueue(eastl::move(group));
     XR_UNREFERENCED_PARAMETER(res);
     XR_DEBUG_ASSERTION_MSG(res, "Can't return group to pool");
 }
