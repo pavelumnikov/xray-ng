@@ -21,10 +21,8 @@ init_task::init_task(main::initialize_application_desc const& desc, extension::c
  */
 void init_task::operator()(tasks::execution_context& context)
 {
-    m_extension_context.register_subsystem<async_io::async_io_subsystem>(
-        extension::tick_group::smoothed, m_init_desc.io_system_allocator);
-    m_extension_context.register_subsystem<sfx::sfx_subsystem>(
-        extension::tick_group::smoothed, m_init_desc.sfx_allocator);
+    m_extension_context.register_subsystem<async_io::async_io_subsystem>(m_init_desc.io_system_allocator);
+    m_extension_context.register_subsystem<sfx::sfx_subsystem>(m_init_desc.sfx_allocator);
 
     auto result = m_extension_context.initialize_async(context);
     if(!result)

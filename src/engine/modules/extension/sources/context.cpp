@@ -21,9 +21,8 @@ context::context(memory::base_allocator& alloc)
  */
 context::~context()
 {
-    // Loop in reverse registration order to avoid dependency conflicts
     for(size_t i = m_subsystems.size() - 1; i > 0; --i)
-        m_subsystems[i].ptr.reset();
+        m_subsystems[i].reset();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -39,10 +38,9 @@ bool context::initialize_async(tasks::execution_context& ctx)
 
     for(size_t i = 0; i < count; ++i)
     {
-        auto ptr = m_subsystems[i].ptr;
-        // TODO: add status checking
+        auto ptr = m_subsystems[i];
         result = ptr->initialize_sync_before_async();
-        memory::call_emplace_construct(&t[i], ptr); // for async init
+        memory::call_emplace_construct(&t[i], ptr);
     }
 
     ctx.run_subtasks_and_yield(tasks::task_group::get_default_group(), t.get_raw_data(), t.size());
@@ -52,17 +50,10 @@ bool context::initialize_async(tasks::execution_context& ctx)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void context::tick_async(tasks::execution_context& ctx, tick_group group, float delta)
+void context::tick_async(tasks::execution_context& ctx, float delta)
 {
     for(size_t i = 0; i < m_subsystems.size(); ++i)
-    {
-        if(m_subsystems[i].group != group)
-            continue;
-
-        m_subsystems[i].ptr->tick_async(ctx, delta);
-    }
-
-    ctx.yield();
+        m_subsystems[i]->tick_async(ctx, delta);
 }
 
 XR_NAMESPACE_END(xr, extension)
