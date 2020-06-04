@@ -40,6 +40,8 @@ bool context::initialize_async(tasks::execution_context& ctx)
     for(size_t i = 0; i < count; ++i)
     {
         auto ptr = m_subsystems[i].ptr;
+        // TODO: add status checking
+        result = ptr->initialize_sync_before_async();
         memory::call_emplace_construct(&t[i], ptr); // for async init
     }
 

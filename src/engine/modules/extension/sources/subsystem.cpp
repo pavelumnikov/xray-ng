@@ -9,6 +9,14 @@ XR_NAMESPACE_BEGIN(xr, extension)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
+bool subsystem::initialize_sync_before_async()
+{
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+/**
+ */
 bool subsystem::initialize_async(tasks::execution_context& ctx)
 {
     XR_UNREFERENCED_PARAMETER(ctx);

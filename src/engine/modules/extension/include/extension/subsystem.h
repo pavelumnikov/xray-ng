@@ -17,6 +17,7 @@ class XR_NON_VIRTUAL subsystem : public eastl::enable_shared_from_this<subsystem
 {
 public:
     XR_DECLARE_DEFAULT_DESTRUCTOR(subsystem);
+    virtual bool initialize_sync_before_async();
     virtual bool initialize_async(tasks::execution_context& ctx);
     virtual void tick_async(tasks::execution_context& ctx, float delta);
 
