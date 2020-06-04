@@ -15,7 +15,7 @@ set(EXTENSION_MODULE_HEADERS
 	"include/extension/context.h"
 	"include/extension/subsystem.h"
 )
-	
+
 source_group("include" FILES ${EXTENSION_MODULE_HEADERS})
 
 ##
@@ -24,7 +24,7 @@ set(EXTENSION_MODULE_SOURCES
 	"sources/context.cpp"
 	"sources/subsystem.cpp"
 )
-	
+
 source_group("sources" FILES ${EXTENSION_MODULE_SOURCES})
 
 ##
@@ -32,8 +32,10 @@ source_group("sources" FILES ${EXTENSION_MODULE_SOURCES})
 set(EXTENSION_MODULE_TASKS_SOURCES
 	"sources/task/parallel_init_task.cpp"
 	"sources/task/parallel_init_task.h"
+	"sources/task/tick_task.cpp"
+	"sources/task/tick_task.h"
 )
-	
+
 source_group("sources\\task" FILES ${EXTENSION_MODULE_TASKS_SOURCES})
 
 ##
