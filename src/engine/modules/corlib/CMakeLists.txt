@@ -326,6 +326,7 @@ set(CORE_MODULE_UTILS_HEADERS
 	"include/corlib/utils/enumeration.h"
 	"include/corlib/utils/fixed_string.h"
 	"include/corlib/utils/fourcc.h"
+	"include/corlib/utils/hash_crc32.h"
 	"include/corlib/utils/hash_elsa.h"
 	"include/corlib/utils/hash_string.h"
 	"include/corlib/utils/integer.h"
@@ -360,7 +361,9 @@ source_group("include\\utils" FILES ${CORE_MODULE_UTILS_HEADERS})
 ##
 
 set(CORE_MODULE_UTILS_SOURCES
-	"sources/utils/string_conversion.cpp")
+	"sources/utils/string_conversion.cpp"
+	"sources/utils/hash_crc32.cpp"
+)
 
 source_group("sources\\utils" FILES ${CORE_MODULE_UTILS_SOURCES})
 
