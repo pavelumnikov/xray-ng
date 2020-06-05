@@ -16,7 +16,7 @@ public:
     sfx_subsystem(extension::context* ctx, memory::base_allocator& alloc);
     virtual ~sfx_subsystem();
     virtual bool initialize_async(tasks::execution_context& ctx);
-    virtual void tick_async(tasks::execution_context& ctx, float delta);
+    virtual void tick_async(tasks::execution_context& ctx, sys::tick delta);
     api* get_sfx_api();
 
 private:

@@ -51,7 +51,7 @@ bool context::initialize_async(tasks::execution_context& ctx)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void context::tick_async(tasks::execution_context& ctx, float delta)
+void context::tick_async(tasks::execution_context& ctx, sys::tick delta)
 {
     size_t count = m_subsystems.size();
     pvoid view_map = XR_STACK_ALLOCATE_MEMORY(sizeof(task::tick_task) * count);

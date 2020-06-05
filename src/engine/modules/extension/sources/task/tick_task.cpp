@@ -9,7 +9,7 @@ XR_NAMESPACE_BEGIN(xr, extension, task)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-tick_task::tick_task(utils::shared_ptr<subsystem>& system, float delta)
+tick_task::tick_task(utils::shared_ptr<subsystem>& system, sys::tick delta)
     : m_system { system }
     , m_delta { delta }
 {}

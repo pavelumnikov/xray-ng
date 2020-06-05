@@ -26,7 +26,7 @@ bool subsystem::initialize_async(tasks::execution_context& ctx)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void subsystem::tick_async(tasks::execution_context& ctx, float delta)
+void subsystem::tick_async(tasks::execution_context& ctx, sys::tick delta)
 {
     XR_UNREFERENCED_PARAMETER(ctx, delta);
 }

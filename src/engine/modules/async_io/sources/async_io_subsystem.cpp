@@ -38,7 +38,7 @@ bool async_io_subsystem::initialize_async(tasks::execution_context& ctx)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void async_io_subsystem::tick_async(tasks::execution_context& ctx, float delta)
+void async_io_subsystem::tick_async(tasks::execution_context& ctx, sys::tick delta)
 {}
 
 //-----------------------------------------------------------------------------------------------------------

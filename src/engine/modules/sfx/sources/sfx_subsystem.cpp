@@ -42,7 +42,7 @@ bool sfx_subsystem::initialize_async(tasks::execution_context& ctx)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-void sfx_subsystem::tick_async(tasks::execution_context& ctx, float delta)
+void sfx_subsystem::tick_async(tasks::execution_context& ctx, sys::tick delta)
 {}
 
 //-----------------------------------------------------------------------------------------------------------

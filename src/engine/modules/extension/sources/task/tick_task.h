@@ -18,7 +18,7 @@ public:
         tasks::task_priority::default_prority,
         math::color_table::blue_violet);
 
-    tick_task(utils::shared_ptr<subsystem>& system, float delta);
+    tick_task(utils::shared_ptr<subsystem>& system, sys::tick delta);
     ~tick_task() = default;
 
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(tick_task);
@@ -28,7 +28,7 @@ public:
 
 private:
     utils::shared_ptr<subsystem> m_system;
-    float m_delta;
+    sys::tick m_delta;
 }; // class tick_task
 
 XR_NAMESPACE_END(xr, extension, task)

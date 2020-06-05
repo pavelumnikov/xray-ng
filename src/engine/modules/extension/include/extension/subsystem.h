@@ -5,6 +5,7 @@
 
 #include "corlib/tasks/task_system.h"
 #include "corlib/utils/ptr.h"
+#include "corlib/sys/chrono.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, extension)
@@ -19,7 +20,7 @@ public:
     XR_DECLARE_DEFAULT_DESTRUCTOR(subsystem);
     virtual bool initialize_sync_before_async();
     virtual bool initialize_async(tasks::execution_context& ctx);
-    virtual void tick_async(tasks::execution_context& ctx, float delta);
+    virtual void tick_async(tasks::execution_context& ctx, sys::tick delta);
 
     template<typename T>
     utils::shared_ptr<T> query_shared_ptr();

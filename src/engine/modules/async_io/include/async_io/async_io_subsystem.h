@@ -16,7 +16,7 @@ public:
     async_io_subsystem(extension::context* ctx, memory::base_allocator& alloc);
     virtual ~async_io_subsystem();
     virtual bool initialize_async(tasks::execution_context& ctx);
-    virtual void tick_async(tasks::execution_context& ctx, float delta);
+    virtual void tick_async(tasks::execution_context& ctx, sys::tick delta);
     file_api& get_file_api();
 
 private:

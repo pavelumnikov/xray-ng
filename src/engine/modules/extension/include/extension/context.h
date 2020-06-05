@@ -27,7 +27,7 @@ public:
     // Initialize subsystems
     bool initialize_async(tasks::execution_context& ctx);
     // Tick
-    void tick_async(tasks::execution_context& ctx, float delta = 0.0f);
+    void tick_async(tasks::execution_context& ctx, sys::tick delta);
 
 private:
     using subsystems_container = utils::vector<utils::shared_ptr<subsystem>>;
