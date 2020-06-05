@@ -11,7 +11,7 @@ XR_NAMESPACE_BEGIN(xr, game, task)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-tick_task::tick_task(extension::context& ctx, float delta)
+tick_task::tick_task(extension::context& ctx, sys::tick delta)
     : m_extension_context { ctx }
     , m_delta { delta }
 {}
