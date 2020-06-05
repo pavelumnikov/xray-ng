@@ -64,6 +64,8 @@ source_group("sources\\main\\win" FILES ${GAME_MODULE_MAIN_WIN_RESOURCES})
 set(GAME_MODULE_TASK_SOURCES
 	"sources/tasks/init_task.cpp"
 	"sources/tasks/init_task.h"
+	"sources/tasks/tick_task.cpp"
+	"sources/tasks/tick_task.h"
 )
 
 source_group("sources\\task" FILES ${GAME_MODULE_TASK_SOURCES})
