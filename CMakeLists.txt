@@ -3,14 +3,16 @@ cmake_policy(SET CMP0054 NEW)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ## Workrounds
-string(REPLACE "/GR" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) # Disable RTTI
-string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) # Disable Exceptions
+
+set(CXX_RTTI OFF)
+set(CXX_EXCEPTIONS OFF)
 
 ## For Visual Studio
 set(XR_PROJECT_PREFIX xray-ng)
 
 set(GAME_PROJECT clearsky)
 set(GAME_PROJECT_OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/result)
+set(GAME_PROJECT_BASE_OUTPUT ${GAME_PROJECT_OUTPUT}/base)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/extras/custom_cmake)
 
 project(xrengine-ng)
