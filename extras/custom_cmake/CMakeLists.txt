@@ -12,6 +12,7 @@ set(CMAKE_PROGRAMS_FILES
 )
 
 set(CMAKE_MODULE_FILES
+	"modules/include_amd_ags.cmake"
 	"modules/include_catch.cmake"
 	"modules/include_fmod.cmake"
 	"modules/include_renderdoc.cmake"
