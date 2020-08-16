@@ -319,6 +319,13 @@ function (xrng_fixup_definitions_internal ProjectName ProjectType)
 		target_compile_definitions(${ProjectName} PRIVATE _GNU_SOURCE)
 	endif(WIN32)
 
+	## Fixup linkage definitions
+	if(${ProjectType} STREQUAL "STATIC")
+		target_compile_definitions(${ProjectName} PRIVATE XR_STATIC_LIBRARIES)
+	elseif(${ProjectType} STREQUAL "SHARED")
+		## TODO: add selection for import/export
+	endif(${ProjectType} STREQUAL "STATIC")
+
 	## Fixup project definitions for specific platform
 	if (WIN32 AND (${ProjectType} STREQUAL "EXECUTABLE"))
 		set_property(TARGET ${ProjectName} PROPERTY LINK_FLAGS_DEBUG "/SUBSYSTEM:windows")
