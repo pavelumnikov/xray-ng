@@ -32,5 +32,14 @@ void zero(T(&destination)[Count])
     zero(destination, Count * sizeof(T));
 }
 
+//-----------------------------------------------------------------------------------------------------------
+/**
+*/
+template<typename T>
+inline void zero_struct(T* object)
+{
+    zero(object, sizeof(T));
+}
+
 XR_NAMESPACE_END(xr, memory)
 //-----------------------------------------------------------------------------------------------------------
