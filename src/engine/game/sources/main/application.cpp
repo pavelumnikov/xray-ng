@@ -96,9 +96,13 @@ bool on_run_application(sys::tick start_point)
     XR_CONSTEXPR_CPP14_OR_STATIC_CONST uint32_t timeout_ms = 1500;
 
     sys::tick time_slice = the_last_update_time - start_point;
-    while(time_slice < frame_ms)
+    if(the_last_update_time < start_point)
+        time_slice = frame_ms;
+
+    if(time_slice < frame_ms)
     {
         sys::yield(frame_ms - time_slice);
+        time_slice = frame_ms;
     }
 
     task::tick_task tick { the_main_context.ref(), time_slice };
