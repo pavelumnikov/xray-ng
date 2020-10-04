@@ -93,9 +93,7 @@ set(DEPENDENCY
 	module:eastl
 	module:imgui
 	module:corlib
-	module:extension
-	module:async_io
-	module:sfx
+	module:engine
 	win:delayimp
 )
 
