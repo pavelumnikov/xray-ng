@@ -4,7 +4,7 @@
 #pragma once
 
 #include "../main/application.h"
-#include "extension/context.h"
+#include "engine/extension/context.h"
 #include "corlib/tasks/task_system.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ public:
         tasks::task_priority::default_prority,
         math::color_table::orange);
 
-    init_task(main::initialize_application_desc const& desc, extension::context& ctx);
+    init_task(main::initialize_application_desc const& desc, engine::extension::context& ctx);
     ~init_task() = default;
 
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(init_task);
@@ -29,7 +29,7 @@ public:
 
 private:
     main::initialize_application_desc const& m_init_desc;
-    extension::context& m_extension_context;
+    engine::extension::context& m_extension_context;
 }; // class init_task
 
 XR_NAMESPACE_END(xr, game, task)
