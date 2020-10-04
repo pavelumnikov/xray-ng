@@ -506,10 +506,10 @@ set(TESTS
 set(TESTS_DEPENDENCY ${DEPENDENCY} module:${PROJECT_NAME})
 set(TESTS_OPTIONS generic:cpp17=yes win:asm=yes)
 
-xrng_engine_add_unittest(${PROJECT_NAME}_tests TESTS_OPTIONS TESTS_DEPENDENCY TESTS)
-xrng_engine_add_doctest(${PROJECT_NAME}_tests)
+xrng_engine_add_unittest(${PROJECT_NAME}-tests TESTS_OPTIONS TESTS_DEPENDENCY TESTS)
+xrng_engine_add_doctest(${PROJECT_NAME}-tests)
 
 ## For Visual Studio
-set_target_properties(${PROJECT_NAME}_tests PROPERTIES FOLDER ${XR_PROJECT_PREFIX})
+set_target_properties(${PROJECT_NAME}-tests PROPERTIES FOLDER ${XR_PROJECT_PREFIX})
 
 endif(${WITH_TESTS})
