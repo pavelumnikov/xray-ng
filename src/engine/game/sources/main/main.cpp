@@ -38,9 +38,6 @@ int main(int argc, char** argv)
     memory::crt_allocator misc_allocator {};
     game::main::early_initialize_application(misc_allocator);
 
-    memory::st_arena_allocator glfw_allocator {};
-    glfw_allocator.initialize(XR_MEGABYTES_TO_BYTES(1), XR_KILOBYTES_TO_BYTES(256), sys::current_thread_id());
-
     memory::mt_arena_allocator io_system_allocator {};
     io_system_allocator.initialize(XR_MEGABYTES_TO_BYTES(64), XR_MEGABYTES_TO_BYTES(16));
 
