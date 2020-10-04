@@ -2,8 +2,6 @@
 //
 
 #include "tick_task.h"
-#include "async_io/async_io_subsystem.h"
-#include "sfx/sfx_subsystem.h"
 
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, game, task)
@@ -11,7 +9,7 @@ XR_NAMESPACE_BEGIN(xr, game, task)
 //-----------------------------------------------------------------------------------------------------------
 /**
  */
-tick_task::tick_task(extension::context& ctx, sys::tick delta)
+tick_task::tick_task(engine::extension::context& ctx, sys::tick delta)
     : m_extension_context { ctx }
     , m_delta { delta }
 {}

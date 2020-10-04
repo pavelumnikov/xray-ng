@@ -4,7 +4,7 @@
 #pragma once
 
 #include "../main/application.h"
-#include "extension/context.h"
+#include "engine/extension/context.h"
 #include "corlib/tasks/task_system.h"
 
 //-----------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ public:
         tasks::task_priority::default_prority,
         math::color_table::green_yellow);
 
-    tick_task(extension::context& ctx, sys::tick delta);
+    tick_task(engine::extension::context& ctx, sys::tick delta);
     ~tick_task() = default;
 
     XR_DECLARE_DELETE_COPY_ASSIGNMENT(tick_task);
@@ -28,7 +28,7 @@ public:
     void operator()(tasks::execution_context& context);
 
 private:
-    extension::context& m_extension_context;
+    engine::extension::context& m_extension_context;
     sys::tick m_delta;
 }; // class tick_task
 
