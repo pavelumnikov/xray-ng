@@ -9,8 +9,7 @@
 #include "corlib/tasks/task_system.h"
 #include "corlib/sys/chrono.h"
 #include "corlib/sys/thread.h"
-#include "extension/context.h"
-#include "async_io/file_api.h"
+#include "engine/extension/context.h"
 #include "../tasks/init_task.h"
 #include "../tasks/tick_task.h"
 #include "../config.h"
@@ -24,7 +23,7 @@
 //-----------------------------------------------------------------------------------------------------------
 XR_NAMESPACE_BEGIN(xr, game, main, details)
 
-static memory::uninitialized_reference<extension::context> the_main_context {};
+static memory::uninitialized_reference<engine::extension::context> the_main_context {};
 static sys::tick the_last_update_time = 0;
 
 //-----------------------------------------------------------------------------------------------------------
